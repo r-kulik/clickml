@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-of-43chn&%2z-p+q$1-07p(2-ajk8n+tw_9&szwq6k+ksid9b9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'click-ml.ru'
+]
 
 
 # Application definition
