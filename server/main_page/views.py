@@ -8,10 +8,4 @@ def index(request: HttpRequest) -> HttpResponse:
     :param request: user Http reqeust to reach main page
     :return: Project main page
     """
-    return HttpResponse(
-        """
-        <html>
-            <h1>Hello, world!</h1>
-        </html>
-        """
-    )
+    return render(request, "mainpage.html")
