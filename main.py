@@ -1,5 +1,6 @@
-import DataReceiver
+from WorkWithTask import Task
+
 
 if __name__ == '__main__':
-    df = DataReceiver.get_data_frame()
-
+    while True:
+        task = Task()
