@@ -1,5 +1,5 @@
-import FileReceive
+import DataReceiver
 
 if __name__ == '__main__':
-    df = FileReceive.file_upload()
+    df = DataReceiver.get_data_frame()
 
