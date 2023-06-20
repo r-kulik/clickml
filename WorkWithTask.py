@@ -3,12 +3,12 @@ import pandas as pd
 
 class Task:
     def __init__(self):
-        self.description = self.get_description_from_sever()
-        self.user_name = self.description["user_name"]
-        self.project_name = self.description["project_name"]
-        self.purpose = self.description["purpose"]
-        self.task_type = self.description["task_type"]
-        self.target_variable = self.description["target_variable"]
+        self.__description = self.get_description_from_sever()
+        self.user_name = self.__description["user_name"]
+        self.project_name = self.__description["project_name"]
+        self.purpose = self.__description["purpose"]
+        self.task_type = self.__description["task_type"]
+        self.target_variable = self.__description["target_variable"]
         self.df = self.get_data_frame()
 
     def get_data_frame(self) -> pd.DataFrame:
