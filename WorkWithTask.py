@@ -44,11 +44,19 @@ class Task:
 
     def __get_file_from_server(self) -> str:
 
-        # todo add creating of directory
-        """if self.user_name not in os.listdir(path='.'):
-            os.mkdir(self.user_name)"""
+        # if there is no folder of user create it
+        if self.user_name not in os.listdir(path='.'):
+            os.mkdir(self.user_name)
 
-        # todo add getting file through web in format user_name/project_name/tmp/example.csv (already directory exist)
+        # if there is no folder of project create it
+        if self.project_name not in os.listdir(path=self.user_name):
+            os.mkdir("{}/{}".format(self.user_name, self.project_name))
+
+        # if there is no tmp in project create it
+        if "tmp" not in os.listdir(path=self.user_name + "/" + self.project_name):
+            os.mkdir("{}/{}/tpm".format(self.user_name, self.project_name))
+
+        # todo add getting file through web in format user_name/project_name/tmp/example.csv (directory already exist)
 
         return "{}/{}/tmp/{}".format(self.user_name, self.project_name, self.file_name)
 
@@ -57,7 +65,7 @@ class Task:
         # todo add receiving json file with descriptions
 
         # just example for testing
-        return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic.csv", "purpose": "learning",
+        return {"user_name": "bulkina", "project_name": "repkal", "file_name": "titanic.csv", "purpose": "learning",
                 "task_type": "class", "target_variable": "survived"}
 
     # form of json(dict) file
