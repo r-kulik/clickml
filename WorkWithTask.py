@@ -22,17 +22,17 @@ class Task:
         return df
 
     def __get_file_from_server(self) -> str:
-        return "1.csv"
+        return "{}/{}/tmp/titanic.csv".format(self.user_name, self.project_name)
         # todo add getting file through web
 
     def get_description_from_sever(self) -> dict:
         # todo add receiving json file with descriptions
-        return {}
+        return {"user_name": "bulkin", "project_name": "rep", "purpose" : "learning",
+                "task_type": "class", "target_variable": "survived"}
     """
     dict:
     "user_name" : str
     "project_name" : str
-    "purpose" : str("learning / using")
     "task_type" : str
     "target_variable" : str
     """
