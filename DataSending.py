@@ -1,3 +1,3 @@
-def send() -> None:
-    # todo add sending of information
+def send_fail_message():
+    # todo send fail message
     pass

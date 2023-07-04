@@ -1,7 +1,6 @@
 from WorkWithTask import Task
-from DataSending import send
+from DataSending import send_fail_message
 import logging
-
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w")
@@ -17,5 +16,5 @@ if __name__ == '__main__':
 
             else:
                 logging.debug("Wrong task_type format")
-
-            send()
+        else:
+            send_fail_message()
