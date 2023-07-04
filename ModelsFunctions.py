@@ -1,8 +1,12 @@
+import numpy as np
+import pandas as pd
 import sklearn.datasets
 import sklearn.ensemble
 import sklearn.model_selection
 import sklearn.svm
+import optuna
 import pickle
+from optuna.samplers import TPESampler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
@@ -10,36 +14,80 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def linear_regression(x, y):
-    lrg = LinearRegression()
-    score = sklearn.model_selection.cross_val_score(lrg, x, y, n_jobs=-1, cv=5)
-    accuracy = score.mean()
-    return accuracy
+class Model:
+    def fit(self, x, y):
+        pass
+
+    def predict(self, x):
+        pass
+
+    def accuracy(self, x, y):
+        pass
+
+    def save(self, trial_number: int):
+        with open("{}.pickle".format(trial_number), "wb") as fout:
+            pickle.dump(self, fout)
+        return 0
 
 
-def polynomial_regression(degree, x, y):
-    polynomial_features = PolynomialFeatures(degree=degree)
-    linear_regression = LinearRegression()
-    pipeline = Pipeline([("polynomial_features", polynomial_features), ("linear_regression", linear_regression)])
-    score = sklearn.model_selection.cross_val_score(pipeline, x, y, n_jobs=-1, cv=5)
-    accuracy = score.mean()
-    return accuracy
+class LinearRegressionModel(Model):
+    def __init__(self):
+        self.lrg = LinearRegression()
+
+    def fit(self, x, y):
+        return self.lrg.fit(x, y)
+
+    def accuracy(self, x, y):
+        score = sklearn.model_selection.cross_val_score(self.lrg, x, y, n_jobs=-1, cv=5)
+        return score.mean()
+
+    def predict(self, x):
+        return self.lrg.predict(x)
 
 
-def logistic_regression(penalty, solver, C, x, y):
-    lr = LogisticRegression(max_iter=1000, penalty=penalty, solver=solver, C=C)
-    score = sklearn.model_selection.cross_val_score(lr, x, y, n_jobs=-1, cv=5)
-    accuracy = score.mean()
-    return accuracy
+class PolynomialRegressionModel(Model):
+    def __init__(self, degree, x, y):
+        self.polynomial_features = PolynomialFeatures(degree=degree)
+        self.linear_regression = LinearRegression()
+        self.pipeline = Pipeline([("polynomial_features", self.polynomial_features),
+                                  ("linear_regression", self.linear_regression)])
 
-def KNeighbors(n_neighbors, weights, metric, x, y, trial):
-    knn = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights, metric=metric)
-    score = sklearn.model_selection.cross_val_score(knn, x, y, scoring="balanced_accuracy", n_jobs=-1, cv=5)
-    knn = knn.fit(x, y)
-    with open("trial_{}.pickle".format(trial.number), "wb") as fout:
-            pickle.dump(knn, fout)
-    '''n_neighbors':list(range(1, 15)),
-              'weights':['uniform', 'distance'],
-              'metric':['euclidean', 'manhattan', 'chebyshev', 'cosine']'''
-    accuracy = score.mean()
-    return accuracy
+    def fit(self, x, y):
+        return self.pipeline.fit(x, y)
+
+    def accuracy(self, x, y):
+        score = sklearn.model_selection.cross_val_score(self.pipeline, x, y, n_jobs=-1, cv=5)
+        return score.mean()
+
+    def predict(self, x):
+        return self.pipeline.predict(x)
+
+
+class LogisticRegressionModel(Model):
+    def __init__(self, penalty, solver, c, x, y):
+        self.lr = LogisticRegression(max_iter=1000, penalty=penalty, solver=solver, C=c)
+
+    def fit(self, x, y):
+        return self.lr.fit(x, y)
+
+    def accuracy(self, x, y):
+        score = sklearn.model_selection.cross_val_score(self.lr, x, y, n_jobs=-1, cv=5)
+        return score.mean()
+
+    def predict(self, x):
+        return self.lr.predict(x)
+
+
+class KNeighborsClassifierModel(Model):
+    def __init__(self, n_neighbors, weights, metric, x, y):
+        self.knn = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights, metric=metric)
+
+    def fit(self, x, y):
+        return self.knn.fit(x, y)
+
+    def accuracy(self, x, y):
+        score = sklearn.model_selection.cross_val_score(self.knn, x, y, n_jobs=-1, cv=5)
+        return score.mean()
+
+    def predict(self, x):
+        return self.knn.predict(x)
