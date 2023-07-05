@@ -1,7 +1,13 @@
 {% extends "base_generic.html" %}
+{% load static %}
+
 
 {% block content %}
 
+
+<script type="text/javascript" src={% static "/js/workspace_scripts.js" %}></script>
 <p>это типа рабочее пространство</p>
+
+<button onclick="redirectToModelCreation()">Создать новую модель</button>
 
 {% endblock %}
