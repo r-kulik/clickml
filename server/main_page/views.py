@@ -9,3 +9,5 @@ def index(request: HttpRequest) -> HttpResponse:
     :return: Project main page
     """
     return render(request, "mainpage.html")
+
+
