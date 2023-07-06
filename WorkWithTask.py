@@ -74,6 +74,7 @@ class Task:
     "user_name" : str
     "project_name" : str
     "file name" : str
+    "purpose" : str
     "task_type" : str
     "target_variable" : str
     """
