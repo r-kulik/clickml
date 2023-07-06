@@ -14,6 +14,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from WorkWithTask import Task
 
 
 class Model:
@@ -26,8 +27,9 @@ class Model:
     def accuracy(self, x, y):
         pass
 
-    def save(self, trial_number: int):
-        with open("{}.pickle".format(trial_number), "wb") as fout:
+    def save(self, trial_number: int, task: Task):
+        with open("{}/{}/model_{}.pickle".format(task.user_name, task.project_name, trial_number),
+                  "wb") as fout:
             pickle.dump(self, fout)
         return 0
 

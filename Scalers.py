@@ -1,9 +1,10 @@
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 import pandas as pd
 import pickle
+from WorkWithTask import Task
 
 
-class Scalers:
+class Scaler:
     def __init__(self, scaler_type: str):
         if scaler_type == "standard":
             self.__scaler = StandardScaler()
@@ -21,15 +22,10 @@ class Scalers:
     def fit_transform(self, x: pd.DataFrame) -> pd.DataFrame:
         return self.__scaler.fit_transform(x)
 
-    def save(self, trial_number: int):
-        with open("scaler_{}.pickle".format(trial_number), "wb") as fout:
+    def save(self, trial_number: int, task: Task):
+        with open("{}/{}/scaler_{}.pickle".format(task.user_name, task.project_name, trial_number),
+                  "wb") as fout:
             pickle.dump(self, fout)
-        return 0
-
-    def save_best(self):
-        with open("best_scaler.pickle", "wb") as fout:
-            pickle.dump(self, fout)
-        return 0
 
 
 """
