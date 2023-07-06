@@ -54,7 +54,7 @@ class Task:
 
         # if there is no tmp in project create it
         if "tmp" not in os.listdir(path=self.user_name + "/" + self.project_name):
-            os.mkdir("{}/{}/tpm".format(self.user_name, self.project_name))
+            os.mkdir("{}/{}/tmp".format(self.user_name, self.project_name))
 
         # todo add getting file through web in format user_name/project_name/tmp/example.csv (directory already exist)
 
@@ -66,7 +66,7 @@ class Task:
 
         # just example for testing
         return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic.csv", "purpose": "learning",
-                "task_type": "class", "target_variable": "survived"}
+                "task_type": "classification", "target_variable": "survived"}
 
     # form of json(dict) file
     """

@@ -19,10 +19,13 @@ class OptunaWork:
     def __init__(self, task: Task):
         self.task = task
 
-    def objective(self, trial, x: pd.DataFrame, y):
+    def objective(self, trial):
+        x = self.task.df.drop(self.task.target_variable, axis=1)
+        y = self.task.df[self.task.target_variable]
         deletedColumns = []
         for i in x:  # только для строк или объектов
-            if x[i].dtype() == "object":
+            if type(x[i]) == "object":
+                print(x[i])
                 counts = x[i].value_counts()
                 if counts[counts.idxmax()] / len(x[i]) < CONST_FREQ and x[i].dtype == object:
                     x = x.drop(i, axis=1)
@@ -32,30 +35,31 @@ class OptunaWork:
         imputer = Imputer(imputer_strategy)
         x = imputer.fit(x)
 
-        encoder = Encoding(trial.number)
+        encoder = Encoding()
         x = encoder.fit(x)
-        encoder.save()
+        encoder.save(trial.number, self.task)
 
-        scaler_type = trial.suggest_categorical("scaler", ["standard", "robust", "minmax", "none"])
+        scaler_type = trial.suggest_categorical("scaler", ["standard", "robust", "minmax"])
         scaler = Scaler(scaler_type)
         x = scaler.fit_transform(x)
-        scaler.save()
+        scaler.save(trial.number, self.task)
 
+        model = ModelsFunctions.Model()
         if self.task.task_type == "classification":
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["DecisionTree", "LogisticRegression", "RandomForest"])
+                                                        ["DecisionTree", "LogisticRegression"])
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
                 penalty = trial.suggest_categorical("penalty", ["l1", "l2", "none"])
                 c = trial.suggest_float("C", 1e-3, 1e3, log=True)
-                model = ModelsFunctions.LinearRegressionModel(penalty, solver, c, x, y, trial)
+                model = ModelsFunctions.LogisticRegressionModel(penalty, solver, c)
             elif classifier_name == "DecisionTree":
                 criterion = trial.suggest_categorical("criterion", ["gini", "entropy"])
                 splitter = trial.suggest_categorical("splitter", ["best", "random"])
-                model = ModelsFunctions.DecisionTree(criterion, splitter, x, y, trial)
+                model = ModelsFunctions.DecisionTree(criterion, splitter)
             elif classifier_name == "randomForest":
                 criterion = trial.suggest_categorical("criterion", ["gini", "entropy"])
-                model = ModelsFunctions.RandomForest(criterion, x, y, trial)
+                model = ModelsFunctions.RandomForest(criterion)
 
         elif self.task.task_type == "regression":
             regressor_name = trial.suggest_categorical("regressor_name", ["LinearRegression", "PolynomialRegression"])
@@ -64,24 +68,25 @@ class OptunaWork:
             elif regressor_name == "PolynomialRegression":
                 degree = trial.suggest_int("degree", 2, 8)
                 model = ModelsFunctions.PolynomialRegressionModel(degree)
-
-        accuracy = model.accuracy(x, y)
-        model.fit(x, y)
-        model.save(trial.number)
+        accuracy = 0
+        try:
+            accuracy = model.accuracy(x, y)
+            model.fit(x, y)
+            model.save(trial.number, self.task)
+        except Exception as e:
+            print(e)
 
         config = {"deletedColumns": deletedColumns, "imputer_strategy": imputer_strategy}
 
         with open("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, trial.number),
-                  "wb") as fout:
+                  "w") as fout:
             json.dump(config, fout)
 
         return accuracy
 
     def optuna_study(self):
         study = optuna.create_study(direction="maximize")
-        x = self.task.df.drop(self.task.target_variable, axis=1)
-        y = self.task.df[self.task.target_variable]
-        study.optimize(self.objective(x, y), n_trials=100)
+        study.optimize(self.objective, n_trials=100)
 
         os.rename("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, study.best_trial.number),
                   "{}/{}/config_best.json".format(self.task.user_name, self.task.project_name))
@@ -94,8 +99,11 @@ class OptunaWork:
                   "{}/{}/model_best.pickle".format(self.task.user_name, self.task.project_name))
 
         dirs = os.listdir("{}/{}".format(self.task.user_name, self.task.project_name))
-        for i in dirs:
-            if "best" not in i:
-                os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
+        try:
+            for i in dirs:
+                if "best" not in i:
+                    os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
+        except Exception as e:
+            print(e)
 
         study.best_trial.number
