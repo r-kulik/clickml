@@ -22,14 +22,13 @@ class OptunaWork:
     def objective(self, trial):
         x = self.task.df.drop(self.task.target_variable, axis=1)
         y = self.task.df[self.task.target_variable]
-        deletedColumns = []
+        self.deletedColumns = []
         for i in x:  # только для строк или объектов
-            if type(x[i]) == "object":
-                print(x[i])
+            if x[i].dtype == "object":
                 counts = x[i].value_counts()
                 if counts[counts.idxmax()] / len(x[i]) < CONST_FREQ and x[i].dtype == object:
                     x = x.drop(i, axis=1)
-                    self.deletedColumns[trial.number].append(i)
+                    self.deletedColumns.append(i)
 
         imputer_strategy = trial.suggest_categorical("imputer", ["mean", "most_frequent"])
         imputer = Imputer(imputer_strategy)
@@ -76,7 +75,8 @@ class OptunaWork:
         except Exception as e:
             print(e)
 
-        config = {"deletedColumns": deletedColumns, "imputer_strategy": imputer_strategy}
+        config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy}
+        print(config)
 
         with open("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, trial.number),
                   "w") as fout:
@@ -86,7 +86,11 @@ class OptunaWork:
 
     def optuna_study(self):
         study = optuna.create_study(direction="maximize")
-        study.optimize(self.objective, n_trials=100)
+        study.optimize(self.objective, n_trials=200)
+
+        for i in ["config_best.json", "encoder_best.pickle", "scaler_best.pickle", "model_best.pickle"]:
+            if("{}".format(i) in os.listdir("{}/{}".format(self.task.user_name, self.task.project_name))):
+                os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
 
         os.rename("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, study.best_trial.number),
                   "{}/{}/config_best.json".format(self.task.user_name, self.task.project_name))

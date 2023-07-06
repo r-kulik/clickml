@@ -65,7 +65,7 @@ class Task:
         # todo add receiving json file with descriptions
 
         # just example for testing
-        return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic.csv", "purpose": "learning",
+        return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic_test.csv", "purpose": "using",
                 "task_type": "classification", "target_variable": "survived"}
 
     # form of json(dict) file
