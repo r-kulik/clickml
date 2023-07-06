@@ -1,5 +1,6 @@
 from WorkWithTask import Task
 from DataSending import send_fail_message
+from Predict import Predict
 import logging
 
 if __name__ == '__main__':
@@ -12,8 +13,9 @@ if __name__ == '__main__':
                 pass
 
             elif task.task_type == "using":
-                pass
-
+                a = Predict(task).predict()
+                print(a)
+                # todo normal output
             else:
                 logging.debug("Wrong task_type format")
         else:
