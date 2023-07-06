@@ -22,7 +22,12 @@ class Scalers:
         return self.__scaler.fit_transform(x)
 
     def save(self, trial_number: int):
-        with open("{}.pickle".format(trial_number), "wb") as fout:
+        with open("scaler_{}.pickle".format(trial_number), "wb") as fout:
+            pickle.dump(self, fout)
+        return 0
+
+    def save_best(self):
+        with open("best_scaler.pickle", "wb") as fout:
             pickle.dump(self, fout)
         return 0
 

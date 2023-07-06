@@ -33,3 +33,9 @@ class Encoding:
             x_encode = enc.transform(x[[category]]).toarray()
             x[enc.categories_[0]] = x_encode
             x = x.drop(category, axis=1)
+        return x
+
+    def save_best(self):
+        with open("best_encoder.pickle", "wb") as fout:
+            pickle.dump(self, fout)
+        return 0
