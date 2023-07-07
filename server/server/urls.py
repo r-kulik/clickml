@@ -30,7 +30,8 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('workspace', workspace_views.main, name='Workspace')
+    path('workspace', workspace_views.main, name='Workspace'),
+    path('create_new_model', workspace_views.createNewModel, name='Create New Model')
 ]
 
 urlpatterns += [
