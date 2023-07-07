@@ -6,7 +6,13 @@
 
 
 <script type="text/javascript" src={% static "/js/workspace_scripts.js" %}></script>
+<h1>Привет, {{ context.username}} </h1>
+{% if not context.request.user.is_authenticated %}
+    <p>current user is not authenticated</p>
+{% endif %}
 <p>это типа рабочее пространство</p>
+
+
 
 <button onclick="redirectToModelCreation()">Создать новую модель</button>
 

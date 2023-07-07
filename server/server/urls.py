@@ -32,3 +32,8 @@ urlpatterns += [
 urlpatterns += [
     path('workspace', workspace_views.main, name='Workspace')
 ]
+
+urlpatterns += [
+    path('accounts/register', main_page_views.register, name='Register'),
+    path('accounts/', main_page_views.register, name='Register done')
+]
