@@ -1,22 +1,21 @@
-import numpy as np
-import pandas as pd
-import optuna
-import os
-import pickle
 import json
-from Imputers import Imputer
-from Encoder import Encoding
-from Scalers import Scaler
+import os
+import optuna
 import ModelsFunctions
+from DataSending import send_percent
+from Encoder import Encoding
+from Imputers import Imputer
+from Scalers import Scaler
 from WorkWithTask import Task
-
 
 # todo add COMMENTS. Not forget. Not only in this file
 CONST_FREQ = 0.01
 
 
 class OptunaWork:
-    def __init__(self, task: Task):
+    def __init__(self, task: Task, n_trials: int):
+        self.n_trials = n_trials
+        self.counter = 0
         self.task = task
 
     def objective(self, trial):
@@ -82,14 +81,19 @@ class OptunaWork:
                   "w") as fout:
             json.dump(config, fout)
 
+        self.counter += 1
+
+        if self.counter % 5 == 0:
+            send_percent(self.counter, self.n_trials)
+
         return accuracy
 
     def optuna_study(self):
         study = optuna.create_study(direction="maximize")
-        study.optimize(self.objective, n_trials=200)
+        study.optimize(self.objective, n_trials=self.n_trials)
 
         for i in ["config_best.json", "encoder_best.pickle", "scaler_best.pickle", "model_best.pickle"]:
-            if("{}".format(i) in os.listdir("{}/{}".format(self.task.user_name, self.task.project_name))):
+            if ("{}".format(i) in os.listdir("{}/{}".format(self.task.user_name, self.task.project_name))):
                 os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
 
         os.rename("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, study.best_trial.number),
@@ -109,5 +113,3 @@ class OptunaWork:
                     os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
         except Exception as e:
             print(e)
-
-        study.best_trial.number

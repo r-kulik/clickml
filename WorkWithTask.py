@@ -22,12 +22,15 @@ class Task:
         self.df = self.__get_data_frame()
 
     def __get_data_frame(self) -> pd.DataFrame:
-
-        file = self.__get_file_from_server()
         df = None
 
-        # check file extension
-        file_extension = file.split(".")[-1]
+        try:
+            file = self.__get_file_from_server()
+            # check file extension
+            file_extension = file.split(".")[-1]
+        except:
+            self.is_correct = False
+            return pd.DataFrame()
 
         if file_extension == "csv":
             df = pd.read_csv(file)
@@ -65,7 +68,7 @@ class Task:
         # todo add receiving json file with descriptions
 
         # just example for testing
-        return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic_test.csv", "purpose": "using",
+        return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic_train.csv", "purpose": "learning",
                 "task_type": "classification", "target_variable": "survived"}
 
     # form of json(dict) file

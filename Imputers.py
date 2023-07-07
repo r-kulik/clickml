@@ -1,4 +1,3 @@
-import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
 
@@ -7,7 +6,8 @@ class Imputer:
     def __init__(self, strategy: str):
         self.strategy = strategy
 
-    def imput(self, x_column, strategy):
+    @staticmethod
+    def imput(x_column, strategy):
         imputer = SimpleImputer(missing_values=np.nan, strategy=strategy)
         return imputer.fit_transform(x_column)
 
