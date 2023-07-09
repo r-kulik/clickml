@@ -2,6 +2,8 @@ from django.template.response import TemplateResponse
 
 from django.http import HttpRequest, HttpResponse
 
+from .ModelCreationSettingsContext import ModelCreationSettingsContext
+
 
 class WorkspaceMainPageContext:
     def __init__(self, request) -> None:
@@ -38,10 +40,11 @@ def createNewModel(request) -> HttpResponse:
 
 def modelCreationSettings(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        file = request.FILES['dataset_source_file']
+        creationContext = ModelCreationSettingsContext(request)
         # print(file.read())
         return TemplateResponse(
             request,
-            "model_creation_settings.html"
+            "model_settings.html",
+            context={'context': creationContext}
         )
     return "<p> Error <p>"

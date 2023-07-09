@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+    <form action="/workspace">
+        <h2> Mark the task type</h2>
+        <input type="radio" name="task_type" id="task_type_classification" value="classification">
+        <p>Classification</p>
+        <input type="radio" name="task_type" id="task_type_regression" valye="regression">
+        <p>Regression</p>
+
+        <h2>Mark the target variable</h2>
+
+        {% for data_field_name in context.dataset_column_names %}
+        <input type="radio" name="target_variable" id="target_variable_{{data_field_name}}" value="{{data_field_name}}">
+        <p>{{data_field_name}}</p>
+        {% endfor %}
+
+        <input type="submit">
+
+    </form>
+{% endblock %}
