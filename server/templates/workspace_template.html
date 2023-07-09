@@ -16,4 +16,13 @@
 
 <button onclick="redirectToModelCreation()">Создать новую модель</button>
 
+
+<h2>Информация по последней созданной модели</h2>
+
+<p>username = {{ context.username}}</p>
+<p>task_type = {{ context.task_type }}</p>
+<p>target_variable = {{ context.target_variable }}</p>
+<p>dataset_file = {{ context.currently_created_model_dataset_file }}</p>
+<p>project_name = {{ context.currently_created_model_project_name }}</p>
+
 {% endblock %}

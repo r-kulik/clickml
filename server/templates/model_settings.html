@@ -2,11 +2,14 @@
 {% load static %}
 
 {% block content %}
-    <form action="/workspace">
+    <form action="/workspace" method="post">
+
+        {% csrf_token %}
+
         <h2> Mark the task type</h2>
         <input type="radio" name="task_type" id="task_type_classification" value="classification">
         <p>Classification</p>
-        <input type="radio" name="task_type" id="task_type_regression" valye="regression">
+        <input type="radio" name="task_type" id="task_type_regression" value="regression">
         <p>Regression</p>
 
         <h2>Mark the target variable</h2>
