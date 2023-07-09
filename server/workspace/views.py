@@ -34,3 +34,14 @@ def createNewModel(request) -> HttpResponse:
         request,
         "create_new_model.html"
     )
+
+
+def modelCreationSettings(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        file = request.FILES['dataset_source_file']
+        # print(file.read())
+        return TemplateResponse(
+            request,
+            "model_creation_settings.html"
+        )
+    return "<p> Error <p>"

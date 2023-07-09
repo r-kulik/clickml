@@ -4,7 +4,19 @@
 
 <p>Тут мы создаем новую модель</p>
 
-<h4>И здесь по идее должна быть некая форма</h4>
+<form enctype="multipart/form-data" method="post" action="/model_creation_settings">
+    {% csrf_token %}
+    <p>Название проекта</p>
+    <p>
+        <input type="text" name="project_name">
+    </p>
+    <p>
+        <input type="file" name="dataset_source_file">
+    </p>
+    <p>
+        <input type="submit">
+    </p>
+</form>
 
 
 {% endblock %}
