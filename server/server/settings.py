@@ -28,7 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'click-ml.ru',
-    '127.0.0.1'
+    '127.0.0.1',
+    '10.91.50.38'
 ]
 
 

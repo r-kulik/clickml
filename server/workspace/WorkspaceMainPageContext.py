@@ -1,4 +1,4 @@
-from .ModelOnCreation import ModelOnCreation
+from .models import ModelOnCreation
 
 
 class WorkspaceMainPageContext:

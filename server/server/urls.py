@@ -39,3 +39,7 @@ urlpatterns += [
     path('accounts/register', main_page_views.register, name='Register'),
     path('accounts/', main_page_views.register, name='Register done')
 ]
+
+urlpatterns += [
+    path('enter_as_gpu_machine', workspace_views.__ENTER_AS_A_GPU_SERVER, name='Enter as a GPU SERVER')
+]

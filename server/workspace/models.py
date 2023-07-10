@@ -2,38 +2,55 @@ from django.db import models
 
 # Create your models here.
 from django.urls import reverse
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
-class MLMODEL(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    additional_info = models.CharField(max_length=100)
 
-    model_name = models.CharField(
-        help_text="Name of model",
-        max_length=1000
-    )
+    @staticmethod
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
 
-    model_directory = models.CharField(
-        help_text = "Link to the ml model storing directory",
-        max_length=1000
-    )
+    @staticmethod
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
 
-    owner_user_id = models.IntegerField(
-        help_text="User id of models owner"
-    )
+class ModelOnCreation(models.Model):
+    username = models.CharField(max_length=100)
+    project_name = models.CharField(max_length=100)
+    dataset_file = models.FileField()
 
-    ready_for_usage = models.BooleanField(
-        help_text="True if model was learned and is ready for expluatation",
-        default=False
-    )
+    def deletePreviousIfExists(self) -> None:
+        previousEntities = ModelOnCreation.objects.filter(username=self.username)
+        for entity in previousEntities:
+            entity.delete()
 
-    # Methods
-    def get_absolute_url(self):
-        """
-        Returns the url to access a particular instance of MyModelName.
-        """
-        return reverse('model-detail-view', args=[str(self.id)])
 
-    def __str__(self):
-        """
-        String for representing the MyModelName object (in Admin site etc.)
-        """
-        return self.model_name
+class LearningTask(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project_name = models.CharField(max_length=100)
+    task_type = models.CharField(max_length=100)
+    target_variable = models.CharField(max_length=100)
+    upload_token = models.CharField(max_length=100)
+    GPU_server_IP = models.CharField(max_length=20)
+    success = models.IntegerField()
+
+
+class WorkingGpuRemoteServer(models.Model):
+    IP_ADDRESS = models.CharField(max_length=20, unique=True)
+    LAST_REQUEST = models.DateTimeField()
+
+
+class UploadTokens(models.Model):
+    FILE_PATH = models.FileField()
+    UPLOAD_TOKEN = models.CharField(max_length=100)
+
+
+
