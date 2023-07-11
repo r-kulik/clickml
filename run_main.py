@@ -9,6 +9,7 @@ from Predict import Predict
 from sklearn import metrics
 
 from completeLearnTask import completeLearnTask
+from Clear import *
 
 
 def print_clf_metrics(y_actual, y_pred):
@@ -23,7 +24,13 @@ def run_app(js_task: APILearnTask):
 
     if task.is_correct:
         OptunaWork(task, 2).optuna_study()
-        completeLearnTask(js_task)
+        try:
+            completeLearnTask(js_task)
+        except:
+            pass
+        # todo change this construction
+        clear_files_after_learning(task)
+
 
 
 
