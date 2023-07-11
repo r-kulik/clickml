@@ -1,6 +1,6 @@
 import pandas as pd
 import logging
-from runAPI import APILearnTask
+from JsTask import APILearnTask
 import os
 
 

@@ -3,21 +3,15 @@ import traceback
 
 import uvicorn
 from fastapi import FastAPI
-from pydantic import BaseModel
 import requests
 import threading
 import APICONFIG
 import run_main
 import logging
 
+from JsTask import APILearnTask
+
 logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w")
-
-class APILearnTask(BaseModel):
-    task_id: int
-    task_type: str
-    target_variable: str
-    source_file_upload_token: str
-
 
 app = FastAPI()
 response = requests.get(f'http://{APICONFIG.site_host}/enter_as_gpu_machine')

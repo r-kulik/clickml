@@ -1,6 +1,6 @@
 from WorkWithTask import Task
 from OptunaPreprocessing import OptunaWork
-from runAPI import APILearnTask
+from JsTask import APILearnTask
 
 from sklearn import metrics
 
