@@ -30,7 +30,7 @@ class Model:
         pass
 
     def save(self, trial_number: int, task: Task):
-        with open("{}/{}/model_{}.pickle".format(task.user_name, task.project_name, trial_number),
+        with open("task_{}/model_{}.pickle".format(task.task_id, trial_number),
                   "wb") as fout:
             pickle.dump(self, fout)
         return 0

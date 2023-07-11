@@ -23,12 +23,7 @@ class Scaler:
         return self.__scaler.fit_transform(x)
 
     def save(self, trial_number: int, task: Task):
-        with open("{}/{}/scaler_{}.pickle".format(task.user_name, task.project_name, trial_number),
+        with open("task_{}/scaler_{}.pickle".format(task.task_id, trial_number),
                   "wb") as fout:
             pickle.dump(self, fout)
 
-
-"""
-a = Scaler()
-a.fit()
-"""

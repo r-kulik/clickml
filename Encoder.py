@@ -9,7 +9,7 @@ class Encoding:
         self.encoders = []
 
     def save(self, trial_number, task: Task):
-        with open("{}/{}/encoder_{}.pickle".format(task.user_name, task.project_name, trial_number),
+        with open("task_{}/encoder_{}.pickle".format(task.task_id, trial_number),
                   "wb") as fout:
             pickle.dump(self, fout)
 
