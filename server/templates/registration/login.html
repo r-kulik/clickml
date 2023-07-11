@@ -1,5 +1,5 @@
 {% extends "base_generic.html" %}
-
+{% load static %}
 {% block content %}
 
 {% if form.errors %}
@@ -14,6 +14,50 @@
     <p>Please login to see this page.</p>
   {% endif %}
 {% endif %}
+
+
+<! -- tag before the code and a -->
+<link rel="stylesheet" type="text/css" href='{% static "css/login.css" %}'/>
+<header>
+    <div class="container">
+        <img src='{% static "svg/logo_header.svg" %}'>
+
+        <nav>
+            <ul>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223z"/>
+                </svg>
+                <li><a href="">Main</a></li>
+                <li><a href="">Tutorial</a></li>
+                <li><a href="">About Us</a></li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                </svg>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="wrapper">
+
+
+<div class="left">
+
+    <div class="inner">
+
+    <img src='{% static "svg/background_graph.svg" %}'>
+    <div class="click_ml_login"><h1><b>CLICK ML</b></h1></div>
+    </div>
+
+</div>
+
+
+<div class="right">
+
+    <h1><b>Log in</b></h1>
+    <p>Do not have an account yet?</p>
+    <p><a href="tip.html">Sign Up here</a></p>
+
 
 <form method="post" action="{% url 'login' %}">
 {% csrf_token %}
@@ -30,11 +74,16 @@
 </tr>
 </table>
 
-<input type="submit" value="login" />
+<input type="submit" value="Log in" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
+
 {# Assumes you setup the password_reset view in your URLconf #}
 <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    </div>
+
+</div>
+<! -- tag before the code and a -->
 
 {% endblock %}

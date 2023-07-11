@@ -1,0 +1,51 @@
+.wrapper{
+    display: flex;
+
+
+}
+
+.inner{
+    position: relative;
+    display: flex;
+}
+
+.click_ml_login{
+    position: absolute;
+
+
+    width: 329px;
+    height: 53px;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    color: #FFF;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 70px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+    margin-left: 15%;
+    margin-top: 20%;
+
+}
+.left{
+    display: inline-block;
+
+
+
+    background: #274758;
+
+    height: 100vh;
+
+
+}
+
+.right{
+    display: inline-block;
+
+    margin-left: 20px;
+
+
+}
