@@ -24,14 +24,22 @@ def completeLearnTask(task: APILearnTask) -> int:
 
     responce_data = json.loads(response.text)
     folder_name=f"task_{task.task_id}"
-    result = uploadFile(
-        responce_data.get('upload_valid_token'),
-        responce_data.get('ml_model_id'),
-        f"{folder_name}/config_best.json",
-        'json'
-    )
-    if result == -1:
-        sys.exit() #TODO: убрать системный выход и заменить на обработку ошибки
+
+    for filename_type_pair in [
+        (f"{folder_name}/config_best.json", 'json'),
+        (f"{folder_name}/encoder_best.pickle", "encoder"),
+        (f"{folder_name}/scaler_best.pickle", "scaler"),
+        (f"{folder_name}/model_best.pickle", "model")
+    ]:
+
+        result = uploadFile(
+            responce_data.get('upload_valid_token'),
+            responce_data.get('ml_model_id'),
+            filename_type_pair[0],
+            filename_type_pair[1]
+        )
+        if result == -1:
+            sys.exit() #TODO: убрать системный выход и заменить на обработку ошибки
 
 
 def uploadFile(token: str, model_id: int, filename:str, filetype: str):

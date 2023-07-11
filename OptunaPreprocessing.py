@@ -77,8 +77,8 @@ class OptunaWork:
                 param = {
                     'objective': 'reg:squarederror',
                     'sampling_method': 'uniform',
-                    'lambda': trial.suggest_loguniform('lambda', 7.0, 17.0),
-                    'alpha': trial.suggest_loguniform('alpha', 7.0, 17.0),
+                    'lambda': trial.suggest_float('lambda', 7.0, 17.0, log=True),
+                    'alpha': trial.suggest_float('alpha', 7.0, 17.0, log=True),
                     'eta': trial.suggest_categorical('eta', [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]),
                     'gamma': trial.suggest_categorical('gamma', [18, 19, 20, 21, 22, 23, 24, 25]),
                     'learning_rate': trial.suggest_categorical('learning_rate',
