@@ -14,19 +14,19 @@ class Predict:
     def predict(self) -> np.ndarray:
 
         # import all files (pickle and json) to program from user_name/project_name
-        with open("{}/{}/encoder_best.pickle".format(self.task.user_name, self.task.project_name),
+        with open("task_{}/encoder_best.pickle".format(self.task.task_id),
                   "rb") as enc:
             encoder = pickle.load(enc)
 
-        with open("{}/{}/scaler_best.pickle".format(self.task.user_name, self.task.project_name),
+        with open("task_{}/scaler_best.pickle".format(self.task.task_id),
                   "rb") as scal:
             scaler = pickle.load(scal)
 
-        with open("{}/{}/model_best.pickle".format(self.task.user_name, self.task.project_name),
+        with open("task_{}/model_best.pickle".format(self.task.task_id),
                   "rb") as mod:
             model = pickle.load(mod)
 
-        with open("{}/{}/config_best.json".format(self.task.user_name, self.task.project_name)) as file:
+        with open("task_{}/config_best.json".format(self.task.task_id)) as file:
             config = json.load(file)
 
         # get values from config_best.json
