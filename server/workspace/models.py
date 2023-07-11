@@ -53,4 +53,16 @@ class UploadTokens(models.Model):
     UPLOAD_TOKEN = models.CharField(max_length=100)
 
 
+class MLMODEL(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project_name = models.CharField(max_length=100)
+    config_best_json_file = models.FileField()
+    encoder_best_file = models.FileField()
+    scaler_best_file = models.FileField()
+    model_best_file = models.FileField()
+    creation_time = models.DateTimeField()
+    ready_to_use = models.BooleanField(default=False)
+    valid_token_to_upload_files=models.CharField(max_length=100, default="")
+
+
 

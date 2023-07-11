@@ -58,10 +58,7 @@ class TaskRegister:
         )
         print(response.text)
         if response.text == "OK":
-            self.learning_task.success = 1
-            self.learning_task.save()
             return 0
-
         else:
             return -1
 
