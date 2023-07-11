@@ -83,7 +83,7 @@ def __UPLOAD_MODEL_CONFIGURATION_FILE(request: HttpRequest) -> HttpResponse:
 
         file = request.FILES['file']
         file_name = default_storage.save(
-            f"{ml_model.user.username}_{ml_model.project_name}_{file.name}",
+            f"projects/{ml_model.user.username}/{ml_model.project_name}/{file.name}",
             file
         )
         ml_model.__setattr__(allowed_filetypes[filetype], file_name)

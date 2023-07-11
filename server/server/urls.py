@@ -43,5 +43,10 @@ urlpatterns += [
 
 urlpatterns += [
     path('enter_as_gpu_machine', GPU_INTERFACES.__ENTER_AS_A_GPU_SERVER, name='Enter as a GPU SERVER'),
-    path('get_dataset_file', GPU_INTERFACES.__GET_DATASET_FILE, name='Download the dataset file')
+    path('get_dataset_file', GPU_INTERFACES.__GET_DATASET_FILE, name='Download the dataset file'),
+    path('complete_learning_task_and_get_files',
+         GPU_INTERFACES.__COMPLETE_LEARNING_TASK_AND_GET_FILES,
+         name='Complete Task'),
+    path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
+         name='Upload Config Files')
 ]
