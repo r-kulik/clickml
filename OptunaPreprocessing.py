@@ -93,7 +93,7 @@ class OptunaWork:
 
         config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy}
 
-        with open("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, trial.number),
+        with open("task_{}/config_{}.json".format(self.task.task_id, trial.number),
                   "w") as fout:
             json.dump(config, fout)
 
@@ -109,23 +109,23 @@ class OptunaWork:
         study.optimize(self.objective, n_trials=self.n_trials)
 
         for i in ["config_best.json", "encoder_best.pickle", "scaler_best.pickle", "model_best.pickle"]:
-            if "{}".format(i) in os.listdir("{}/{}".format(self.task.user_name, self.task.project_name)):
-                os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
+            if "{}".format(i) in os.listdir("task_{}".format(self.task.task_id)):
+                os.remove("task_{}/{}".format(self.task.task_id, i))
 
-        os.rename("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, study.best_trial.number),
-                  "{}/{}/config_best.json".format(self.task.user_name, self.task.project_name))
+        os.rename("task_{}/config_{}.json".format(self.task.task_id, study.best_trial.number),
+                  "task_{}/config_best.json".format(self.task.task_id))
         os.rename(
-            "{}/{}/encoder_{}.pickle".format(self.task.user_name, self.task.project_name, study.best_trial.number),
-            "{}/{}/encoder_best.pickle".format(self.task.user_name, self.task.project_name))
-        os.rename("{}/{}/scaler_{}.pickle".format(self.task.user_name, self.task.project_name, study.best_trial.number),
-                  "{}/{}/scaler_best.pickle".format(self.task.user_name, self.task.project_name))
-        os.rename("{}/{}/model_{}.pickle".format(self.task.user_name, self.task.project_name, study.best_trial.number),
-                  "{}/{}/model_best.pickle".format(self.task.user_name, self.task.project_name))
+            "task_{}/encoder_{}.pickle".format(self.task.task_id, study.best_trial.number),
+            "task_{}/encoder_best.pickle".format(self.task.task_id))
+        os.rename("task_{}/scaler_{}.pickle".format(self.task.task_id, study.best_trial.number),
+                  "task_{}/scaler_best.pickle".format(self.task.task_id))
+        os.rename("task_{}/model_{}.pickle".format(self.task.task_id, study.best_trial.number),
+                  "task_{}/model_best.pickle".format(self.task.task_id))
 
-        dirs = os.listdir("{}/{}".format(self.task.user_name, self.task.project_name))
+        dirs = os.listdir("task_{}".format(self.task.task_id))
         try:
             for i in dirs:
                 if "best" not in i:
-                    os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
+                    os.remove("task_{}/{}".format(self.task.task_id, i))
         except Exception as e:
             print(e)

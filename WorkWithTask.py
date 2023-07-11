@@ -1,15 +1,11 @@
-import time
-
 import pandas as pd
 import logging
+from runAPI import APILearnTask
 import os
 
-import requests
-
-import APICONFIG
 
 class Task:
-    def __init__(self):
+    def __init__(self, js_task: APILearnTask):
         # configuration logging in file
         logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w")
 
@@ -17,84 +13,23 @@ class Task:
         self.is_correct = True
 
         # variables for work with task in all program
-        self.__description = self.__get_description_from_sever()
-        self.user_name = self.__description["user_name"]
-        self.project_name = self.__description["project_name"]
-        self.file_name = self.__description["file_name"]
-        self.purpose = self.__description["purpose"]
-        self.task_type = self.__description["task_type"]
-        self.target_variable = self.__description["target_variable"]
+        self.task_id = js_task.task_id
+        self.task_type = js_task.task_type
+        self.target_variable = js_task.target_variable
+        self.source_file_upload_token = js_task.source_file_upload_token
         self.df = self.__get_data_frame()
+        self.__create_dir()
 
     def __get_data_frame(self) -> pd.DataFrame:
         df = None
 
         try:
-            file = self.__get_file_from_server()
-            # check file extension
-            file_extension = file.split(".")[-1]
+            df = pd.read_csv(f"tmp/{self.source_file_upload_token}.csv")
         except:
             self.is_correct = False
-            return pd.DataFrame()
-
-        if file_extension == "csv":
-            df = pd.read_csv(file)
-
-        elif file_extension == "xlsx":
-            df = pd.read_excel
-
-        else:
-            # exception: logging and changing is_correct
-            logging.debug("Wrong file format")
-            self.is_correct = False
-
+            logging.warning("Problems with wile getting")
         return df
 
-    def __get_file_from_server(self) -> str:
-
-        # if there is no folder of user create it
-        if self.user_name not in os.listdir(path='.'):
-            os.mkdir(self.user_name)
-
-        # if there is no folder of project create it
-        if self.project_name not in os.listdir(path=self.user_name):
-            os.mkdir("{}/{}".format(self.user_name, self.project_name))
-
-        # if there is no tmp in project create it
-        if "tmp" not in os.listdir(path=self.user_name + "/" + self.project_name):
-            os.mkdir("{}/{}/tmp".format(self.user_name, self.project_name))
-
-        # todo add getting file through web in format user_name/project_name/tmp/example.csv (directory already exist)
-
-        return "{}/{}/tmp/{}".format(self.user_name, self.project_name, self.file_name)
-
-    def __get_description_from_sever(self) -> dict:
-
-        # todo add receiving json file with descriptions
-
-        # just example for testing
-        return {"user_name": "bulkin", "project_name": "rep", "file_name": "titanic_train.csv", "purpose": "learning",
-                "task_type": "classification", "target_variable": "survived"}
-
-    # form of json(dict) file
-    """
-    dict:
-    "user_name" : str
-    "project_name" : str
-    "file name" : str
-    "purpose" : str
-    "task_type" : str
-    "target_variable" : str
-    """
-
-def registerTask(task) -> None:
-    response = requests.get(
-        f'http://{APICONFIG.site_host}/get_dataset_file?UPLOAD_TOKEN={task.source_file_upload_token}'
-    )
-    print("responce with the file had arrived")
-    if response.text == "some exception has occured":
-        raise FileNotFoundError
-    file_address = f"tmp/{task.source_file_upload_token}.csv"
-    with open(file_address, 'wb') as file:
-        file.write(response.content)
-    print(task.task_type)
+    def __create_dir(self) -> None:
+        if self.task_id not in os.listdir(path='.'):
+            os.mkdir(f"task_{self.task_id}")
