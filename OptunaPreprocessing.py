@@ -51,7 +51,7 @@ class OptunaWork:
         model = ModelsFunctions.Model()
         if self.task.task_type == "classification":
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["LogisticRegression", "DecisionTree"])
+                                                        ["DecisionTree", "LogisticRegression"])
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
                 penalty = trial.suggest_categorical("penalty", ["l1", "l2", "none"])
@@ -67,22 +67,33 @@ class OptunaWork:
 
         elif self.task.task_type == "regression":
             regressor_name = trial.suggest_categorical("regressor_name",
-                                                       ["LinearRegression", "PolynomialRegression", "GradientBoosting"])
+                                                       ["GradientBoosting"])
             if regressor_name == "LinearRegression":
                 model = ModelsFunctions.LinearRegressionModel()
             elif regressor_name == "PolynomialRegression":
                 degree = trial.suggest_int("degree", 2, 8)
                 model = ModelsFunctions.PolynomialRegressionModel(degree)
             elif regressor_name == "GradientBoosting":
-                degree = trial.suggest_int("degree", 2, 4)
-                loss = 0
-                learning_rate = 0
-                n_estimators = 0
-                criterion = 0
-                max_depth = 0
-                min_samples_leaf = 0
-                model = ModelsFunctions.PolynomialRegressionModel(loss, learning_rate, n_estimators, criterion,
-                                                                  max_depth, min_samples_leaf)
+                param = {
+                    'objective': 'reg:squarederror',
+                    'sampling_method': 'uniform',
+                    'lambda': trial.suggest_loguniform('lambda', 7.0, 17.0),
+                    'alpha': trial.suggest_loguniform('alpha', 7.0, 17.0),
+                    'eta': trial.suggest_categorical('eta', [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]),
+                    'gamma': trial.suggest_categorical('gamma', [18, 19, 20, 21, 22, 23, 24, 25]),
+                    'learning_rate': trial.suggest_categorical('learning_rate',
+                                                               [0.008, 0.01, 0.012, 0.014, 0.016, 0.018, 0.02]),
+                    'colsample_bytree': trial.suggest_categorical('colsample_bytree',
+                                                                  [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]),
+                    'colsample_bynode': trial.suggest_categorical('colsample_bynode',
+                                                                  [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]),
+                    'n_estimators': trial.suggest_int('n_estimators', 400, 1000),
+                    'min_child_weight': trial.suggest_int('min_child_weight', 8, 600),
+                    'max_depth': trial.suggest_categorical('max_depth', [3, 4, 5, 6, 7]),
+                    'subsample': trial.suggest_categorical('subsample', [0.5, 0.6, 0.7, 0.8, 1.0]),
+                    'random_state': 42
+                }
+                model = ModelsFunctions.GradientBoostingRegression(param)
         accuracy = 0
         try:
             accuracy = model.accuracy(x, y)
