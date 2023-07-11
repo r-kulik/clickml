@@ -7,10 +7,15 @@ from JsTask import APILearnTask
 
 
 def completeLearnTask(task: APILearnTask) -> int:
+    print(
+        f"""
+        GOING TO COMPLETE TASSK {task.task_id}
+        """
+    )
     response = requests.post(
         url=f'http://{site_host}/complete_learning_task_and_get_files',
-        json={
-            'task_id': task.task_id
+        headers={
+            'taskid': str(task.task_id)
         }
     )
     if response.status_code != 200:
@@ -23,25 +28,25 @@ def completeLearnTask(task: APILearnTask) -> int:
         responce_data.get('upload_valid_token'),
         responce_data.get('ml_model_id'),
         f"{folder_name}/config_best.json",
-        'json_config'
+        'json'
     )
     if result == -1:
         sys.exit() #TODO: убрать системный выход и заменить на обработку ошибки
 
 
-
-
 def uploadFile(token: str, model_id: int, filename:str, filetype: str):
     response = requests.post(
         url=f'http://{site_host}/upload_model_configuration_file',
-        json={
+        headers={
             'token': token,
-            'model_id': model_id,
+            'modelid': str(model_id),
             'filetype': filetype
         },
-        files={'file': open(filename)}
+        files={
+            'file': open(filename)
+        }
     )
     if response.status_code != 200:
-        print(response.text)
+        # print(response.text)
         return -1
     return 0

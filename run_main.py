@@ -1,3 +1,5 @@
+import traceback
+
 import pandas as pd
 import os
 
@@ -27,8 +29,7 @@ def run_app(js_task: APILearnTask):
         try:
             completeLearnTask(js_task)
         except:
-            pass
-        # todo change this construction
+            print(traceback.format_exc())
         clear_files_after_learning(task)
 
 
