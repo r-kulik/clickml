@@ -1,7 +1,12 @@
+import time
+
 import pandas as pd
 import logging
 import os
 
+import requests
+
+import APICONFIG
 
 class Task:
     def __init__(self):
@@ -81,3 +86,15 @@ class Task:
     "task_type" : str
     "target_variable" : str
     """
+
+def registerTask(task) -> None:
+    response = requests.get(
+        f'http://{APICONFIG.site_host}/get_dataset_file?UPLOAD_TOKEN={task.source_file_upload_token}'
+    )
+    print("responce with the file had arrived")
+    if response.text == "some exception has occured":
+        raise FileNotFoundError
+    file_address = f"tmp/{task.source_file_upload_token}.csv"
+    with open(file_address, 'wb') as file:
+        file.write(response.content)
+    print(task.task_type)

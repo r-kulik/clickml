@@ -5,6 +5,7 @@ import sklearn.ensemble
 import sklearn.model_selection
 import optuna
 import pickle
+from sklearn.metrics import mean_squared_error
 from optuna.samplers import TPESampler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
@@ -14,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingRegressor
 from WorkWithTask import Task
 
 
@@ -42,7 +44,9 @@ class LinearRegressionModel(Model):
         return self.lrg.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.lrg, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.lrg, x, y, scoring='neg_root_mean_squared_error',
+                                                        n_jobs=-1,
+                                                        cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -60,11 +64,29 @@ class PolynomialRegressionModel(Model):
         return self.pipeline.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.pipeline, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.pipeline, x, y, scoring='neg_root_mean_squared_error',
+                                                        n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
         return self.pipeline.predict(x)
+
+
+class GradientBoosting(Model):
+    def __init__(self, loss, learning_rate, n_estimators, criterion, max_depth):
+        self.gbr = GradientBoostingRegressor(loss=loss, learning_rate=learning_rate, n_estimators=n_estimators,
+                                             criterion=criterion, max_depth=max_depth)
+
+    def fit(self, x, y):
+        return self.gbr.fit(x, y)
+
+    def accuracy(self, x, y):
+        score = sklearn.model_selection.cross_val_score(self.lr, x, y, scoring="neg_root_mean_squared_error", n_jobs=-1,
+                                                        cv=5)
+        return score.mean()
+
+    def predict(self, x):
+        return self.gbr.predict(x)
 
 
 class LogisticRegressionModel(Model):

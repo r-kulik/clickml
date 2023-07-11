@@ -1,3 +1,8 @@
+import numpy as np
+import pandas as pd
+import optuna
+import os
+import pickle
 import json
 import os
 import optuna
@@ -17,6 +22,7 @@ class OptunaWork:
         self.n_trials = n_trials
         self.counter = 0
         self.task = task
+        self.current_trial = 0
 
     def objective(self, trial):
         x = self.task.df.drop(self.task.target_variable, axis=1)
@@ -31,21 +37,21 @@ class OptunaWork:
 
         imputer_strategy = trial.suggest_categorical("imputer", ["mean", "most_frequent"])
         imputer = Imputer(imputer_strategy)
-        x = imputer.fit(x)
+        x = imputer.fit(x).copy()
 
         encoder = Encoding()
-        x = encoder.fit(x)
+        x = encoder.fit(x).copy()
         encoder.save(trial.number, self.task)
 
         scaler_type = trial.suggest_categorical("scaler", ["standard", "robust", "minmax"])
         scaler = Scaler(scaler_type)
-        x = scaler.fit_transform(x)
+        x = scaler.fit_transform(x).copy()
         scaler.save(trial.number, self.task)
 
         model = ModelsFunctions.Model()
         if self.task.task_type == "classification":
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["DecisionTree", "LogisticRegression"])
+                                                        ["LogisticRegression", "DecisionTree"])
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
                 penalty = trial.suggest_categorical("penalty", ["l1", "l2", "none"])
@@ -60,12 +66,23 @@ class OptunaWork:
                 model = ModelsFunctions.RandomForest(criterion)
 
         elif self.task.task_type == "regression":
-            regressor_name = trial.suggest_categorical("regressor_name", ["LinearRegression", "PolynomialRegression"])
+            regressor_name = trial.suggest_categorical("regressor_name",
+                                                       ["LinearRegression", "PolynomialRegression", "GradientBoosting"])
             if regressor_name == "LinearRegression":
                 model = ModelsFunctions.LinearRegressionModel()
             elif regressor_name == "PolynomialRegression":
                 degree = trial.suggest_int("degree", 2, 8)
                 model = ModelsFunctions.PolynomialRegressionModel(degree)
+            elif regressor_name == "GradientBoosting":
+                degree = trial.suggest_int("degree", 2, 4)
+                loss = 0
+                learning_rate = 0
+                n_estimators = 0
+                criterion = 0
+                max_depth = 0
+                min_samples_leaf = 0
+                model = ModelsFunctions.PolynomialRegressionModel(loss, learning_rate, n_estimators, criterion,
+                                                                  max_depth, min_samples_leaf)
         accuracy = 0
         try:
             accuracy = model.accuracy(x, y)
@@ -75,7 +92,6 @@ class OptunaWork:
             print(e)
 
         config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy}
-        print(config)
 
         with open("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, trial.number),
                   "w") as fout:
@@ -93,7 +109,7 @@ class OptunaWork:
         study.optimize(self.objective, n_trials=self.n_trials)
 
         for i in ["config_best.json", "encoder_best.pickle", "scaler_best.pickle", "model_best.pickle"]:
-            if ("{}".format(i) in os.listdir("{}/{}".format(self.task.user_name, self.task.project_name))):
+            if "{}".format(i) in os.listdir("{}/{}".format(self.task.user_name, self.task.project_name)):
                 os.remove("{}/{}/{}".format(self.task.user_name, self.task.project_name, i))
 
         os.rename("{}/{}/config_{}.json".format(self.task.user_name, self.task.project_name, study.best_trial.number),
