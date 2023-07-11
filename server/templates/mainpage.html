@@ -1,65 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>click-ml.ru</title>
-</head>
-<body>
+{% extends "base_generic.html" %}
+{% load static %}
 
-<header>
-    <nav>
-        <a href="/accounts/login/">Log in</a>
-    </nav>
-</header>
 
-<main>
+{% block content %}
+<style>
 
-    <h1>click-ml</h1>
-    <p>Description</p>
-    <button class="btn active" onclick="showPage('page2')">Start</button>
-    <p>How it works?</p>
-    <p>How to start?</p>
-    <button class="btn active" onclick="showPage('page3')">Tutorial</button>
+    @import url('https://fonts.googleapis.com/css?family=Raleway:300,300i,400,500,500i'); /* Import font */
 
-    <!-- содержимое каждой страницы -->
-    <div id="page1">
-        <h1>Log in</h1>
-        <p>Enter your login and password</p>
-    </div>
-    <div id="page2" style="display:none">
-        <h1>Create account right now!</h1>
-        <p>Sign in and try one click-ml</p>
-    </div>
-    <div id="page3" style="display:none">
-        <h1>Tutorial</h1>
-        <p>How to work with our service</p>
-    </div>
-
-    // TODO: Это можно в будущем убирать, это пока для тестов
-    <div id="workspace_link">
-        <h1>Workspace</h1>
-        <button onclick='location.href = "/workspace"'>Workspace</button>
-    </div>
-
-</main>
-
-<script>
-    function showPage(pageName) {
-        var i, pageContent, btns;
-        pageContent = document.getElementsByTagName("div");
-        for (i = 0; i < pageContent.length; i++) {
-            if (pageContent[i].id === pageName) {
-                pageContent[i].style.display = "block";
-            } else {
-                pageContent[i].style.display = "none";
-            }
-        }
-        btns = document.getElementsByClassName("btn");
-        for (i = 0; i < btns.length; i++) {
-            btns[i].classList.remove("active");
-        }
-        event.currentTarget.classList.add("active");
+    /* Container needed to position the button. Adjust the width as needed */
+    .container {
+        position: relative;
+        width: 100%;
     }
-</script>
-</body>
-</html>
+
+    /* Make the image responsive */
+    .container img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Style the button and place it in the middle of the container/image */
+    /* Поменять все заново */
+    .container .btn {
+        position: absolute;
+        top: 77.3%;
+        left: 28%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        background-color: white;
+        color: black;
+        font-size: 16px;
+        padding: 12px 24px;
+
+        cursor: pointer;
+        border-radius: 5px;
+        width: 485px;
+        height: 148px;
+        flex-shrink: 0;
+        border: 2px; /* Параметры рамки */
+    }
+
+    .container .btn:hover {
+        background-color: #555555;
+
+    }
+
+    .frame2{
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 45px;
+        right: 110px;
+        top: 52px;
+        position: absolute;
+    }
+    .frame2 .upperbtn {
+        color: black;
+        font-size: 20px;
+        font-family: 'Raleway', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+
+        line-height: normal;
+
+
+    }
+</style>
+
+
+<div class="container">
+    <img src='{% static "/images/main_page.jpg" %}' alt="Snow">
+    <button class="btn">TUTORIAL</button>
+
+</div>
+
+<div class="frame2">
+    <button class="upperbtn" onclick="document.location='login.html'">Login</button>
+    <button class="upperbtn" onclick="pass">Tutorial</button>
+    <button class="upperbtn" onclick="pass">About Us</button>
+</div>
+
+{% endblock %}

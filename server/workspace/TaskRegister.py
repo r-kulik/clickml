@@ -27,20 +27,22 @@ class TaskRegister:
         token_note = UploadTokens(FILE_PATH=workspaceMainPageContext.currently_created_model_dataset_file,
                                   UPLOAD_TOKEN=secrets.token_urlsafe())
         token_note.save()
-
+        #  print(workspaceMainPageContext.username)
         task_register.learning_task = LearningTask(
-            user=User.objects.get(username=workspaceMainPageContext.username),
+            user=User.objects.filter(username=workspaceMainPageContext.username)[0],
             project_name=workspaceMainPageContext.currently_created_model_project_name,
             task_type=workspaceMainPageContext.task_type,
             target_variable=workspaceMainPageContext.target_variable,
+            upload_token=token_note.UPLOAD_TOKEN,
             GPU_server_IP="",
-            success = 0
+            success=0
         )
         task_register.purpose = "learn"
+        return task_register
 
     def registerLearningTask(self) -> int:
 
-        GPU_SERVER_IP = WorkingGpuRemoteServer.objects.all().sorted(key=lambda x: x.LAST_REQUEST)[0].IP_ADDRESS
+        GPU_SERVER_IP = WorkingGpuRemoteServer.objects.order_by('LAST_REQUEST')[0].IP_ADDRESS
         self.learning_task.GPU_server_IP = GPU_SERVER_IP
         self.learning_task.save()
         requestBody = {
@@ -49,10 +51,21 @@ class TaskRegister:
             'target_variable': self.learning_task.target_variable,
             'source_file_upload_token': self.learning_task.upload_token
         }
-
+        # print(json.dumps(requestBody))
         response = requests.post(
-            url=f"https://{GPU_SERVER_IP}/",
-            json=json.dumps(requestBody)
+            url=f"http://{GPU_SERVER_IP}/register_learn_task",
+            json=requestBody
         )
+        print(response.text)
+        if response.text == "OK":
+            self.learning_task.success = 1
+            self.learning_task.save()
+            return 0
+
+        else:
+            return -1
+
+        # TODO: защитить систему от падения в результате выключения работы GPU-машины (переключение на следующую
+        #  машину. лист ожидания при необходимости)
 
         return response

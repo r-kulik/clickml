@@ -19,6 +19,7 @@ from django.urls import path
 from django.conf.urls import include
 from main_page import views as main_page_views
 from workspace import views as workspace_views
+from workspace import GPU_INTERFACES
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,5 +42,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('enter_as_gpu_machine', workspace_views.__ENTER_AS_A_GPU_SERVER, name='Enter as a GPU SERVER')
+    path('enter_as_gpu_machine', GPU_INTERFACES.__ENTER_AS_A_GPU_SERVER, name='Enter as a GPU SERVER'),
+    path('get_dataset_file', GPU_INTERFACES.__GET_DATASET_FILE, name='Download the dataset file')
 ]

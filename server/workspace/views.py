@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.template.response import TemplateResponse
 
 
-from django.http import HttpRequest, HttpResponse, response
+from django.http import HttpRequest, HttpResponse, response, FileResponse
 
 from .ModelCreationSettingsContext import ModelCreationSettingsContext
 from .TaskRegister import TaskRegister
@@ -26,9 +26,9 @@ def main(request: HttpRequest) -> HttpResponse:
         workspaceMainPageContext.loadInformationAboutNewModel()
         workspaceMainPageContext.addInfoFromTemporaryTable()
 
-        task_register = TaskRegister.fromWorkspaceMainPageContext(workspaceMainPageContext)
-        task_register.registerLearningTask()
-
+        task_register: TaskRegister = TaskRegister.fromWorkspaceMainPageContext(workspaceMainPageContext)
+        task_registrarion_result = task_register.registerLearningTask() #0 - OK, -1 - Exception
+        print(task_registrarion_result)
         return TemplateResponse(
             request,
             "workspace_template.html",
@@ -70,22 +70,3 @@ def modelCreationSettings(request: HttpRequest) -> HttpResponse:
     return "<p> Error <p>"
 
 
-def __ENTER_AS_A_GPU_SERVER(request: HttpRequest) -> HttpResponse:
-    IP_ADDRESS = __get_ip_address(request)
-    for instance in WorkingGpuRemoteServer.objects.filter(IP_ADDRESS=IP_ADDRESS):
-        instance.delete()
-    remote_server = WorkingGpuRemoteServer(
-        IP_ADDRESS=IP_ADDRESS,
-        LAST_REQUEST=datetime.datetime.now()
-    )
-    remote_server.save()
-    return HttpResponse("OK")
-
-
-def __get_ip_address(request) -> str:
-    user_ip_address = request.META.get('HTTP_X_FORWARDED_FOR')
-    if user_ip_address:
-        ip = user_ip_address.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
