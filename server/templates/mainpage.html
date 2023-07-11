@@ -1,82 +1,84 @@
-{% extends "base_generic.html" %}
+{% extends "header_footer.html" %}
 {% load static %}
 
 
-{% block content %}
-<style>
+{% block page %}
 
-    @import url('https://fonts.googleapis.com/css?family=Raleway:300,300i,400,500,500i'); /* Import font */
+<div class="main">
 
-    /* Container needed to position the button. Adjust the width as needed */
-    .container {
-        position: relative;
-        width: 100%;
-    }
+    <img src='{% static "svg/background_graph.svg" %}'>
 
-    /* Make the image responsive */
-    .container img {
-        width: 100%;
-        height: auto;
-    }
-
-    /* Style the button and place it in the middle of the container/image */
-    /* Поменять все заново */
-    .container .btn {
-        position: absolute;
-        top: 77.3%;
-        left: 28%;
-        transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        background-color: white;
-        color: black;
-        font-size: 16px;
-        padding: 12px 24px;
-
-        cursor: pointer;
-        border-radius: 5px;
-        width: 485px;
-        height: 148px;
-        flex-shrink: 0;
-        border: 2px; /* Параметры рамки */
-    }
-
-    .container .btn:hover {
-        background-color: #555555;
-
-    }
-
-    .frame2{
-        display: inline-flex;
-        align-items: flex-start;
-        gap: 45px;
-        right: 110px;
-        top: 52px;
-        position: absolute;
-    }
-    .frame2 .upperbtn {
-        color: black;
-        font-size: 20px;
-        font-family: 'Raleway', sans-serif;
-        font-style: normal;
-        font-weight: 400;
-
-        line-height: normal;
-
-
-    }
-</style>
-
-
-<div class="container">
-    <img src='{% static "/images/main_page.jpg" %}' alt="Snow">
-    <button class="btn">TUTORIAL</button>
+    <div class="click_ml"><h1><b>CLICK ML</b></h1></div>
+    <div class="description"><p>We help you doing ML things</p></div>
 
 </div>
 
-<div class="frame2">
-    <button class="upperbtn" onclick="document.location='login.html'">Login</button>
-    <button class="upperbtn" onclick="pass">Tutorial</button>
-    <button class="upperbtn" onclick="pass">About Us</button>
+<div class="work">
+
+    <div class="text_left">
+        <h1><b>How does it work?</b></h1>
+
+        <p>It works in very smart way, which I don’t understand at all.
+            Just some text to fill the space. I’m not a developer, I am designer.
+            Hard problems need smart decisions. At the end you will get what you need,
+            that the thing. Universal solution, we are genius. </p>
+    </div>
+
+    <div class="steps_arrows">
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-1-circle" viewBox="0 0 16 16">
+            <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383h1.312Z"/>
+        </svg>
+
+
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-arrow-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+        </svg>
+
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-2-circle" viewBox="0 0 16 16">
+            <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM6.646 6.24v.07H5.375v-.064c0-1.213.879-2.402 2.637-2.402 1.582 0 2.613.949 2.613 2.215 0 1.002-.6 1.667-1.287 2.43l-.096.107-1.974 2.22v.077h3.498V12H5.422v-.832l2.97-3.293c.434-.475.903-1.008.903-1.705 0-.744-.557-1.236-1.313-1.236-.843 0-1.336.615-1.336 1.306Z"/>
+        </svg>
+
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-arrow-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+        </svg>
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-3-circle" viewBox="0 0 16 16">
+            <path d="M7.918 8.414h-.879V7.342h.838c.78 0 1.348-.522 1.342-1.237 0-.709-.563-1.195-1.348-1.195-.79 0-1.312.498-1.348 1.055H5.275c.036-1.137.95-2.115 2.625-2.121 1.594-.012 2.608.885 2.637 2.062.023 1.137-.885 1.776-1.482 1.875v.07c.703.07 1.71.64 1.734 1.917.024 1.459-1.277 2.396-2.93 2.396-1.705 0-2.707-.967-2.754-2.144H6.33c.059.597.68 1.06 1.541 1.066.973.006 1.6-.563 1.588-1.354-.006-.779-.621-1.318-1.541-1.318Z"/>
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Z"/>
+        </svg>
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-arrow-down" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+        </svg>
+
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="white" class="bi bi-4-circle" viewBox="0 0 16 16">
+            <path d="M7.519 5.057c.22-.352.439-.703.657-1.055h1.933v5.332h1.008v1.107H10.11V12H8.85v-1.559H4.978V9.322c.77-1.427 1.656-2.847 2.542-4.265ZM6.225 9.281v.053H8.85V5.063h-.065c-.867 1.33-1.787 2.806-2.56 4.218Z"/>
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0ZM1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Z"/>
+        </svg>
+
+    </div>
+
+    <div class="steps_text">
+        <div class="text_right"><p>Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in </p></div>
+        <div class="text_right"><p>Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in </p></div>
+        <div class="text_right"><p>Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in </p></div>
+        <div class="text_right"><p>Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in </p></div>
+    </div>
+
+</div>
+
+
+
+<div class="tutorial">
+    <button class="button">TUTORIAL</button>
+    <div class="text">
+        <h1>How to start?</h1>
+        <p>You are welcome to use this gorgeous software after reading the tutorial.</p>
+    </div>
 </div>
 
 {% endblock %}

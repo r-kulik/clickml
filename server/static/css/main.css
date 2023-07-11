@@ -1,0 +1,228 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;300;700&display=swap');
+
+
+h1{
+    font-family: 'Raleway', 'sans-serif';
+}
+
+p{
+    font-family: 'Raleway', 'sans-serif';
+}
+
+/* Header */
+
+.container {
+    width: 100%;
+    max-width: 1024px;
+    padding: 15px;
+    margin: 0 auto;
+
+
+}
+
+.logo {
+    float: left;
+    flex-shrink: 0;
+}
+nav {
+    float: right;
+}
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+}
+nav li {
+    display: inline-block;
+
+}
+
+nav a{
+    text-decoration: none;
+    margin: 40px;
+    line-height: 38px;
+    top: 150px;
+
+
+}
+
+a:visited {
+    /* Цвет посещённой ссылки */
+    color: black;
+}
+
+/* Body */
+
+
+/* Graph part */
+
+
+.main{
+    position: relative;
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+
+}
+
+.click_ml{
+    position: absolute;
+    top: 30%;
+    left: 40%;
+
+    color: var(--text, #0B1B23);
+
+    font-size: 100px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+
+}
+
+.description{
+    position: absolute;
+    top: 50%;
+    left:30%;
+
+
+    color: #0B1B23;
+
+
+
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+}
+
+
+
+/* Steps part */
+
+
+.work{
+    background: #274758;
+    display: flex;
+    align-items: stretch;
+    padding: 75px;
+}
+
+.work .text_left{
+    color: #FFF;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    height: 300px;
+    width: 460px;
+}
+
+.work .steps_arrows{
+    display: flex;
+    flex-direction: column;
+    padding-left: 180px;
+    padding-right: 110px;
+}
+
+.work .text_right{
+    color: #FFF;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    height: 200px;
+    padding-top: 25px;
+
+}
+
+.work h1{
+    color: #F5F5F5;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    height: 75px;
+}
+
+
+.work p{
+    color: #F5F5F5;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+/* Tutorial part */
+
+.tutorial {
+    display: flex;
+    padding: 25px;
+    width: 100vw;
+    height: 100vh;
+
+}
+.tutorial .button {
+    margin-top: 250px;
+    margin-right: 10px;
+    width: 477px;
+    height: 148px;
+    flex-shrink: 0;
+    background: white;
+    border: 3px solid var(--text, #0B1B23);
+
+    color: var(--text, #0B1B23);
+    text-align: center;
+    font-family: Raleway, sans-serif;
+    font-size: 75px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+}
+.tutorial .text {
+    margin-top: 250px;
+    margin-left: 10px;
+    padding-right: 25px;
+    color: var(--text, #0B1B23);
+    text-align: right;
+
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+
+}
+
+.tutorial h1{
+    font-weight: 500;
+}
+
+
+
+/* Footer part */
+
+
+.footer{
+    display: flex;
+    height: 15%;
+    padding: 79px 398px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    background-color: #254455;
+}
+
+.footer p{
+    color: #FFF;
+    text-align: center;
+
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+}
