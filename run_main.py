@@ -14,6 +14,7 @@ from Clear import *
 
 import cpuinfo
 from sklearnex import patch_sklearn
+import ChooseBest
 
 
 def print_clf_metrics(y_actual, y_pred):
@@ -21,6 +22,10 @@ def print_clf_metrics(y_actual, y_pred):
     print(f'Testing precision = {metrics.precision_score(y_actual, y_pred)}')
     print(f'Testing recall = {metrics.recall_score(y_actual, y_pred)}')
     print(f'Testing F1-score = {metrics.f1_score(y_actual, y_pred)}')
+
+def print_reg_metrics(y_actual, y_pred):
+    print(f'Testing MSE = {metrics.mean_squared_error(y_actual, y_pred)}')
+    print(f'Testing R2 = {metrics.r2_score(y_actual, y_pred)}')
 
 
 def run_app(js_task: APILearnTask):
@@ -51,17 +56,21 @@ def run_test(scenario: int):
         OptunaWork(task, 200).optuna_study()
 
     if task.purpose == "use":
+        ChooseBest.choose_best(task, 1)
+        true_y = task.df[task.target_variable]
+        task.df = task.df.drop(task.target_variable, axis=1)
         a = Predict(task)
         b = a.predict()
-        print(b)
+        print_clf_metrics(true_y, b)
 
 
 if __name__ == "__main__":
-    run_test(3)
+    run_test(4)
 
     """
     0 - cars - class
     1 - titanic - class
     2 - diamonds - multy class
     3 - california - regression
+    4 - use cars
     """

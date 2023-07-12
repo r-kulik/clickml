@@ -54,7 +54,7 @@ class OptunaWork:
         # todo add SVM
         if self.task.task_type == "classification":
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["DecisionTree", "LogisticRegression", "RandomForest"])
+                                                        ["DecisionTree", "LogisticRegression"])
 
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
