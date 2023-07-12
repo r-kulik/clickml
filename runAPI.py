@@ -21,15 +21,15 @@ if response.status_code != 200:
 
 
 @app.post("/register_learn_task")
-async def registerLearnTask(jsonFile: APILearnTask):
+async def register_learn_task(json_file: APILearnTask):
     try:
         learning_task_thread = threading.Thread(
-            target=registerTask,
-            args=[jsonFile]
+            target=register_task,
+            args=[json_file]
         )
         learning_task_thread.start()
         return "OK"
-    except Exception as e:
+    except Exception as _:
         logging.info(traceback.format_exc())
         return "EXC"
 
@@ -39,7 +39,7 @@ def index():
     return "Hello, world!"
 
 
-def registerTask(task) -> None:
+def register_task(task) -> None:
     response = requests.get(
         f'http://{APICONFIG.site_host}/get_dataset_file?UPLOAD_TOKEN={task.source_file_upload_token}'
     )

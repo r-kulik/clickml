@@ -6,7 +6,7 @@ from APICONFIG import site_host
 from JsTask import APILearnTask
 
 
-def completeLearnTask(task: APILearnTask) -> int:
+def complete_learn_task(task: APILearnTask) -> int:
     print(
         f"""
         GOING TO COMPLETE TASSK {task.task_id}
@@ -23,7 +23,7 @@ def completeLearnTask(task: APILearnTask) -> int:
         return -1
 
     responce_data = json.loads(response.text)
-    folder_name=f"task_{task.task_id}"
+    folder_name = f"task_{task.task_id}"
 
     for filename_type_pair in [
         (f"{folder_name}/config_best.json", 'json'),
@@ -32,17 +32,17 @@ def completeLearnTask(task: APILearnTask) -> int:
         (f"{folder_name}/model_best.pickle", "model")
     ]:
 
-        result = uploadFile(
+        result = upload_file(
             responce_data.get('upload_valid_token'),
             responce_data.get('ml_model_id'),
             filename_type_pair[0],
             filename_type_pair[1]
         )
         if result == -1:
-            sys.exit() #TODO: убрать системный выход и заменить на обработку ошибки
+            sys.exit()  # TODO: убрать системный выход и заменить на обработку ошибки
 
 
-def uploadFile(token: str, model_id: int, filename:str, filetype: str):
+def upload_file(token: str, model_id: int, filename: str, filetype: str):
     response = requests.post(
         url=f'http://{site_host}/upload_model_configuration_file',
         headers={

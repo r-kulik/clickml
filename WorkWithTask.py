@@ -1,5 +1,3 @@
-import time
-
 import pandas as pd
 import logging
 from JsTask import APILearnTask
@@ -27,7 +25,7 @@ class Task:
 
         try:
             df = pd.read_csv(f"tmp/{self.source_file_upload_token}.csv")
-        except:
+        except Exception as _:
             self.is_correct = False
             logging.warning("Problems with wile getting")
         return df

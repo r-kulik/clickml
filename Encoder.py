@@ -21,7 +21,8 @@ class Encoding:
                 self.encoders.append(encoder)
         return x
 
-    def fit_enc(self, x, category):
+    @staticmethod
+    def fit_enc(x, category):
         encoder = OneHotEncoder()
         x_encode = encoder.fit_transform(x[[category]]).toarray()
         x[encoder.categories_[0]] = x_encode

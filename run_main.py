@@ -10,7 +10,7 @@ from Predict import Predict
 
 from sklearn import metrics
 
-from completeLearnTask import completeLearnTask
+from completeLearnTask import complete_learn_task
 from Clear import *
 
 
@@ -27,12 +27,10 @@ def run_app(js_task: APILearnTask):
     if task.is_correct:
         OptunaWork(task, 2).optuna_study()
         try:
-            completeLearnTask(js_task)
+            complete_learn_task(js_task)
         except:
             print(traceback.format_exc())
         clear_files_after_learning(task)
-
-
 
 
 class T:
@@ -52,6 +50,7 @@ class T:
         if self.task_id not in os.listdir(path='.'):
             os.mkdir(f"task_{self.task_id}")
 
+
 # for test only
 def run_test():
     task = T()
@@ -67,6 +66,3 @@ def run_test():
 
 if __name__ == "__main__":
     run_test()
-
-
-
