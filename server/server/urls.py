@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-from main_page import views as main_page_views
+from workspace import main_page_views as main_page_views
 from workspace import views as workspace_views
 from workspace import GPU_INTERFACES
 
