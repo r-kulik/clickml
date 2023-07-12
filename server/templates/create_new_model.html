@@ -1,22 +1,41 @@
-{% extends "base_generic.html" %}
-{% load static % }
-{% block content %}
+{% extends "header_footer.html" %}
+{% load static %}
+{% block page %}
 
-<p>Тут мы создаем новую модель</p>
+<div class="wrapper">
+
+
 
 <form enctype="multipart/form-data" method="post" action="/model_creation_settings">
     {% csrf_token %}
-    <p>Название проекта</p>
+    <div class="left">
+        <p>Please name your model</p>
     <p>
-        <input type="text" name="project_name">
+        <input type="text" name="project_name" value="Name">
     </p>
+        </div>
+
+    <div class="right">
     <p>
-        <input type="file" name="dataset_source_file">
+        <!--<input type="file" name="dataset_source_file" placeholder="Continue">*-->
+        <label>Please upload .csv</label>
+        <label for="inputFile"><img src='{% static "svg/download_circle.svg" %}'></label>
+        <input type="file" name="dataset_source_file" id="inputFile" style="display:none">
     </p>
+        </div>
+    <div class="bottom">
     <p>
-        <input type="submit">
+
+
+        <label for="inputNext" class="btn btn-info">Continue</label>
+        <input type="submit" name="dataset_source_file" id="inputNext" style="display:none">
     </p>
+        </div>
+
+
 </form>
+
+</div>
 
 
 

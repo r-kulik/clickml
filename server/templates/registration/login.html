@@ -55,8 +55,15 @@
 <div class="right">
 
     <h1><b>Log in</b></h1>
-    <p>Do not have an account yet?</p>
-    <p><a href="tip.html">Sign Up here</a></p>
+
+    <div class="wrapper">
+    <div class="sign_up_text">
+
+    <p>Do not have an account yet?&nbsp;</p>
+    </div>
+
+        <div class="sign_up_text"><p><a href="tip.html">Sign Up</a></p></div>
+        </div>
 
 
 <form method="post" action="{% url 'login' %}">
@@ -64,23 +71,24 @@
 <table>
 
 <tr>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
+  <td><p>{{ form.username.label_tag}}&nbsp;</p></td>
+  <td>{{ form.username}}</td>
 </tr>
 
 <tr>
-  <td>{{ form.password.label_tag }}</td>
+  <td><p>{{ form.password.label_tag}}&nbsp;</p></td>
   <td>{{ form.password }}</td>
 </tr>
 </table>
 
-<input type="submit" value="Log in" />
-<input type="hidden" name="next" value="{{ next }}" />
+<div class="button"><input class="input_button" type="submit" value="Log in" /></div>
+<input class="input_button" type="hidden" name="next" value="{{ next }}" />
 </form>
 
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<div class="lost_pwd"><p><a href="{% url 'password_reset' %}">Lost password?</a></p></div>
+
     </div>
 
 </div>
