@@ -1,7 +1,6 @@
 import traceback
 
-import pandas as pd
-import os
+from Test import *
 
 from WorkWithTask import Task
 from OptunaPreprocessing import OptunaWork
@@ -17,7 +16,6 @@ import cpuinfo
 from sklearnex import patch_sklearn
 
 
-
 def print_clf_metrics(y_actual, y_pred):
     print(f'Testing accuracy = {metrics.accuracy_score(y_actual, y_pred)}')
     print(f'Testing precision = {metrics.precision_score(y_actual, y_pred)}')
@@ -26,6 +24,10 @@ def print_clf_metrics(y_actual, y_pred):
 
 
 def run_app(js_task: APILearnTask):
+
+    if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
+        patch_sklearn()
+
     task = Task(js_task)
 
     if task.is_correct:
@@ -37,61 +39,13 @@ def run_app(js_task: APILearnTask):
         clear_files_after_learning(task)
 
 
-class T:
-    def __init__(self, ar: dict):
-        # fill this field
-        self.purpose = ar["purpose"]  # or use
-        self.task_type = ar["task_type"]  # or classification
-        self.target_variable = ar["target_variable"]  # input by your self
-        self.file_name = ar["file_name"]  # input by your self
-
-        # don't touch
-        self.df = pd.read_csv(f"{self.file_name}.csv")
-        self.task_id = 19
-        self.__create_dir()
-
-    def __create_dir(self) -> None:
-        if self.task_id not in os.listdir(path='.'):
-            os.mkdir(f"task_{self.task_id}")
-
-
 # for test only
 def run_test(scenario: int):
-    if scenario == 0:
-        task = T({
-            "purpose": "learn",
-            "task_type": "classification",
-            "target_variable": "Machine failure",
-            "file_name": "tmp/cars_train"
-        })
 
-    elif scenario == 1:
-        task = T({
-            "purpose": "learn",
-            "task_type": "classification",
-            "target_variable": "survived",
-            "file_name": "tmp/titanic"
-        })
-    elif scenario == 2:
-        task = T({
-            # Multiclass
-            "purpose": "learn",
-            "task_type": "classification",
-            "target_variable": "cut",
-            "file_name": "tmp/diamonds"
-        })
-    elif scenario == 3:
-        task = T({
-            "purpose": "learn",
-            "task_type": "regression",
-            "target_variable": "price",
-            "file_name": "tmp/california_train"
-        })
+    task = choose_scenario(scenario)
 
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
-
-
 
     if task.purpose == "learn":
         OptunaWork(task, 200).optuna_study()
@@ -103,4 +57,11 @@ def run_test(scenario: int):
 
 
 if __name__ == "__main__":
-    run_test(2)
+    run_test(3)
+
+    """
+    0 - cars - class
+    1 - titanic - class
+    2 - diamonds - multy class
+    3 - california - regression
+    """
