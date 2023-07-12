@@ -95,7 +95,7 @@ class OptunaWork:
                     'lambda': trial.suggest_float('lambda', 7.0, 17.0, log=True),
                     'alpha': trial.suggest_float('alpha', 7.0, 17.0, log=True),
                     'eta': trial.suggest_float('eta', 0.2, 1.0),
-                    'gamma': trial.suggest_float('gamma', [18, 19, 20, 21, 22, 23, 24, 25]),
+                    'gamma': trial.suggest_float('gamma', 0, 25),
                     'learning_rate': trial.suggest_float('learning_rate', 0, 0.05),
                     'colsample_bytree': trial.suggest_float('colsample_bytree', 0.1, 1),
                     'colsample_bynode': trial.suggest_float('colsample_bynode', 0.1, 1),
