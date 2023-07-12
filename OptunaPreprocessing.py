@@ -12,6 +12,7 @@ from Encoder import Encoding
 from Imputers import Imputer
 from Scalers import Scaler
 from WorkWithTask import Task
+import cpuinfo
 
 # todo add COMMENTS. Not forget. Not only in this file
 CONST_FREQ = 0.01
@@ -49,21 +50,35 @@ class OptunaWork:
         scaler.save(trial.number, self.task)
 
         model = ModelsFunctions.Model()
+
+        # todo add SVM
         if self.task.task_type == "classification":
             classifier_name = trial.suggest_categorical("classifier",
                                                         ["DecisionTree", "LogisticRegression"])
+
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
                 penalty = trial.suggest_categorical("penalty", ["l1", "l2", "none"])
                 c = trial.suggest_float("C", 1e-3, 1e3, log=True)
                 model = ModelsFunctions.LogisticRegressionModel(penalty, solver, c)
+
             elif classifier_name == "DecisionTree":
                 criterion = trial.suggest_categorical("criterion", ["gini", "entropy"])
                 splitter = trial.suggest_categorical("splitter", ["best", "random"])
                 model = ModelsFunctions.DecisionTree(criterion, splitter)
+
             elif classifier_name == "randomForest":
                 criterion = trial.suggest_categorical("criterion", ["gini", "entropy"])
                 model = ModelsFunctions.RandomForest(criterion)
+
+            elif classifier_name == "SVM":
+                # todo fit parameters
+
+                # "linear", "poly", "rbf", "sigmoid", "precomputed"
+                kernel = trial.suggest_categorical("kernel", ["linear"])
+                degree = trial.suggest_int("degree", 1, 5, log=True)
+                c = trial.suggest_float("C", 0.001, 1, log=True)
+                model = ModelsFunctions.SVMModel(kernel, degree, c)
 
         elif self.task.task_type == "regression":
             regressor_name = trial.suggest_categorical("regressor_name",
@@ -117,7 +132,7 @@ class OptunaWork:
 
     def optuna_study(self):
         study = optuna.create_study(direction="maximize")
-        study.optimize(self.objective, n_trials=self.n_trials)
+        study.optimize(self.objective, n_trials=self.n_trials, gc_after_trial=True)
 
         for i in ["config_best.json", "encoder_best.pickle", "scaler_best.pickle", "model_best.pickle"]:
             if "{}".format(i) in os.listdir("task_{}".format(self.task.task_id)):

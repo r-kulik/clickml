@@ -121,7 +121,7 @@ class KNeighborsClassifierModel(Model):
 
 class SVMModel(Model):
     def __init__(self, kernel, degree, c):
-        self.svm = SVC(kernel=kernel, degree=degree, c=c)
+        self.svm = SVC(kernel=kernel, degree=degree, C=c)
 
     def fit(self, x, y):
         return self.svm.fit(x, y)

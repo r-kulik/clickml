@@ -13,6 +13,10 @@ from sklearn import metrics
 from completeLearnTask import complete_learn_task
 from Clear import *
 
+import cpuinfo
+from sklearnex import patch_sklearn
+
+
 
 def print_clf_metrics(y_actual, y_pred):
     print(f'Testing accuracy = {metrics.accuracy_score(y_actual, y_pred)}')
@@ -37,13 +41,13 @@ class T:
     def __init__(self):
         # fill this field
         self.purpose = "learn"  # or use
-        self.task_type = "regression"  # or classification
-        self.target_variable = "price"  # input by your self
-        self.file_name = "tmp/california_train"  # input by your self
+        self.task_type = "classification"  # or classification
+        self.target_variable = "Machine failure"  # input by your self
+        self.file_name = "tmp/cars"  # input by your self
 
         # don't touch
         self.df = pd.read_csv(f"{self.file_name}.csv")
-        self.task_id = 24
+        self.task_id = 26
         self.__create_dir()
 
     def __create_dir(self) -> None:
@@ -53,6 +57,10 @@ class T:
 
 # for test only
 def run_test():
+
+    if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
+        patch_sklearn()
+
     task = T()
 
     if task.purpose == "learn":
