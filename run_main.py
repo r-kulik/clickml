@@ -38,16 +38,16 @@ def run_app(js_task: APILearnTask):
 
 
 class T:
-    def __init__(self):
+    def __init__(self, ar: dict):
         # fill this field
-        self.purpose = "learn"  # or use
-        self.task_type = "classification"  # or classification
-        self.target_variable = "Machine failure"  # input by your self
-        self.file_name = "tmp/cars"  # input by your self
+        self.purpose = ar["purpose"]  # or use
+        self.task_type = ar["task_type"]  # or classification
+        self.target_variable = ar["target_variable"]  # input by your self
+        self.file_name = ar["file_name"]  # input by your self
 
         # don't touch
         self.df = pd.read_csv(f"{self.file_name}.csv")
-        self.task_id = 26
+        self.task_id = 19
         self.__create_dir()
 
     def __create_dir(self) -> None:
@@ -56,12 +56,42 @@ class T:
 
 
 # for test only
-def run_test():
+def run_test(scenario: int):
+    if scenario == 0:
+        task = T({
+            "purpose": "learn",
+            "task_type": "classification",
+            "target_variable": "Machine failure",
+            "file_name": "tmp/cars_train"
+        })
+
+    elif scenario == 1:
+        task = T({
+            "purpose": "learn",
+            "task_type": "classification",
+            "target_variable": "survived",
+            "file_name": "tmp/titanic"
+        })
+    elif scenario == 2:
+        task = T({
+            # Multiclass
+            "purpose": "learn",
+            "task_type": "classification",
+            "target_variable": "cut",
+            "file_name": "tmp/diamonds"
+        })
+    elif scenario == 3:
+        task = T({
+            "purpose": "learn",
+            "task_type": "regression",
+            "target_variable": "price",
+            "file_name": "tmp/california_train"
+        })
 
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
 
-    task = T()
+
 
     if task.purpose == "learn":
         OptunaWork(task, 200).optuna_study()
@@ -73,4 +103,4 @@ def run_test():
 
 
 if __name__ == "__main__":
-    run_test()
+    run_test(2)

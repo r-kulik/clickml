@@ -91,13 +91,13 @@ class GradientBoostingRegression(Model):
 
 class LogisticRegressionModel(Model):
     def __init__(self, penalty, solver, c):
-        self.lr = LogisticRegression(max_iter=1000, penalty=penalty, solver=solver, C=c)
+        self.lr = LogisticRegression(max_iter=1000, penalty=penalty, solver=solver, C=c, multi_class="ovr")
 
     def fit(self, x, y):
         return self.lr.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.lr, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.lr, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -112,7 +112,7 @@ class KNeighborsClassifierModel(Model):
         return self.knn.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.knn, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.knn, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -127,7 +127,7 @@ class SVMModel(Model):
         return self.svm.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.svm, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.svm, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -142,7 +142,7 @@ class DecisionTree(Model):
         return self.tree.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.tree, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.tree, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -157,7 +157,7 @@ class RandomForest(Model):
         return self.forest.fit(x, y)
 
     def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.forest, x, y, n_jobs=-1, cv=5)
+        score = sklearn.model_selection.cross_val_score(self.forest, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):

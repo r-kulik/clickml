@@ -54,11 +54,11 @@ class OptunaWork:
         # todo add SVM
         if self.task.task_type == "classification":
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["DecisionTree", "LogisticRegression"])
+                                                        ["DecisionTree", "LogisticRegression", "RandomForest"])
 
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
-                penalty = trial.suggest_categorical("penalty", ["l1", "l2", "none"])
+                penalty = trial.suggest_categorical("penalty", ["l1", "l2"])
                 c = trial.suggest_float("C", 1e-3, 1e3, log=True)
                 model = ModelsFunctions.LogisticRegressionModel(penalty, solver, c)
 
@@ -67,7 +67,7 @@ class OptunaWork:
                 splitter = trial.suggest_categorical("splitter", ["best", "random"])
                 model = ModelsFunctions.DecisionTree(criterion, splitter)
 
-            elif classifier_name == "randomForest":
+            elif classifier_name == "RandomForest":
                 criterion = trial.suggest_categorical("criterion", ["gini", "entropy"])
                 model = ModelsFunctions.RandomForest(criterion)
 
@@ -116,6 +116,7 @@ class OptunaWork:
             model.save(trial.number, self.task)
         except Exception as e:
             print(e)
+            return 0
 
         config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy}
 
