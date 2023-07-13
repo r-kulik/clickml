@@ -78,5 +78,13 @@ def choose_scenario(num: int) -> T:
             "target_variable": "is_legendary",
             "file_name": "tmp/pokemon_test"
         }
+
+    if num == 7:
+        ar = {
+            "purpose": "learn",
+            "task_type": "classification",
+            "target_variable": "is_legendary",
+            "file_name": "tmp/pokemon_train"
+        }
     scenario = T(ar)
     return scenario

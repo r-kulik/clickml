@@ -55,7 +55,7 @@ class OptunaWork:
         if self.task.task_type == "classification":
             scoring = "roc_auc_ovr"
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["DecisionTree", "LogisticRegression"])
+                                                        ["DecisionTree", "LogisticRegression", "GradientBoostingClassifier"])
 
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
@@ -80,6 +80,29 @@ class OptunaWork:
                 degree = trial.suggest_int("degree", 1, 5, log=True)
                 c = trial.suggest_float("C", 0.001, 1, log=True)
                 model = ModelsFunctions.SVMModel(kernel, degree, c)
+
+            elif classifier_name == "GradientBoostingClassifier":
+                param = {
+                    "verbosity": 0,
+                    "objective": trial.suggest_categorical('objective', ['reg:linear', 'reg:logistic', 'binary:logistic']),
+                    "eval_metric": trial.suggest_categorical("eval_metric", ["rmse", "logloss", "error"]),
+                    "booster": trial.suggest_categorical("booster", ['gbtree', 'gblinear', 'dart']),
+                    "lambda": trial.suggest_float("lambda", 1e-8, 1.0, log=True),
+                    "alpha": trial.suggest_float("alpha", 1e-8, 1.0, log=True),
+                    "n_estimators": trial.suggest_int("n_estimators", 10, 600),
+                    'random_state': 42
+                }
+                if param["booster"] == "gbtree" or param["booster"] == "dart":
+                    param["max_depth"] = trial.suggest_int("max_depth", 1, 4)
+                    param["eta"] = trial.suggest_float("eta", 1e-8, 1.0, log=True)
+                    param["gamma"] = trial.suggest_float("gamma", 1e-8, 1.0, log=True)
+                    param["grow_policy"] = trial.suggest_categorical("grow_policy", ["depthwise", "lossguide"])
+                if param["booster"] == "gblinear":
+                    param["sample_type"] = trial.suggest_categorical("sample_type", ["uniform", "weighted"])
+                    param["normalize_type"] = trial.suggest_categorical("normalize_type", ["tree", "forest"])
+                    param["rate_drop"] = trial.suggest_float("rate_drop", 1e-8, 1.0, log=True)
+                    param["skip_drop"] = trial.suggest_float("skip_drop", 1e-8, 1.0, log=True)
+                model = ModelsFunctions.GradientBoostingClassifier(param)
 
         elif self.task.task_type == "regression":
             scoring = "r2"
@@ -107,8 +130,6 @@ class OptunaWork:
                     'subsample': trial.suggest_float('subsample', 0.3, 1.0),
                     'random_state': 42
                 }
-                model = ModelsFunctions.GradientBoostingRegression(param)
-        accuracy = 0
         try:
             if y.nunique() == 2:
                 scoring = "f1"

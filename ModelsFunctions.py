@@ -17,7 +17,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingRegressor
 from WorkWithTask import Task
-from xgboost import XGBRegressor
+from xgboost import XGBRegressor, XGBClassifier
 
 
 class Model:
@@ -162,3 +162,19 @@ class RandomForest(Model):
 
     def predict(self, x):
         return self.forest.predict(x)
+
+
+class GradientBoostingClassifier(Model):
+    def __init__(self, param):
+        self.gbc = XGBClassifier(**param)
+
+    def fit(self, x, y):
+        return self.gbc.fit(x, y)
+
+    def accuracy(self, x, y, scoring="roc_auc_ovr"):
+        score = sklearn.model_selection.cross_val_score(self.gbc, x, y, scoring=scoring, n_jobs=-1,
+                                                        cv=5)
+        return score.mean()
+
+    def predict(self, x):
+        return self.gbc.predict(x)
