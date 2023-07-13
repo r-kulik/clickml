@@ -53,6 +53,7 @@ class OptunaWork:
 
         # todo add SVM
         if self.task.task_type == "classification":
+            scoring = "roc_auc_ovr"
             classifier_name = trial.suggest_categorical("classifier",
                                                         ["DecisionTree", "LogisticRegression"])
 
@@ -81,6 +82,7 @@ class OptunaWork:
                 model = ModelsFunctions.SVMModel(kernel, degree, c)
 
         elif self.task.task_type == "regression":
+            scoring = "r2"
             regressor_name = trial.suggest_categorical("regressor_name",
                                                        ["GradientBoosting"])
             if regressor_name == "LinearRegression":
@@ -108,7 +110,9 @@ class OptunaWork:
                 model = ModelsFunctions.GradientBoostingRegression(param)
         accuracy = 0
         try:
-            accuracy = model.accuracy(x, y)
+            if y.nunique() == 2:
+                scoring = "f1"
+            accuracy = model.accuracy(x, y, scoring=scoring)
             model.fit(x, y)
             model.save(trial.number, self.task)
         except Exception as e:

@@ -67,7 +67,7 @@ def run_test(scenario: int):
 
 
 if __name__ == "__main__":
-    run_test(6)
+    run_test(2)
 
     """
     0 - cars - class

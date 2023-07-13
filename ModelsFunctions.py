@@ -27,7 +27,7 @@ class Model:
     def predict(self, x):
         pass
 
-    def accuracy(self, x, y):
+    def accuracy(self, x, y, scoring):
         pass
 
     def save(self, trial_number: int, task: Task):
@@ -44,8 +44,8 @@ class LinearRegressionModel(Model):
     def fit(self, x, y):
         return self.lrg.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.lrg, x, y, scoring='r2',
+    def accuracy(self, x, y, scoring="r2"):
+        score = sklearn.model_selection.cross_val_score(self.lrg, x, y, scoring=scoring,
                                                         n_jobs=-1,
                                                         cv=5)
         return score.mean()
@@ -64,8 +64,8 @@ class PolynomialRegressionModel(Model):
     def fit(self, x, y):
         return self.pipeline.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.pipeline, x, y, scoring='r2',
+    def accuracy(self, x, y, scoring="r2"):
+        score = sklearn.model_selection.cross_val_score(self.pipeline, x, y, scoring=scoring,
                                                         n_jobs=-1, cv=5)
         return score.mean()
 
@@ -80,8 +80,8 @@ class GradientBoostingRegression(Model):
     def fit(self, x, y):
         return self.gbr.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.gbr, x, y, scoring="r2", n_jobs=-1,
+    def accuracy(self, x, y, scoring="r2"):
+        score = sklearn.model_selection.cross_val_score(self.gbr, x, y, scoring=scoring, n_jobs=-1,
                                                         cv=5)
         return score.mean()
 
@@ -96,8 +96,8 @@ class LogisticRegressionModel(Model):
     def fit(self, x, y):
         return self.lr.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.lr, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
+    def accuracy(self, x, y, scoring="roc_auc_ovr"):
+        score = sklearn.model_selection.cross_val_score(self.lr, x, y, scoring=scoring, n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -111,8 +111,8 @@ class KNeighborsClassifierModel(Model):
     def fit(self, x, y):
         return self.knn.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.knn, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
+    def accuracy(self, x, y, scoring="roc_auc_ovr"):
+        score = sklearn.model_selection.cross_val_score(self.knn, x, y, scoring=scoring, n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -126,8 +126,8 @@ class SVMModel(Model):
     def fit(self, x, y):
         return self.svm.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.svm, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
+    def accuracy(self, x, y, scoring="roc_auc_ovr"):
+        score = sklearn.model_selection.cross_val_score(self.svm, x, y, scoring=scoring, n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -141,8 +141,8 @@ class DecisionTree(Model):
     def fit(self, x, y):
         return self.tree.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.tree, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
+    def accuracy(self, x, y, scoring="roc_auc_ovr"):
+        score = sklearn.model_selection.cross_val_score(self.tree, x, y, scoring=scoring, n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
@@ -156,8 +156,8 @@ class RandomForest(Model):
     def fit(self, x, y):
         return self.forest.fit(x, y)
 
-    def accuracy(self, x, y):
-        score = sklearn.model_selection.cross_val_score(self.forest, x, y, scoring="roc_auc_ovr", n_jobs=-1, cv=5)
+    def accuracy(self, x, y, scoring="roc_auc_ovr"):
+        score = sklearn.model_selection.cross_val_score(self.forest, x, y, scoring=scoring, n_jobs=-1, cv=5)
         return score.mean()
 
     def predict(self, x):
