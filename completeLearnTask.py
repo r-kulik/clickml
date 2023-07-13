@@ -6,16 +6,16 @@ from APICONFIG import site_host
 from JsTask import APILearnTask
 
 
-def complete_learn_task(task: APILearnTask) -> int:
+def complete_learn_task(task_id: int) -> int:
     print(
         f"""
-        GOING TO COMPLETE TASSK {task.task_id}
+        GOING TO COMPLETE TASSK {task_id}
         """
     )
     response = requests.post(
         url=f'http://{site_host}/complete_learning_task_and_get_files',
         headers={
-            'taskid': str(task.task_id)
+            'taskid': str(task_id)
         }
     )
     if response.status_code != 200:
@@ -23,7 +23,7 @@ def complete_learn_task(task: APILearnTask) -> int:
         return -1
 
     responce_data = json.loads(response.text)
-    folder_name = f"task_{task.task_id}"
+    folder_name = f"task_{task_id}"
 
     for filename_type_pair in [
         (f"{folder_name}/config_best.json", 'json'),

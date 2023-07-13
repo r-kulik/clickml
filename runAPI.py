@@ -2,12 +2,13 @@ import sys
 import traceback
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile
 import requests
 import threading
 import APICONFIG
 import run_main
 import logging
+import os
 
 from JsTask import APILearnTask
 
@@ -35,6 +36,35 @@ async def register_learn_task(json_file: APILearnTask):
         return "EXC"
 
 
+@app.post("/register_exploit_task")
+async def register_exploit_task(
+        exploit_file: UploadFile,
+        json_config_file: UploadFile,
+        encoder_file: UploadFile,
+        scaler_file: UploadFile,
+        model_file: UploadFile,
+        task_id: UploadFile
+):
+    task_id = int(task_id.file.read())
+    if task_id not in os.listdir(path='.'):
+        os.mkdir(f"task_{task_id}")
+
+    with open(f"task_{task_id}/encoder_best.pickle", "wb") as f:
+        f.write(encoder_file.file.read())
+    with open(f"task_{task_id}/scaler_best.pickle", "wb") as f:
+        f.write(scaler_file.file.read())
+    with open(f"task_{task_id}/model_best.pickle", "wb") as f:
+        f.write(model_file.file.read())
+    with open(f"task_{task_id}/config_best.json", "wb") as f:
+        f.write(json_config_file.file.read())
+    with open(f"task_{task_id}/df.csv", "wb") as f:
+        f.write(exploit_file.file.read())
+
+    run_main.run_app("use", task_id=task_id)
+
+    return "OK"
+
+
 @app.get('/')
 def index():
     return "Hello, world!"
@@ -50,7 +80,7 @@ def register_task(task) -> None:
     file_address = f"tmp/{task.source_file_upload_token}.csv"
     with open(file_address, 'wb') as file:
         file.write(response.content)
-    run_main.run_app(task, purpose="learn")
+    run_main.run_app("learn", js_task=task)
 
 
 if __name__ == '__main__':

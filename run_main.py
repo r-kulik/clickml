@@ -1,5 +1,8 @@
 import traceback
 
+import pandas as pd
+
+from Predict_old import PredictOld
 from Test import *
 
 from WorkWithTask import Task
@@ -10,6 +13,7 @@ from Predict import Predict
 from sklearn import metrics
 
 from completeLearnTask import complete_learn_task
+from  completeExploitTask import complete_exploit_task
 from Clear import *
 
 import cpuinfo
@@ -29,19 +33,19 @@ def print_reg_metrics(y_actual, y_pred):
     print(f'Testing R2 = {metrics.r2_score(y_actual, y_pred)}')
 
 
-def run_app(js_task: APILearnTask, purpose: str) -> None:
+def run_app(purpose: str, js_task: APILearnTask = None, task_id: int = None) -> None:
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
 
-    task = Task(js_task)
-
-    if task.is_correct:
-        if purpose == "learn":
-            OptunaWork(task, 10).optuna_study()
-            complete_learn_task(js_task)
-            clear_files_after_learning(task)
-        if purpose == "use":
-            result = Predict(task).predict()
+    if purpose == "learn":
+        task = Task(js_task)
+        OptunaWork(task, 100).optuna_study()
+        complete_learn_task(js_task.task_id)
+        clear_files_after_learning(task)
+    if purpose == "use":
+        Predict(task_id).predict()
+        #complete_exploit_task(task_id)
+        clear_files_after_using(task_id)
 
 
 # for test only
@@ -58,7 +62,7 @@ def run_test(scenario: int):
         ChooseBest.choose_best(task, 1)
         true_y = task.df[task.target_variable]
         task.df = task.df.drop(task.target_variable, axis=1)
-        a = Predict(task)
+        a = PredictOld(task)
         b = a.predict()
         if task.task_type == "classification":
             print_clf_metrics(true_y, b)
@@ -67,7 +71,7 @@ def run_test(scenario: int):
 
 
 if __name__ == "__main__":
-    run_test(7)
+    run_test(0)
 
     """
     0 - cars - class
