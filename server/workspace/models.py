@@ -67,6 +67,13 @@ class MLMODEL(models.Model):
     valid_token_to_upload_files=models.CharField(max_length=100, default="")
 
 
+class ExploitTask(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ml_model: MLMODEL = models.ForeignKey(MLMODEL, on_delete=models.CASCADE)
+    csv_file_name = models.FilePathField()
+    GPU_SERVER_IP = models.CharField(max_length=20)
+    success = models.BooleanField(default=False)
+
 
 
 

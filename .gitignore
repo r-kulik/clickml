@@ -2,3 +2,4 @@
 *.sqlite3
 /server/source_dataset_files/
 /server/projects
+/server/exploit_dataset_files

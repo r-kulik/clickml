@@ -1,3 +1,5 @@
+import secrets
+
 from django.core.files.storage import default_storage
 from django.http import HttpRequest
 import pandas as pd
@@ -14,7 +16,7 @@ class ModelCreationSettingsContext(BasePageContext):
         super().__init__(request, **kwargs)
         self.project_name = self.request.POST.get('project_name', 'Unnamed Project')
         self.dataset_file_name = default_storage.save(
-            f"source_dataset_files/{request.user.get_username()}/{self.project_name}.csv",
+            f"source_dataset_files/{secrets.token_urlsafe()}.csv",
             self.request.FILES['dataset_source_file']
         )
 

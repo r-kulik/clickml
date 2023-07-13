@@ -23,7 +23,7 @@ class WorkspaceMainPageContext(BasePageContext):
         self.currently_created_model_dataset_file_name = None
         self.currently_created_model_project_name = "undefined"
         self.is_workspace = True
-        self.ml_model_contexts= []
+        self.ml_model_contexts = []
 
     def loadInformationAboutNewModel(self) -> None:
         self.task_type = self.request.POST.get('task_type', 'undefined')

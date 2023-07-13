@@ -9,8 +9,10 @@ from django.http import HttpRequest, HttpResponse, response, FileResponse
 from .BasePageContext import BasePageContext
 from .ModelCreationSettingsContext import ModelCreationSettingsContext
 from .TaskRegister import TaskRegister
+from .ViewResultsContext import ViewResultsContext
+from .UseModelContext import UseModelContext
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
-from .models import ModelOnCreation, WorkingGpuRemoteServer
+from .models import ModelOnCreation, WorkingGpuRemoteServer, MLMODEL
 
 from .CreateNewModelContext import CreateNewModelContext
 
@@ -86,6 +88,32 @@ def modelCreationSettings(request: HttpRequest) -> HttpResponse:
         )
     return "<p> Error <p>"
 
-
+@errorHandler
 def useMlModel(request: HttpRequest) -> HttpResponse:
-    pass
+    model_id = int(request.GET.get("model_id", "-1"))
+    #TODO: проверка доступа
+    useModelContext = UseModelContext(
+        request,
+        model_id,
+        is_workspace=True
+    )
+
+    return TemplateResponse(
+        request,
+        "use_model.html",
+        context={'context': useModelContext}
+    )
+
+
+@errorHandler
+def viewResults(request: HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        viewResultsContext = ViewResultsContext(request)
+        task_register = TaskRegister.fromUseModelContext(viewResultsContext)
+        task_register.registerExploitTask()
+
+        return TemplateResponse(
+            request,
+            "view_results.html",
+            context={'context': viewResultsContext}
+        )
