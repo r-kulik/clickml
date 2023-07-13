@@ -1,28 +1,36 @@
-{% extends "base_generic.html" %}
+{% extends "header_footer.html" %}
 {% load static %}
 
 
-{% block content %}
+{% block page %}
+
+<link rel="stylesheet" type="text/css" href='{% static "css/workspace_template.css" %}'/>
+<script type="text/javascript" src='{% static "/js/workspace_scripts.js" %}'></script>
 
 
-<script type="text/javascript" src={% static "/js/workspace_scripts.js" %}></script>
-<h1>Привет, {{ context.username}} </h1>
 {% if not context.request.user.is_authenticated %}
     <p>current user is not authenticated</p>
 {% endif %}
-<p>это типа рабочее пространство</p>
 
 
 
-<button onclick="redirectToModelCreation()">Создать новую модель</button>
+<div class="parent_workspace_template">
+
+    <div class="top_elements">
+<button onclick="redirectToModelCreation()"><p>Create a new model</p></button>
+<h1>Here is the list of your models</h1>
+    </div>
+
+    <div class="title_description">
+<p>Title</p>
+<p>Status</p>
+        </div>
+{% include "model_including_example.html" %}
+{% include "model_including_example.html" %}
+    </div>
 
 
-<h2>Информация по последней созданной модели</h2>
 
-<p>username = {{ context.username}}</p>
-<p>task_type = {{ context.task_type }}</p>
-<p>target_variable = {{ context.target_variable }}</p>
-<p>dataset_file = {{ context.currently_created_model_dataset_file }}</p>
-<p>project_name = {{ context.currently_created_model_project_name }}</p>
+
 
 {% endblock %}

@@ -11,12 +11,7 @@ from .TaskRegister import TaskRegister
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
 from .models import ModelOnCreation, WorkingGpuRemoteServer
 
-
-class CreateNewModelContext:
-
-    def __init__(self, request) -> None:
-        self.request = request
-        self.username = self.request.user.get_username()
+from .CreateNewModelContext import CreateNewModelContext
 
 # Create your views here.
 
@@ -43,11 +38,12 @@ def main(request: HttpRequest) -> HttpResponse:
 
 
 def createNewModel(request) -> HttpResponse:
-    createNewModelContext = CreateNewModelContext(request)
+    createNewModelContext = CreateNewModelContext(request, is_workspace=True)
 
     return TemplateResponse(
         request,
-        "create_new_model.html"
+        "create_new_model.html",
+        context={'context': createNewModelContext}
     )
 
 

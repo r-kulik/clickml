@@ -29,7 +29,7 @@ class TaskRegister:
         token_note.save()
         #  print(workspaceMainPageContext.username)
         task_register.learning_task = LearningTask(
-            user=User.objects.filter(username=workspaceMainPageContext.username)[0],
+            user=User.objects.get(username=workspaceMainPageContext.username),
             project_name=workspaceMainPageContext.currently_created_model_project_name,
             task_type=workspaceMainPageContext.task_type,
             target_variable=workspaceMainPageContext.target_variable,

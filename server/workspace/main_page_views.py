@@ -4,6 +4,9 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
 import django.forms as forms
 from django.contrib.auth.models import User
+from django.template.response import TemplateResponse
+
+from.BasePageContext import BasePageContext
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -52,4 +55,6 @@ def index(request: HttpRequest) -> HttpResponse:
     """
 
     print('main page is rendering')
-    return render(request, "mainpage.html")
+    context = BasePageContext(request)
+    return TemplateResponse(request, "mainpage.html", context={'context': context})
+

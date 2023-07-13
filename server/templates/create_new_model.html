@@ -2,11 +2,11 @@
 {% load static %}
 {% block page %}
 
-<div class="wrapper">
+
+<link rel="stylesheet" type="text/css" href='{% static "css/create_new_model.css" %}'/>
 
 
-
-<form enctype="multipart/form-data" method="post" action="/model_creation_settings">
+<!--<form enctype="multipart/form-data" method="post" action="/model_creation_settings">
     {% csrf_token %}
     <div class="left">
         <p>Please name your model</p>
@@ -17,7 +17,7 @@
 
     <div class="right">
     <p>
-        <!--<input type="file" name="dataset_source_file" placeholder="Continue">*-->
+       -<input type="file" name="dataset_source_file" placeholder="Continue">*
         <label>Please upload .csv</label>
         <label for="inputFile"><img src='{% static "svg/download_circle.svg" %}'></label>
         <input type="file" name="dataset_source_file" id="inputFile" style="display:none">
@@ -34,8 +34,42 @@
 
 
 </form>
+-->
+<div class="create_nm_workspace">
 
-</div>
+    <form enctype="multipart/form-data" method="post" action="/model_creation_settings">
+    <!--{% csrf_token %}-->
+    <div class="row_">
+
+      <div class="left_">
+
+        <p>Please name your model</p>
+        <p>
+          <input type="text" name="project_name" placeholder="Name">
+        </p>
+
+      </div>
+
+
+      <div class="right_">
+
+        <p>Please upload .csv</p>
+        <label for="inputFile"><img src='{% static "svg/download_circle.svg" %}'></label>
+        <input type="file" name="dataset_source_file" id="inputFile" style="display:none">
+
+      </div>
+
+
+    </div>
+
+        <label for="inputNext" class="cont_button">Continue</label>
+        <input class="center_" type="submit" name="dataset_source_file" id="inputNext" style="display:none">
+
+
+  </form>
+    </div>
+
+
 
 
 

@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-from main_page import views as main_page_views
+from workspace import main_page_views as main_page_views
 from workspace import views as workspace_views
 from workspace import GPU_INTERFACES
 
@@ -43,5 +43,10 @@ urlpatterns += [
 
 urlpatterns += [
     path('enter_as_gpu_machine', GPU_INTERFACES.__ENTER_AS_A_GPU_SERVER, name='Enter as a GPU SERVER'),
-    path('get_dataset_file', GPU_INTERFACES.__GET_DATASET_FILE, name='Download the dataset file')
+    path('get_dataset_file', GPU_INTERFACES.__GET_DATASET_FILE, name='Download the dataset file'),
+    path('complete_learning_task_and_get_files',
+         GPU_INTERFACES.__COMPLETE_LEARNING_TASK_AND_GET_FILES,
+         name='Complete Task'),
+    path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
+         name='Upload Config Files')
 ]

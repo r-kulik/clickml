@@ -1,9 +1,12 @@
 import datetime
 import json
 import os
+import secrets
 
 import requests
 from django.http import HttpResponse, HttpRequest, FileResponse
+from django.core.files.storage import default_storage
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import WorkingGpuRemoteServer, UploadTokens, LearningTask, MLMODEL
 
@@ -28,7 +31,7 @@ def __GET_DATASET_FILE(request: HttpRequest) -> FileResponse:
     return FileResponse(file_to_download)
 
 
-
+@csrf_exempt
 def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse:
     """
     схема запроса
@@ -37,21 +40,17 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
     :return:
     """
     if request.method == "POST":
-        learning_task_id = request.POST.get("task_id")
+        learning_task_id = int(request.headers.get('taskid', -1))
+        assert learning_task_id != -1
+        print(f'GET A COMPLETION OF TASK #{learning_task_id}')
         learning_task: LearningTask = LearningTask.objects.get(id=learning_task_id)
         learning_task.success = 1
         learning_task.save()
-
-        if not os.path.exists('/ml_models'):
-            os.makedirs('/ml_models')
-        if not os.path.exists(f'/ml_models/{learning_task.user.username}'):
-            os.makedirs(f'/ml_models/{learning_task.user.username}')
-        if not os.path.exists(f'/ml_models/{learning_task.user.username}/{learning_task.project_name}'):
-            os.makedirs(f'/ml_models/{learning_task.user.username}/{learning_task.project_name}')
-
         ml_model = MLMODEL(
             user = learning_task.user,
-            project_name = learning_task.project_name
+            project_name = learning_task.project_name,
+            valid_token_to_upload_files=secrets.token_urlsafe(),
+            creation_time=datetime.datetime.now()
         )
         ml_model.save()
 
@@ -63,6 +62,36 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
                 }
             )
         )
+
+@csrf_exempt
+def __UPLOAD_MODEL_CONFIGURATION_FILE(request: HttpRequest) -> HttpResponse:
+    allowed_filetypes = {
+        'json': 'config_best_json_file',
+        'encoder': 'encoder_best_file',
+        'scaler': 'scaler_best_file',
+        'model': 'model_best_file'
+    }
+    if request.method == "POST":
+        upload_token = request.headers.get('token', '')
+        model_id = int(request.headers.get('modelid', '-1'))
+        filetype = request.headers.get('filetype', '')
+
+        assert model_id != -1
+        ml_model: MLMODEL = MLMODEL.objects.get(id=model_id)
+        assert upload_token == ml_model.valid_token_to_upload_files
+        assert filetype in allowed_filetypes.keys()
+
+        file = request.FILES['file']
+        file_name = default_storage.save(
+            f"projects/{ml_model.user.username}/{ml_model.project_name}/{file.name}",
+            file
+        )
+        ml_model.__setattr__(allowed_filetypes[filetype], file_name)
+        ml_model.save()
+        return HttpResponse(
+            "File was handled and saved correctly"
+        )
+
 
 
 

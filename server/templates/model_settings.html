@@ -1,7 +1,7 @@
-{% extends "base_generic.html" %}
+{% extends "header_footer.html" %}
 {% load static %}
 
-{% block content %}
+{% block page %}
     <form action="/workspace" method="post">
 
         {% csrf_token %}

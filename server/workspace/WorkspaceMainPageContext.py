@@ -1,15 +1,16 @@
 from .models import ModelOnCreation
+from .BasePageContext import BasePageContext
 
 
-class WorkspaceMainPageContext:
+class WorkspaceMainPageContext(BasePageContext):
 
     def __init__(self, request) -> None:
-        self.request = request
-        self.username = self.request.user.get_username()
+        super().__init__(request)
         self.task_type = 'undefined'
         self.target_variable = 'undefined'
         self.currently_created_model_dataset_file = None
         self.currently_created_model_project_name = "undefined"
+        self.is_workspace = True
 
     def loadInformationAboutNewModel(self) -> None:
         self.task_type = self.request.POST.get('task_type', 'undefined')
