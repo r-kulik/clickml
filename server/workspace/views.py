@@ -108,7 +108,7 @@ def useMlModel(request: HttpRequest) -> HttpResponse:
 @errorHandler
 def viewResults(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
-        viewResultsContext = ViewResultsContext(request)
+        viewResultsContext = ViewResultsContext(request, is_workspace=True)
         task_register = TaskRegister.fromUseModelContext(viewResultsContext)
         task_register.registerExploitTask()
 

@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -142,3 +143,5 @@ A page where user will be redirected after successful log-in.
 Change to workspace in advance!
 """
 LOGIN_REDIRECT_URL = '/'
+
+ASGI_APPLICATION = "server.asgi.application"

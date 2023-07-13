@@ -15,11 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls import include
 from workspace import main_page_views as main_page_views
 from workspace import views as workspace_views
 from workspace import GPU_INTERFACES
+from workspace import consumers
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -51,4 +53,8 @@ urlpatterns += [
          name='Complete Task'),
     path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
          name='Upload Config Files')
+]
+
+websocket_urlpatterns = [
+    re_path(r'loading_results/\d+', consumers.ExploitLoadingConsumer.as_asgi())
 ]

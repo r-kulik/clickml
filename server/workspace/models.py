@@ -73,7 +73,7 @@ class ExploitTask(models.Model):
     csv_file_name = models.FilePathField()
     GPU_SERVER_IP = models.CharField(max_length=20)
     success = models.BooleanField(default=False)
-
+    result_file_name = models.FilePathField()
 
 
 

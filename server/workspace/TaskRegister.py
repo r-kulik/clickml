@@ -81,7 +81,8 @@ class TaskRegister:
             ml_model=MLMODEL.objects.get(id=useModelContext.model_id),
             csv_file_name=useModelContext.exploit_file_name,
             GPU_SERVER_IP="",
-            success=False
+            success=False,
+            result_file_name="0.csv"
         )
         task_register.exploit_task.save()
         useModelContext.exploit_task_id = task_register.exploit_task.id
