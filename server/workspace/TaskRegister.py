@@ -6,6 +6,7 @@ import secrets
 import json
 
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
+from .errors import NoRunningGPUMachineException
 from .models import LearningTask, UploadTokens, WorkingGpuRemoteServer
 
 
@@ -41,8 +42,10 @@ class TaskRegister:
         return task_register
 
     def registerLearningTask(self) -> int:
-
-        GPU_SERVER_IP = WorkingGpuRemoteServer.objects.order_by('LAST_REQUEST')[0].IP_ADDRESS
+        try:
+            GPU_SERVER_IP = WorkingGpuRemoteServer.objects.order_by('LAST_REQUEST')[0].IP_ADDRESS
+        except IndexError:
+            raise NoRunningGPUMachineException()
         self.learning_task.GPU_server_IP = GPU_SERVER_IP
         self.learning_task.save()
         requestBody = {

@@ -10,8 +10,8 @@ from .BasePageContext import BasePageContext
 class ModelCreationSettingsContext(BasePageContext):
     dataset_column_names: list[str] = []
 
-    def __init__(self, request: HttpRequest) -> None:
-        super().__init__(request)
+    def __init__(self, request: HttpRequest, **kwargs) -> None:
+        super().__init__(request, **kwargs)
         self.dataset_file = self.request.FILES['dataset_source_file']
         self.project_name = self.request.POST.get('project_name', 'Unnamed Project')
         self.analyzeDataSetColumnNames()
