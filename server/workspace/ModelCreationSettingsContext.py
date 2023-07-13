@@ -3,8 +3,6 @@ from django.http import HttpRequest
 import pandas as pd
 
 
-#TODO: Сделать класс BaseContext, унаследовать
-# от него все контексты, которые используют страницы, в нем прописать контекст поведения хэдера и футэра
 from .BasePageContext import BasePageContext
 from .errors import WrongFileFormatException
 

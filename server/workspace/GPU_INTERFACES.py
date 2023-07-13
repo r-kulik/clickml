@@ -53,6 +53,7 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
             creation_time=datetime.datetime.now()
         )
         ml_model.save()
+        learning_task.delete()
 
         return HttpResponse(
             json.dumps(
@@ -88,6 +89,13 @@ def __UPLOAD_MODEL_CONFIGURATION_FILE(request: HttpRequest) -> HttpResponse:
         )
         ml_model.__setattr__(allowed_filetypes[filetype], file_name)
         ml_model.save()
+
+        if ml_model.config_best_json_file is not None and\
+            ml_model.encoder_best_file is not None and\
+            ml_model.scaler_best_file is not None and\
+            ml_model.model_best_file is not None:
+            ml_model.ready_to_use = 1
+            ml_model.save()
         return HttpResponse(
             "File was handled and saved correctly"
         )

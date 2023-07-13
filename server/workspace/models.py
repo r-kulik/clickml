@@ -54,6 +54,8 @@ class UploadTokens(models.Model):
 
 
 class MLMODEL(models.Model):
+    #TODO: сделать хранение метрик для модели, а так же тип задачи для отображения на странице workspace
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project_name = models.CharField(max_length=100)
     config_best_json_file = models.FilePathField()
@@ -63,6 +65,8 @@ class MLMODEL(models.Model):
     creation_time = models.DateTimeField()
     ready_to_use = models.BooleanField(default=False)
     valid_token_to_upload_files=models.CharField(max_length=100, default="")
+
+
 
 
 

@@ -17,17 +17,18 @@
 <div class="parent_workspace_template">
 
     <div class="top_elements">
-<button onclick="redirectToModelCreation()"><p>Create a new model</p></button>
-<h1>Here is the list of your models</h1>
+        <button onclick="redirectToModelCreation()"><p>Create a new model</p></button>
+        <h1>Here is the list of your models</h1>
     </div>
 
     <div class="title_description">
-<p>Title</p>
-<p>Status</p>
-        </div>
-{% include "model_including_example.html" %}
-{% include "model_including_example.html" %}
+        <p>Title</p>
+        <p>Status</p>
     </div>
+    {% for model_context_object in context.ml_model_contexts%}
+        {% include "ml_model.html" with model_context=model_context_object %}
+    {% endfor %}
+</div>
 
 
 

@@ -4,7 +4,6 @@ import traceback
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 
-
 from django.http import HttpRequest, HttpResponse, response, FileResponse
 
 from .BasePageContext import BasePageContext
@@ -14,6 +13,7 @@ from .WorkspaceMainPageContext import WorkspaceMainPageContext
 from .models import ModelOnCreation, WorkingGpuRemoteServer
 
 from .CreateNewModelContext import CreateNewModelContext
+
 
 # Create your views here.
 
@@ -32,35 +32,33 @@ def errorHandler(function):
                     'error_text': traceback.format_exc()
                 }
             )
+
     return wrapper
+
 
 @errorHandler
 def main(request: HttpRequest) -> HttpResponse:
+    # TODO: сделать редирект после POSt на GET, чтобы при обновлении страницы не отправлялась поторная задача обучения
+    workspaceMainPageContext = WorkspaceMainPageContext(request)
+    workspaceMainPageContext.loadInformationAboutExistingModels()
     if request.method == 'POST':
-        workspaceMainPageContext = WorkspaceMainPageContext(request)
-        workspaceMainPageContext.loadInformationAboutNewModel()
         workspaceMainPageContext.addInfoFromTemporaryTable()
-
+        workspaceMainPageContext.loadInformationAboutNewModel()
         task_register: TaskRegister = TaskRegister.fromWorkspaceMainPageContext(workspaceMainPageContext)
-        task_registrarion_result = task_register.registerLearningTask() #0 - OK, -1 - Exception
-        print(task_registrarion_result)
-        return TemplateResponse(
-            request,
-            "workspace_template.html",
-            context={'context': workspaceMainPageContext}
-        )
-
+        task_registration_result = task_register.registerLearningTask()  # 0 - OK, -1 - Exception
     return TemplateResponse(
         request,
         "workspace_template.html",
-        context={'context': WorkspaceMainPageContext(request)}
+        context={'context': workspaceMainPageContext}
     )
+
 
 
 @errorHandler
 def createNewModel(request) -> HttpResponse:
     createNewModelContext = CreateNewModelContext(request, is_workspace=True)
-
+    # TODO: сделать скрипт, который проверяет уникальность имени проекта: предотвратить регистрацию проектов с существующим именем
+    # TODO: запретить пользователю оставлять пустое название или не загружать файл. Сделать это через JS
     return TemplateResponse(
         request,
         "create_new_model.html",
@@ -70,6 +68,7 @@ def createNewModel(request) -> HttpResponse:
 
 @errorHandler
 def modelCreationSettings(request: HttpRequest) -> HttpResponse:
+    #TODO: сделать так, чтоб пользователь обязательно выбрал тип задачи и целевую переменную
     if request.method == "POST":
         creationContext = ModelCreationSettingsContext(request, is_workspace=True)
         temporary_information = ModelOnCreation(
@@ -88,3 +87,5 @@ def modelCreationSettings(request: HttpRequest) -> HttpResponse:
     return "<p> Error <p>"
 
 
+def useMlModel(request: HttpRequest) -> HttpResponse:
+    pass
