@@ -206,23 +206,7 @@ a:visited {
 /* Footer part */
 
 
-.footer{
-    display: flex;
-    height: 15%;
-    padding: 79px 398px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    background-color: #254455;
-}
 
-.footer p{
-    color: #FFF;
-    text-align: center;
 
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-}
+
+
