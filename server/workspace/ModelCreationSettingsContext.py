@@ -5,6 +5,7 @@ import pandas as pd
 #TODO: Сделать класс BaseContext, унаследовать
 # от него все контексты, которые используют страницы, в нем прописать контекст поведения хэдера и футэра
 from .BasePageContext import BasePageContext
+from .errors import WrongFileFormatException
 
 
 class ModelCreationSettingsContext(BasePageContext):
@@ -17,6 +18,10 @@ class ModelCreationSettingsContext(BasePageContext):
         self.analyzeDataSetColumnNames()
 
     def analyzeDataSetColumnNames(self) -> None:
-        dataframe: pd.DataFrame = pd.read_csv(self.dataset_file)
+        dataframe = None
+        try:
+            dataframe: pd.DataFrame = pd.read_csv(self.dataset_file)
+        except UnicodeDecodeError:
+            raise WrongFileFormatException()
         for column in dataframe.columns:
             self.dataset_column_names.append(column)
