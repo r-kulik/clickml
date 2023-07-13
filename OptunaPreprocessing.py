@@ -119,7 +119,8 @@ class OptunaWork:
             print(e)
             return 0
 
-        config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy}
+        config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy,
+                  "target_variable": self.task.target_variable}
 
         with open("task_{}/config_{}.json".format(self.task.task_id, trial.number),
                   "w") as fout:
