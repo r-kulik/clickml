@@ -20,7 +20,8 @@ class BasePageContext:
         TitleLinkPair("/about_us", "About us")
     ]
 
-    def __init__(self, request: HttpRequest, is_workspace = False):
+    def __init__(self, request: HttpRequest,
+                 is_workspace=False):
         self.request = request
         self.user_is_authenticated = self.request.user.is_authenticated
         self.username = self.request.user.get_username()

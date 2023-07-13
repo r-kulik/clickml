@@ -1,4 +1,5 @@
 import datetime
+import traceback
 
 from django.shortcuts import render
 from django.template.response import TemplateResponse
@@ -6,6 +7,7 @@ from django.template.response import TemplateResponse
 
 from django.http import HttpRequest, HttpResponse, response, FileResponse
 
+from .BasePageContext import BasePageContext
 from .ModelCreationSettingsContext import ModelCreationSettingsContext
 from .TaskRegister import TaskRegister
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
@@ -15,6 +17,24 @@ from .CreateNewModelContext import CreateNewModelContext
 
 # Create your views here.
 
+
+def errorHandler(function):
+    def wrapper(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except Exception as e:
+            return TemplateResponse(
+                *args,
+                "error_message.html",
+                context={
+                    'error': str(e),
+                    'context': BasePageContext(*args, *kwargs, is_workspace=True),
+                    'error_text': traceback.format_exc()
+                }
+            )
+    return wrapper
+
+@errorHandler
 def main(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         workspaceMainPageContext = WorkspaceMainPageContext(request)
@@ -37,6 +57,7 @@ def main(request: HttpRequest) -> HttpResponse:
     )
 
 
+@errorHandler
 def createNewModel(request) -> HttpResponse:
     createNewModelContext = CreateNewModelContext(request, is_workspace=True)
 
@@ -47,9 +68,10 @@ def createNewModel(request) -> HttpResponse:
     )
 
 
+@errorHandler
 def modelCreationSettings(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        creationContext = ModelCreationSettingsContext(request)
+        creationContext = ModelCreationSettingsContext(request, is_workspace=True)
         temporary_information = ModelOnCreation(
             username=creationContext.username,
             project_name=creationContext.project_name,
