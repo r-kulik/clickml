@@ -12,7 +12,7 @@ class T:
 
         # don't touch
         self.df = pd.read_csv(f"{self.file_name}.csv")
-        self.task_id = 20
+        self.task_id = 21
         if self.purpose == "learn":
             self.__create_dir()
 
@@ -36,7 +36,7 @@ def choose_scenario(num: int) -> T:
             "purpose": "learn",
             "task_type": "classification",
             "target_variable": "survived",
-            "file_name": "tmp/titanic"
+            "file_name": "tmp/titanic_train"
         }
 
     if num == 2:
@@ -85,6 +85,14 @@ def choose_scenario(num: int) -> T:
             "task_type": "classification",
             "target_variable": "is_legendary",
             "file_name": "tmp/pokemon_train"
+        }
+
+    if num == 8:
+        ar = {
+            "purpose": "use",
+            "task_type": "classification",
+            "target_variable": "survived",
+            "file_name": "tmp/titanic_test"
         }
     scenario = T(ar)
     return scenario

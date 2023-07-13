@@ -12,7 +12,6 @@ class PredictOld:
         self.task = task
 
     def predict(self) -> np.ndarray:
-
         # import all files (pickle and json) to program from user_name/project_name
         with open("task_{}/encoder_best.pickle".format(self.task.task_id),
                   "rb") as enc:
@@ -43,7 +42,6 @@ class PredictOld:
         self.task.df = imputer_strategy.fit(self.task.df)
 
         self.task.df = encoder.transform(self.task.df)
-
         self.task.df = scaler.transform(self.task.df)
 
         # predict using best model

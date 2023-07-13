@@ -55,7 +55,7 @@ class OptunaWork:
         if self.task.task_type == "classification":
             scoring = "roc_auc_ovr"
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["DecisionTree", "LogisticRegression", "GradientBoostingClassifier"])
+                                                        ["GradientBoostingClassifier"])
 
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
@@ -90,12 +90,13 @@ class OptunaWork:
                     "lambda": trial.suggest_float("lambda", 1e-8, 1.0, log=True),
                     "alpha": trial.suggest_float("alpha", 1e-8, 1.0, log=True),
                     "n_estimators": trial.suggest_int("n_estimators", 10, 600),
-                    'random_state': 42
+                    "max_depth": trial.suggest_int("max_depth", 1, 10),
+                    'colsample_bytree': trial.suggest_float('colsample_bytree', 0.1, 1),
+                    'colsample_bynode': trial.suggest_float('colsample_bynode', 0.1, 1)
                 }
                 if param["booster"] == "gbtree" or param["booster"] == "dart":
-                    param["max_depth"] = trial.suggest_int("max_depth", 1, 4)
                     param["eta"] = trial.suggest_float("eta", 1e-8, 1.0, log=True)
-                    param["gamma"] = trial.suggest_float("gamma", 1e-8, 1.0, log=True)
+                    param["gamma"] = trial.suggest_float("gamma", 0, 25)
                     param["grow_policy"] = trial.suggest_categorical("grow_policy", ["depthwise", "lossguide"])
                 if param["booster"] == "gblinear":
                     param["sample_type"] = trial.suggest_categorical("sample_type", ["uniform", "weighted"])
@@ -130,6 +131,7 @@ class OptunaWork:
                     'subsample': trial.suggest_float('subsample', 0.3, 1.0),
                     'random_state': 42
                 }
+                model = ModelsFunctions.GradientBoostingRegression(param)
         try:
             if y.nunique() == 2:
                 scoring = "f1"
@@ -140,8 +142,9 @@ class OptunaWork:
             print(e)
             return 0
 
+        metrics_names = {"r2": "R2 score", "f1": "F1 score", "roc_auc_ovr": "ROC AUC score"}
         config = {"deletedColumns": self.deletedColumns, "imputer_strategy": imputer_strategy,
-                  "target_variable": self.task.target_variable}
+                  "target_variable": self.task.target_variable, "metric_name": metrics_names[scoring], "metric_value": accuracy}
 
         with open("task_{}/config_{}.json".format(self.task.task_id, trial.number),
                   "w") as fout:

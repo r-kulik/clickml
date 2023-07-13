@@ -9,6 +9,7 @@ from WorkWithTask import Task
 from OptunaPreprocessing import OptunaWork
 from JsTask import APILearnTask
 from Predict import Predict
+from Predict_old import PredictOld
 
 from sklearn import metrics
 
@@ -56,7 +57,7 @@ def run_test(scenario: int):
         patch_sklearn()
 
     if task.purpose == "learn":
-        OptunaWork(task, 400).optuna_study()
+        OptunaWork(task, 200).optuna_study()
 
     if task.purpose == "use":
         ChooseBest.choose_best(task, 1)
@@ -71,7 +72,7 @@ def run_test(scenario: int):
 
 
 if __name__ == "__main__":
-    run_test(0)
+    run_test(8)
 
     """
     0 - cars - class
@@ -79,4 +80,8 @@ if __name__ == "__main__":
     2 - diamonds - multy class
     3 - california - regression
     4 - use cars
+    5 - use california
+    6 - use pokemon
+    7 - learn pokemon
+    8 - use titanic
     """
