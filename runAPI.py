@@ -22,6 +22,7 @@ if response.status_code != 200:
 
 @app.post("/register_learn_task")
 async def register_learn_task(json_file: APILearnTask):
+    print(f"json_file.target_variable = {json_file.target_variable}")
     try:
         learning_task_thread = threading.Thread(
             target=register_task,
@@ -49,7 +50,7 @@ def register_task(task) -> None:
     file_address = f"tmp/{task.source_file_upload_token}.csv"
     with open(file_address, 'wb') as file:
         file.write(response.content)
-    run_main.run_app(task)
+    run_main.run_app(task, purpose="learn")
 
 
 if __name__ == '__main__':

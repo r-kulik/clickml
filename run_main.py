@@ -23,37 +23,36 @@ def print_clf_metrics(y_actual, y_pred):
     print(f'Testing recall = {metrics.recall_score(y_actual, y_pred)}')
     print(f'Testing F1-score = {metrics.f1_score(y_actual, y_pred)}')
 
+
 def print_reg_metrics(y_actual, y_pred):
     print(f'Testing MSE = {metrics.mean_squared_error(y_actual, y_pred)}')
     print(f'Testing R2 = {metrics.r2_score(y_actual, y_pred)}')
 
 
-def run_app(js_task: APILearnTask):
-
+def run_app(js_task: APILearnTask, purpose: str) -> None:
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
 
     task = Task(js_task)
 
     if task.is_correct:
-        OptunaWork(task, 2).optuna_study()
-        try:
+        if purpose == "learn":
+            OptunaWork(task, 10).optuna_study()
             complete_learn_task(js_task)
-        except:
-            print(traceback.format_exc())
-        clear_files_after_learning(task)
+            clear_files_after_learning(task)
+        if purpose == "use":
+            result = Predict(task).predict()
 
 
 # for test only
 def run_test(scenario: int):
-
     task = choose_scenario(scenario)
 
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
 
     if task.purpose == "learn":
-        OptunaWork(task, 200).optuna_study()
+        OptunaWork(task, 400).optuna_study()
 
     if task.purpose == "use":
         ChooseBest.choose_best(task, 1)
@@ -61,11 +60,14 @@ def run_test(scenario: int):
         task.df = task.df.drop(task.target_variable, axis=1)
         a = Predict(task)
         b = a.predict()
-        print_clf_metrics(true_y, b)
+        if task.task_type == "classification":
+            print_clf_metrics(true_y, b)
+        else:
+            print_reg_metrics(true_y, b)
 
 
 if __name__ == "__main__":
-    run_test(4)
+    run_test(6)
 
     """
     0 - cars - class

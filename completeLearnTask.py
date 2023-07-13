@@ -51,7 +51,7 @@ def upload_file(token: str, model_id: int, filename: str, filetype: str):
             'filetype': filetype
         },
         files={
-            'file': open(filename)
+            'file': open(filename, 'rb')
         }
     )
     if response.status_code != 200:

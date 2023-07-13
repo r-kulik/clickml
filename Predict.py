@@ -33,7 +33,6 @@ class Predict:
         deleted_columns = config["deletedColumns"]
         imputer_strategy = config["imputer_strategy"]
 
-
         # delete columns
         for i in self.task.df:
             if i in deleted_columns:
