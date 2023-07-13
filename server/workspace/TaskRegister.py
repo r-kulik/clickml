@@ -21,14 +21,14 @@ class TaskRegister:
     def fromWorkspaceMainPageContext(workspaceMainPageContext: WorkspaceMainPageContext):
         task_register = TaskRegister()
         file_tokens = UploadTokens.objects.filter(
-            FILE_PATH=workspaceMainPageContext.currently_created_model_dataset_file
+            FILE_PATH=workspaceMainPageContext.currently_created_model_dataset_file_name
         )
         if len(file_tokens) > 0:
             for file_token in file_tokens: file_token.delete()
-        token_note = UploadTokens(FILE_PATH=workspaceMainPageContext.currently_created_model_dataset_file,
+        token_note = UploadTokens(FILE_PATH=workspaceMainPageContext.currently_created_model_dataset_file_name,
                                   UPLOAD_TOKEN=secrets.token_urlsafe())
         token_note.save()
-        #  print(workspaceMainPageContext.username)
+
         task_register.learning_task = LearningTask(
             user=User.objects.get(username=workspaceMainPageContext.username),
             project_name=workspaceMainPageContext.currently_created_model_project_name,
@@ -38,6 +38,7 @@ class TaskRegister:
             GPU_server_IP="",
             success=0
         )
+        print(f"\n\nAt the moment of creating TaskRegisterObject, target_variable={task_register.learning_task.target_variable}")
         task_register.purpose = "learn"
         return task_register
 

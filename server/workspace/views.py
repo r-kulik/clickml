@@ -75,7 +75,7 @@ def modelCreationSettings(request: HttpRequest) -> HttpResponse:
         temporary_information = ModelOnCreation(
             username=creationContext.username,
             project_name=creationContext.project_name,
-            dataset_file=creationContext.dataset_file
+            dataset_file_name=creationContext.dataset_file_name
         )
         temporary_information.deletePreviousIfExists()
         temporary_information.save()

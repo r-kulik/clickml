@@ -25,7 +25,7 @@ class Profile(models.Model):
 class ModelOnCreation(models.Model):
     username = models.CharField(max_length=100)
     project_name = models.CharField(max_length=100)
-    dataset_file = models.FileField()
+    dataset_file_name = models.FilePathField()
 
     def deletePreviousIfExists(self) -> None:
         previousEntities = ModelOnCreation.objects.filter(username=self.username)
@@ -49,7 +49,7 @@ class WorkingGpuRemoteServer(models.Model):
 
 
 class UploadTokens(models.Model):
-    FILE_PATH = models.FileField()
+    FILE_PATH = models.FilePathField()
     UPLOAD_TOKEN = models.CharField(max_length=100)
 
 

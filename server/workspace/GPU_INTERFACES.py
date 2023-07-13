@@ -27,7 +27,7 @@ def __GET_DATASET_FILE(request: HttpRequest) -> FileResponse:
     token = request.GET.get('UPLOAD_TOKEN', '')
     if len(token) == 0:
         return "Some exception has occured"
-    file_to_download = UploadTokens.objects.filter(UPLOAD_TOKEN=token)[0].FILE_PATH
+    file_to_download = default_storage.open(UploadTokens.objects.filter(UPLOAD_TOKEN=token)[0].FILE_PATH)
     return FileResponse(file_to_download)
 
 
@@ -91,8 +91,6 @@ def __UPLOAD_MODEL_CONFIGURATION_FILE(request: HttpRequest) -> HttpResponse:
         return HttpResponse(
             "File was handled and saved correctly"
         )
-
-
 
 
 def __get_ip_address(request) -> str:

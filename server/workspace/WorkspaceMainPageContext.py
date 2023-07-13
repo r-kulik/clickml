@@ -8,7 +8,7 @@ class WorkspaceMainPageContext(BasePageContext):
         super().__init__(request)
         self.task_type = 'undefined'
         self.target_variable = 'undefined'
-        self.currently_created_model_dataset_file = None
+        self.currently_created_model_dataset_file_name = None
         self.currently_created_model_project_name = "undefined"
         self.is_workspace = True
 
@@ -18,7 +18,6 @@ class WorkspaceMainPageContext(BasePageContext):
 
     def addInfoFromTemporaryTable(self) -> None:
         information_object: ModelOnCreation = ModelOnCreation.objects.filter(username=self.username)[0]
-        print(information_object.dataset_file)
         print(information_object.project_name)
-        self.currently_created_model_dataset_file = information_object.dataset_file
+        self.currently_created_model_dataset_file_name = information_object.dataset_file_name
         self.currently_created_model_project_name = information_object.project_name
