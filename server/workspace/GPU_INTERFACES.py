@@ -65,7 +65,7 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
         layer = channels.layers.get_channel_layer()
         async_to_sync(layer.group_send)("waiting_learning_task_info", {
             "type": "complete",
-            "text": json.dumps({"learning_task_id": learning_task_id})
+            "text": json.dumps({"learning_task_id": learning_task_id, "ml_model_id": ml_model.id})
         })
 
         return HttpResponse(

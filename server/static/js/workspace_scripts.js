@@ -22,6 +22,23 @@ function redirectToModelCreation(){
     location.href = '/create_new_model';
 }
 
+
+function updateProgressBars(learning_model, data){
+    CP = Math.ceil(data.completion_percentage * 100);
+    document.getElementById(
+        learning_model.progress_value_element_id
+    ).setAttribute('style', 'width: '+ CP +'%')
+    document.getElementById(
+        learning_model.metric_value_element_id
+    ).innerText = data.main_metric_value;
+}
+
+function completeTask(learning_model, data){
+    document.getElementById(
+        "a_" + learning_model.model_id
+    ).setAttribute('href', '/use_model?model_id='+ data.ml_model_id);
+}
+
 async function createSocketAndConnect(){
     const updateSocket = await new WebSocket(
         "ws://" + window.location.host + '/learning_results/'
@@ -49,18 +66,16 @@ async function createSocketAndConnect(){
             if (learning_model.model_id === data.learning_task_id){
                 console.log(data);
                 if (data.complete === 1){
-                    alert("Task Complete");
+                    completeTask(learning_model, data);
                     return;
                 }
-                document.getElementById(
-                    learning_model.progress_value_element_id
-                ).innerText = data.completion_percentage;
-                document.getElementById(
-                    learning_model.metric_value_element_id
-                ).innerText = data.main_metric_value;
+                updateProgressBars(learning_model, data);
             }
         }
 
     }
 }
+
+
+
 

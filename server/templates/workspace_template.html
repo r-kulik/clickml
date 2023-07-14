@@ -13,9 +13,9 @@
          {% for learning_model_context_object in context.learning_task_contexts %}
             learning_model_info_{{ learning_model_context_object.learning_task_id }} = new LearningModelInfo(
                 {{ learning_model_context_object.learning_task_id }},
-                "{{ learning_model_context_object.progress_value_element_id }}",
                 "{{ learning_model_context_object.metric_value_element_id }}",
-                "{{ learning_model_context_object.learning_model_id_value_element_id }}"
+                    "{{ learning_model_context_object.learning_model_id_value_element_id }}",
+                "{{ learning_model_context_object.progress_value_element_id }}",
             );
             learning_models.push(learning_model_info_{{ learning_model_context_object.learning_task_id }});
         {% endfor %}

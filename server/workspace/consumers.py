@@ -74,10 +74,12 @@ class LearningLoadingConsumer(WebsocketConsumer):
         if event.get('type', 'undefined') == "complete":
             data = json.loads(event.get("text", "{}"))
             learning_task_id = data.get('learning_task_id', -1)
+            ml_model_id = data.get('ml_model_id', -1)
             if int(learning_task_id) in self.learning_task_id_list:
                 json_data = {
                     "learning_task_id": learning_task_id,
-                    "complete": 1
+                    "complete": 1,
+                    "ml_model_id": ml_model_id
                 }
                 self.send(
                     text_data=json.dumps(json_data)
