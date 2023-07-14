@@ -43,13 +43,15 @@ def errorHandler(function):
 def main(request: HttpRequest) -> HttpResponse:
     # (closed to_do): сделать редирект после POSt на GET, чтобы при обновлении страницы не отправлялась поторная задача обучения
     workspaceMainPageContext = WorkspaceMainPageContext(request)
-    workspaceMainPageContext.loadInformationAboutExistingModels()
     if request.method == 'POST':
         workspaceMainPageContext.addInfoFromTemporaryTable()
         workspaceMainPageContext.loadInformationAboutNewModel()
         task_register: TaskRegister = TaskRegister.fromWorkspaceMainPageContext(workspaceMainPageContext)
         task_registration_result = task_register.registerLearningTask()  # 0 - OK, -1 - Exception
         return redirect('/workspace')
+
+    workspaceMainPageContext.loadInformationAboutExistingModels()
+    workspaceMainPageContext.loadInformationAboutLearningModels()
     return TemplateResponse(
         request,
         "workspace_template.html",

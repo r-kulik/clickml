@@ -54,9 +54,11 @@ urlpatterns += [
     path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
          name='Upload Config Files'),
     path('complete_exploit_task_and_get_files', GPU_INTERFACES.__COMPLETE_EXPLOIT_TASK_AND_GET_FILES,
-         name="Complete Exploit Task")
+         name="Complete Exploit Task"),
+    path('accept_percent', GPU_INTERFACES.__ACCEPT_PERCENT, name='Accept Percent')
 ]
 
 websocket_urlpatterns = [
-    re_path(r'loading_results/\d+', consumers.ExploitLoadingConsumer.as_asgi())
+    re_path(r'loading_results/\d+', consumers.ExploitLoadingConsumer.as_asgi()),
+    re_path(f'learning_results/', consumers.LearningLoadingConsumer.as_asgi())
 ]

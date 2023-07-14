@@ -62,6 +62,12 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
         ml_model.save()
         learning_task.delete()
 
+        layer = channels.layers.get_channel_layer()
+        async_to_sync(layer.group_send)("waiting_learning_task_info", {
+            "type": "complete",
+            "text": json.dumps({"learning_task_id": learning_task_id})
+        })
+
         return HttpResponse(
             json.dumps(
                 {
@@ -134,6 +140,22 @@ def __UPLOAD_MODEL_CONFIGURATION_FILE(request: HttpRequest) -> HttpResponse:
         return HttpResponse(
             "File was handled and saved correctly"
         )
+
+
+@csrf_exempt
+def __ACCEPT_PERCENT(request: HttpRequest) -> HttpResponse:
+    learning_task_id = int(request.GET.get('learning_task_id'))
+    completion_percentage = float(request.GET.get('completion_percentage'))
+    main_metric_value = float(request.GET.get('main_metric_value'))
+
+    layer = channels.layers.get_channel_layer()
+    async_to_sync(layer.group_send)("waiting_learning_task_info", {
+        "type": "info.get",
+        "text": json.dumps({"learning_task_id": learning_task_id,
+                            "completion_percentage": completion_percentage,
+                            "main_metric_value": main_metric_value})
+    })
+    return HttpResponse("OK")
 
 
 def __get_ip_address(request) -> str:

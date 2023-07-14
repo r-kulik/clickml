@@ -10,10 +10,11 @@ from .errors import WrongFileFormatException
 
 
 class ModelCreationSettingsContext(BasePageContext):
-    dataset_column_names: list[str] = []
+
 
     def __init__(self, request: HttpRequest, **kwargs) -> None:
         super().__init__(request, **kwargs)
+        self.dataset_column_names: list[str] = []
         self.project_name = self.request.POST.get('project_name', 'Unnamed Project')
         self.dataset_file_name = default_storage.save(
             f"source_dataset_files/{secrets.token_urlsafe()}.csv",

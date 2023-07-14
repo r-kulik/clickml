@@ -41,6 +41,7 @@ class LearningTask(models.Model):
     upload_token = models.CharField(max_length=100)
     GPU_server_IP = models.CharField(max_length=20)
     success = models.IntegerField()
+    main_metric_name = models.CharField(max_length=20, default="Undefined")
 
 
 class WorkingGpuRemoteServer(models.Model):
