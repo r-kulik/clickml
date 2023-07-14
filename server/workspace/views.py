@@ -1,7 +1,8 @@
 import datetime
 import traceback
 
-from django.shortcuts import render
+from django.core.files.storage import default_storage
+from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 
 from django.http import HttpRequest, HttpResponse, response, FileResponse
@@ -12,7 +13,7 @@ from .TaskRegister import TaskRegister
 from .ViewResultsContext import ViewResultsContext
 from .UseModelContext import UseModelContext
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
-from .models import ModelOnCreation, WorkingGpuRemoteServer, MLMODEL
+from .models import ModelOnCreation, WorkingGpuRemoteServer, MLMODEL, ExploitTask
 
 from .CreateNewModelContext import CreateNewModelContext
 
@@ -40,7 +41,7 @@ def errorHandler(function):
 
 @errorHandler
 def main(request: HttpRequest) -> HttpResponse:
-    # TODO: сделать редирект после POSt на GET, чтобы при обновлении страницы не отправлялась поторная задача обучения
+    # (closed to_do): сделать редирект после POSt на GET, чтобы при обновлении страницы не отправлялась поторная задача обучения
     workspaceMainPageContext = WorkspaceMainPageContext(request)
     workspaceMainPageContext.loadInformationAboutExistingModels()
     if request.method == 'POST':
@@ -48,6 +49,7 @@ def main(request: HttpRequest) -> HttpResponse:
         workspaceMainPageContext.loadInformationAboutNewModel()
         task_register: TaskRegister = TaskRegister.fromWorkspaceMainPageContext(workspaceMainPageContext)
         task_registration_result = task_register.registerLearningTask()  # 0 - OK, -1 - Exception
+        return redirect('/workspace')
     return TemplateResponse(
         request,
         "workspace_template.html",
@@ -59,8 +61,8 @@ def main(request: HttpRequest) -> HttpResponse:
 @errorHandler
 def createNewModel(request) -> HttpResponse:
     createNewModelContext = CreateNewModelContext(request, is_workspace=True)
-    # TODO: сделать скрипт, который проверяет уникальность имени проекта: предотвратить регистрацию проектов с существующим именем
-    # TODO: запретить пользователю оставлять пустое название или не загружать файл. Сделать это через JS
+    # closed: сделать скрипт, который проверяет уникальность имени проекта: предотвратить регистрацию проектов с существующим именем
+    # closed: запретить пользователю оставлять пустое название или не загружать файл. Сделать это через JS
     return TemplateResponse(
         request,
         "create_new_model.html",
@@ -119,3 +121,20 @@ def viewResults(request: HttpRequest) -> HttpResponse:
             "view_results.html",
             context={'context': viewResultsContext}
         )
+
+
+
+def downloadResults(request: HttpRequest) -> FileResponse:
+    #TODO устроить проверку доступа
+    if request.method == "GET":
+        exploit_task_id = request.GET.get("task_id", -1)
+        print(exploit_task_id)
+        exploit_task: ExploitTask = ExploitTask.objects.get(id=exploit_task_id)
+        print(f"Trying to respond with a file {exploit_task.result_file_name}")
+        file_to_respond = default_storage.open(
+            exploit_task.result_file_name
+        )
+        return FileResponse(
+            file_to_respond
+        )
+

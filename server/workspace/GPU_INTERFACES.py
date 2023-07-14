@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpRequest, FileResponse
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import WorkingGpuRemoteServer, UploadTokens, LearningTask, MLMODEL
+from .models import WorkingGpuRemoteServer, UploadTokens, LearningTask, MLMODEL, ExploitTask
 from asgiref.sync import async_to_sync
 
 def __ENTER_AS_A_GPU_SERVER(request: HttpRequest) -> HttpResponse:
@@ -47,11 +47,17 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
         learning_task: LearningTask = LearningTask.objects.get(id=learning_task_id)
         learning_task.success = 1
         learning_task.save()
+
+        #TODO: на потом: вытаскивать из config.json, пришедшего с GPU машины информацию о метрике
+
         ml_model = MLMODEL(
             user = learning_task.user,
             project_name = learning_task.project_name,
             valid_token_to_upload_files=secrets.token_urlsafe(),
-            creation_time=datetime.datetime.now()
+            creation_time=datetime.datetime.now(),
+            model_main_metric_name="UNDEFINED METRIC",
+            model_main_metric_value=0,
+            model_task_type=learning_task.task_type
         )
         ml_model.save()
         learning_task.delete()
@@ -65,14 +71,31 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
             )
         )
 
+
+
+
 @csrf_exempt
 def __COMPLETE_EXPLOIT_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         layer = channels.layers.get_channel_layer()
-        print("trying to broadcast message through redis channel")
+        upload_token = secrets.token_urlsafe()
+        file_name = default_storage.save(
+            f"results/{upload_token}.csv",
+            request.FILES['file']
+        )
+        task_id = int(request.headers.get('taskid', '-1'))
+        assert task_id != -1
+
+        exploit_task: ExploitTask = ExploitTask.objects.get(id=task_id)
+        exploit_task.result_file_name = file_name
+        exploit_task.success = True
+        exploit_task.save()
+
+        # print("trying to broadcast message through redis channel")
         async_to_sync(layer.group_send)("waiting_results", {
             "type": "results.get",
-            "text": "Hello there"
+            "text": json.dumps({"task_id": exploit_task.id,
+                 "success": exploit_task.success})
         })
         return HttpResponse("OK")
 
