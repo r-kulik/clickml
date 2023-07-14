@@ -1,0 +1,15 @@
+{% extends "header_footer.html" %}
+
+{% block page %}
+
+<form enctype="multipart/form-data" method="post" action="/view_results">
+    {% csrf_token %}
+    <input type="file" name="exploit_file">
+    <input type="text" name="model_id" value="{{ context.model_id }}" style="display: none;">
+    <input type="submit">
+
+
+    <p>Model id is {{ context.model_id }}</p>
+</form>
+
+{% endblock %}

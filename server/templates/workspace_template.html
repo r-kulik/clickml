@@ -7,6 +7,24 @@
 <link rel="stylesheet" type="text/css" href='{% static "css/workspace_template.css" %}'/>
 <script type="text/javascript" src='{% static "/js/workspace_scripts.js" %}'></script>
 
+<script>
+
+    window.addEventListener('load', () => {
+         {% for learning_model_context_object in context.learning_task_contexts %}
+            learning_model_info_{{ learning_model_context_object.learning_task_id }} = new LearningModelInfo(
+                {{ learning_model_context_object.learning_task_id }},
+                "{{ learning_model_context_object.metric_value_element_id }}",
+                    "{{ learning_model_context_object.learning_model_id_value_element_id }}",
+                "{{ learning_model_context_object.progress_value_element_id }}",
+            );
+            learning_models.push(learning_model_info_{{ learning_model_context_object.learning_task_id }});
+        {% endfor %}
+        createSocketAndConnect();
+    });
+
+
+</script>
+
 
 {% if not context.request.user.is_authenticated %}
     <p>current user is not authenticated</p>
@@ -17,17 +35,23 @@
 <div class="parent_workspace_template">
 
     <div class="top_elements">
-<button onclick="redirectToModelCreation()"><p>Create a new model</p></button>
-<h1>Here is the list of your models</h1>
+        <button onclick="redirectToModelCreation()"><p>Create a new model</p></button>
+        <h1>Here is the list of your models</h1>
     </div>
 
     <div class="title_description">
-<p>Title</p>
-<p>Status</p>
-        </div>
-{% include "ml_model.html" %}
-{% include "ml_model.html" %}
+        <p>Title</p>
+        <p>Status</p>
     </div>
+
+    {% for learning_model_context_object in context.learning_task_contexts %}
+        {% include "ml_model_learning.html" with learning_model_context=learning_model_context_object %}
+    {% endfor %}
+
+    {% for model_context_object in context.ml_model_contexts%}
+        {% include "ml_model.html" with model_context=model_context_object %}
+    {% endfor %}
+</div>
 
 
 

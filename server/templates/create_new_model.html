@@ -3,41 +3,21 @@
 {% block page %}
 
 
+<script type="text/javascript" src='{% static "js/create_new_model.js" %}'></script>
 <link rel="stylesheet" type="text/css" href='{% static "css/create_new_model.css" %}'/>
 
 
-<!--<form enctype="multipart/form-data" method="post" action="/model_creation_settings">
-    {% csrf_token %}
-    <div class="left">
-        <p>Please name your model</p>
-    <p>
-        <input type="text" name="project_name" value="Name">
-    </p>
-        </div>
+<script type="text/javascript">
+    window.onload = () => {
+        {% for forbidden_name in context.forbidden_project_names %}
+            addToForbiddenNames("{{ forbidden_name }}");
+        {% endfor %}
+    }
+</script>
 
-    <div class="right">
-    <p>
-       -<input type="file" name="dataset_source_file" placeholder="Continue">*
-        <label>Please upload .csv</label>
-        <label for="inputFile"><img src='{% static "svg/download_circle.svg" %}'></label>
-        <input type="file" name="dataset_source_file" id="inputFile" style="display:none">
-    </p>
-        </div>
-    <div class="bottom">
-    <p>
-
-
-        <label for="inputNext" class="btn btn-info">Continue</label>
-        <input type="submit" name="dataset_source_file" id="inputNext" style="display:none">
-    </p>
-        </div>
-
-
-</form>
--->
 <div class="create_nm_workspace">
 
-    <form enctype="multipart/form-data" method="post" action="/model_creation_settings">
+    <form enctype="multipart/form-data" method="post" action="/model_creation_settings" id="create_new_model_form">
     {% csrf_token %}
     <div class="row_">
 
@@ -45,7 +25,7 @@
 
         <p>Please name your model</p>
         <p>
-          <input type="text" name="project_name" placeholder="Name">
+          <input type="text" name="project_name" placeholder="Name" id="project_name_input"required>
         </p>
 
       </div>
@@ -55,7 +35,7 @@
 
         <p>Please upload .csv</p>
         <label for="inputFile"><img src='{% static "svg/download_circle.svg" %}'></label>
-        <input type="file" name="dataset_source_file" id="inputFile" style="display:none">
+        <input type="file" name="dataset_source_file" id="inputFile" style="display:none" required>
 
       </div>
 

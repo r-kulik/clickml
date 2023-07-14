@@ -26,8 +26,8 @@ class BasePageContext:
         self.user_is_authenticated = self.request.user.is_authenticated
         self.username = self.request.user.get_username()
         self.is_workspace = is_workspace
-        print(f"Trying to upload base context: self.request.path = {self.request.path}")
-        print(type(self.request.path))
+        # print(f"Trying to upload base context: self.request.path = {self.request.path}")
+        # print(type(self.request.path))
 
         self.header_links = []
 

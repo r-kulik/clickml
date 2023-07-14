@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls import include
 from workspace import main_page_views as main_page_views
 from workspace import views as workspace_views
 from workspace import GPU_INTERFACES
+from workspace import consumers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,7 +34,10 @@ urlpatterns += [
 urlpatterns += [
     path('workspace', workspace_views.main, name='Workspace'),
     path('create_new_model', workspace_views.createNewModel, name='Create New Model'),
-    path('model_creation_settings', workspace_views.modelCreationSettings, name='Set up a model')
+    path('model_creation_settings', workspace_views.modelCreationSettings, name='Set up a model'),
+    path('use_model', workspace_views.useMlModel, name='Use Model'),
+    path('view_results', workspace_views.viewResults, name='View Results'),
+    path('download_results', workspace_views.downloadResults, name="Download Results")
 ]
 
 urlpatterns += [
@@ -48,5 +52,13 @@ urlpatterns += [
          GPU_INTERFACES.__COMPLETE_LEARNING_TASK_AND_GET_FILES,
          name='Complete Task'),
     path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
-         name='Upload Config Files')
+         name='Upload Config Files'),
+    path('complete_exploit_task_and_get_files', GPU_INTERFACES.__COMPLETE_EXPLOIT_TASK_AND_GET_FILES,
+         name="Complete Exploit Task"),
+    path('accept_percent', GPU_INTERFACES.__ACCEPT_PERCENT, name='Accept Percent')
+]
+
+websocket_urlpatterns = [
+    re_path(r'loading_results/\d+', consumers.ExploitLoadingConsumer.as_asgi()),
+    re_path(f'learning_results/', consumers.LearningLoadingConsumer.as_asgi())
 ]

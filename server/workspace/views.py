@@ -1,19 +1,22 @@
 import datetime
 import traceback
 
-from django.shortcuts import render
+from django.core.files.storage import default_storage
+from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
-
 
 from django.http import HttpRequest, HttpResponse, response, FileResponse
 
 from .BasePageContext import BasePageContext
 from .ModelCreationSettingsContext import ModelCreationSettingsContext
 from .TaskRegister import TaskRegister
+from .ViewResultsContext import ViewResultsContext
+from .UseModelContext import UseModelContext
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
-from .models import ModelOnCreation, WorkingGpuRemoteServer
+from .models import ModelOnCreation, WorkingGpuRemoteServer, MLMODEL, ExploitTask
 
 from .CreateNewModelContext import CreateNewModelContext
+
 
 # Create your views here.
 
@@ -32,35 +35,36 @@ def errorHandler(function):
                     'error_text': traceback.format_exc()
                 }
             )
+
     return wrapper
+
 
 @errorHandler
 def main(request: HttpRequest) -> HttpResponse:
+    # (closed to_do): сделать редирект после POSt на GET, чтобы при обновлении страницы не отправлялась поторная задача обучения
+    workspaceMainPageContext = WorkspaceMainPageContext(request)
     if request.method == 'POST':
-        workspaceMainPageContext = WorkspaceMainPageContext(request)
-        workspaceMainPageContext.loadInformationAboutNewModel()
         workspaceMainPageContext.addInfoFromTemporaryTable()
-
+        workspaceMainPageContext.loadInformationAboutNewModel()
         task_register: TaskRegister = TaskRegister.fromWorkspaceMainPageContext(workspaceMainPageContext)
-        task_registrarion_result = task_register.registerLearningTask() #0 - OK, -1 - Exception
-        print(task_registrarion_result)
-        return TemplateResponse(
-            request,
-            "workspace_template.html",
-            context={'context': workspaceMainPageContext}
-        )
+        task_registration_result = task_register.registerLearningTask()  # 0 - OK, -1 - Exception
+        return redirect('/workspace')
 
+    workspaceMainPageContext.loadInformationAboutExistingModels()
+    workspaceMainPageContext.loadInformationAboutLearningModels()
     return TemplateResponse(
         request,
         "workspace_template.html",
-        context={'context': WorkspaceMainPageContext(request)}
+        context={'context': workspaceMainPageContext}
     )
+
 
 
 @errorHandler
 def createNewModel(request) -> HttpResponse:
     createNewModelContext = CreateNewModelContext(request, is_workspace=True)
-
+    # closed: сделать скрипт, который проверяет уникальность имени проекта: предотвратить регистрацию проектов с существующим именем
+    # closed: запретить пользователю оставлять пустое название или не загружать файл. Сделать это через JS
     return TemplateResponse(
         request,
         "create_new_model.html",
@@ -70,12 +74,13 @@ def createNewModel(request) -> HttpResponse:
 
 @errorHandler
 def modelCreationSettings(request: HttpRequest) -> HttpResponse:
+    #TODO: сделать так, чтоб пользователь обязательно выбрал тип задачи и целевую переменную
     if request.method == "POST":
         creationContext = ModelCreationSettingsContext(request, is_workspace=True)
         temporary_information = ModelOnCreation(
             username=creationContext.username,
             project_name=creationContext.project_name,
-            dataset_file=creationContext.dataset_file
+            dataset_file_name=creationContext.dataset_file_name
         )
         temporary_information.deletePreviousIfExists()
         temporary_information.save()
@@ -87,4 +92,51 @@ def modelCreationSettings(request: HttpRequest) -> HttpResponse:
         )
     return "<p> Error <p>"
 
+@errorHandler
+def useMlModel(request: HttpRequest) -> HttpResponse:
+    model_id = int(request.GET.get("model_id", "-1"))
+    #TODO: проверка доступа
+    useModelContext = UseModelContext(
+        request,
+        model_id,
+        is_workspace=True
+    )
+
+    return TemplateResponse(
+        request,
+        "use_model.html",
+        context={'context': useModelContext}
+    )
+
+
+@errorHandler
+def viewResults(request: HttpRequest) -> HttpResponse:
+
+    #TODO: устроить такой же обещанный редирект, как и на /workspace
+    if request.method == 'POST':
+        viewResultsContext = ViewResultsContext(request, is_workspace=True)
+        task_register = TaskRegister.fromUseModelContext(viewResultsContext)
+        task_register.registerExploitTask()
+
+        return TemplateResponse(
+            request,
+            "view_results.html",
+            context={'context': viewResultsContext}
+        )
+
+
+
+def downloadResults(request: HttpRequest) -> FileResponse:
+    #TODO устроить проверку доступа
+    if request.method == "GET":
+        exploit_task_id = request.GET.get("task_id", -1)
+        print(exploit_task_id)
+        exploit_task: ExploitTask = ExploitTask.objects.get(id=exploit_task_id)
+        print(f"Trying to respond with a file {exploit_task.result_file_name}")
+        file_to_respond = default_storage.open(
+            exploit_task.result_file_name
+        )
+        return FileResponse(
+            file_to_respond
+        )
 

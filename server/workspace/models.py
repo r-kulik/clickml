@@ -25,7 +25,7 @@ class Profile(models.Model):
 class ModelOnCreation(models.Model):
     username = models.CharField(max_length=100)
     project_name = models.CharField(max_length=100)
-    dataset_file = models.FileField()
+    dataset_file_name = models.FilePathField()
 
     def deletePreviousIfExists(self) -> None:
         previousEntities = ModelOnCreation.objects.filter(username=self.username)
@@ -41,6 +41,7 @@ class LearningTask(models.Model):
     upload_token = models.CharField(max_length=100)
     GPU_server_IP = models.CharField(max_length=20)
     success = models.IntegerField()
+    main_metric_name = models.CharField(max_length=20, default="Undefined")
 
 
 class WorkingGpuRemoteServer(models.Model):
@@ -49,11 +50,13 @@ class WorkingGpuRemoteServer(models.Model):
 
 
 class UploadTokens(models.Model):
-    FILE_PATH = models.FileField()
+    FILE_PATH = models.FilePathField()
     UPLOAD_TOKEN = models.CharField(max_length=100)
 
 
 class MLMODEL(models.Model):
+    # -(closed to_do)-: сделать хранение метрик для модели, а так же тип задачи для отображения на странице workspace
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project_name = models.CharField(max_length=100)
     config_best_json_file = models.FilePathField()
@@ -62,7 +65,20 @@ class MLMODEL(models.Model):
     model_best_file = models.FilePathField()
     creation_time = models.DateTimeField()
     ready_to_use = models.BooleanField(default=False)
-    valid_token_to_upload_files=models.CharField(max_length=100, default="")
+    valid_token_to_upload_files = models.CharField(max_length=100, default="")
 
+    model_main_metric_name = models.CharField(max_length=100, default="UDEFINED METRIC")
+    model_main_metric_value = models.FloatField(default=0)
+
+    model_task_type = models.CharField(max_length=20, default="UNDEFINED TASK TYPE")
+
+
+class ExploitTask(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ml_model: MLMODEL = models.ForeignKey(MLMODEL, on_delete=models.CASCADE)
+    csv_file_name = models.FilePathField()
+    GPU_SERVER_IP = models.CharField(max_length=20)
+    success = models.BooleanField(default=False)
+    result_file_name = models.FilePathField()
 
 

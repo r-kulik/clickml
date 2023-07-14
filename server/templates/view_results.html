@@ -1,0 +1,15 @@
+{% extends "header_footer.html" %}
+{% load static %}
+
+{% block page %}
+
+    <script type="text/javascript" src='{% static "/js/loading_results.js" %}'></script>
+    <script>
+        window.addEventListener('load', () => {
+            createSocketAndConnect({{ context.exploit_task_id }});
+        });
+
+    </script>
+    <p>Я так хочу, чтоб здесь были результаты</p>
+    <a id="link_to_download">Ссылка на скачивание</a>
+{% endblock %}
