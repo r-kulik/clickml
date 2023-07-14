@@ -1,16 +1,16 @@
-from WorkWithTask import Task
+import requests
+from APICONFIG import site_host
 
 
-def send_fail_message():
-    # todo send fail message (later)
-    pass
+def send_percent(counter: int, n: int, task_id: int, score: float) -> bool:
+    result = counter / n
 
-
-def send_result_model(task: Task):
-    # todo send all files from user_name/project_name
-    pass
-
-
-def send_percent(counter: int, n: int) -> None:
-    result = round((counter / n) * 100)
-    # todo send percent
+    response = requests.get(
+        url=f'http://{site_host}/accept_percent',
+        params={
+            "learning_task_id": str(task_id),
+            "completion_percentage": str(result),
+            "main_metric_value": str(score)
+        }
+    )
+    return response.status_code == 200

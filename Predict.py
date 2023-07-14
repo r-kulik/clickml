@@ -56,7 +56,7 @@ class Predict:
         # predict using best model
         out = model.predict(self.df)
         out = pd.DataFrame(out)
-
+        print(out)
         # save to file best.csv
         result = pd.read_csv(f"task_{self.task_id}/df.csv")
         result[target] = out

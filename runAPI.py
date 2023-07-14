@@ -60,7 +60,17 @@ async def register_exploit_task(
     with open(f"task_{task_id}/df.csv", "wb") as f:
         f.write(exploit_file.file.read())
 
-    run_main.run_app("use", task_id=task_id)
+    thread2 = threading.Thread(
+        target=run_main.run_app,
+        args=[
+            "use",
+            None,
+            task_id
+        ]
+    )
+    thread2.start()
+    print('стартуем чи не?')
+    # run_main.run_app("use", task_id=task_i
 
     return "OK"
 

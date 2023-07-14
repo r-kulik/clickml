@@ -38,6 +38,7 @@ def run_app(purpose: str, js_task: APILearnTask = None, task_id: int = None) -> 
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
 
+    print(f"purpose={purpose}, task_id={task_id}")
     if purpose == "learn":
         task = Task(js_task)
         OptunaWork(task, 100).optuna_study()
@@ -45,7 +46,8 @@ def run_app(purpose: str, js_task: APILearnTask = None, task_id: int = None) -> 
         clear_files_after_learning(task)
     if purpose == "use":
         Predict(task_id).predict()
-        #complete_exploit_task(task_id)
+
+        complete_exploit_task(task_id)
         clear_files_after_using(task_id)
 
 

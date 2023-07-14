@@ -3,6 +3,7 @@ import pandas as pd
 import optuna
 import os
 import pickle
+from random import random
 import json
 import os
 import optuna
@@ -24,6 +25,7 @@ class OptunaWork:
         self.counter = 0
         self.task = task
         self.current_trial = 0
+        self.ar_val = []
 
     def objective(self, trial):
         x = self.task.df.drop(self.task.target_variable, axis=1)
@@ -55,7 +57,7 @@ class OptunaWork:
         if self.task.task_type == "classification":
             scoring = "roc_auc_ovr"
             classifier_name = trial.suggest_categorical("classifier",
-                                                        ["GradientBoostingClassifier"])
+                                                        ["LogisticRegression", "DecisionTree"])
 
             if classifier_name == "LogisticRegression":
                 solver = trial.suggest_categorical("solver", ['newton-cg', 'lbfgs', 'liblinear'])
@@ -151,15 +153,18 @@ class OptunaWork:
             json.dump(config, fout)
 
         self.counter += 1
+        self.ar_val.append(accuracy)
 
         if self.counter % 5 == 0:
-            send_percent(self.counter, self.n_trials)
+            send_percent(self.counter, self.n_trials, self.task.task_id, max(self.ar_val))
 
         return accuracy
 
     def optuna_study(self):
         study = optuna.create_study(direction="maximize")
         study.optimize(self.objective, n_trials=self.n_trials, gc_after_trial=True)
+
+        send_percent(1, 1, self.task.task_id, study.best_trial.value)
 
         for i in ["config_best.json", "encoder_best.pickle", "scaler_best.pickle", "model_best.pickle"]:
             if "{}".format(i) in os.listdir("task_{}".format(self.task.task_id)):
