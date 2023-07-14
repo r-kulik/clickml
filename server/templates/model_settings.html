@@ -2,24 +2,65 @@
 {% load static %}
 
 {% block page %}
+
+<link rel="stylesheet" type="text/css" href='{% static "css/model_settings.css" %}'/>
+<script type="text/javascript" src='{% static "js/model_settings.js" %}'></script>
+
+    <div class="parent_model_settings">
     <form action="/workspace" method="post">
 
         {% csrf_token %}
 
-        <h2> Mark the task type</h2>
+
+        <div class="child_types_model_settings">
+        <p style="margin-top:100px; font-size: 30px; font-style: normal; font-weight: 300; line-height: normal; text-align: center"> Mark the task type</p>
+
+            <div class="buttons">
+            <div class="form_radio_btn">
         <input type="radio" name="task_type" id="task_type_classification" value="classification">
-        <p>Classification</p>
+        <label for="task_type_classification"><h1 style="margin: 20px;">Classification</h1><p style="margin-top:10px;">Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in </p></label>
+            </div>
+
+            <div class="form_radio_btn">
         <input type="radio" name="task_type" id="task_type_regression" value="regression">
-        <p>Regression</p>
+        <label for="task_type_regression"><h1 style="margin: 20px;">Regression</h1><p style="margin-top:10px;">Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in Hui gavno i muravei Lorem ipsum dolor sit amet, tale cetero delicatissimi pro ad, duo in </p></label>
+                </div>
+                </div>
 
-        <h2>Mark the target variable</h2>
+        </div>
 
-        {% for data_field_name in context.dataset_column_names %}
-        <input type="radio" name="target_variable" id="target_variable_{{data_field_name}}" value="{{data_field_name}}">
-        <p>{{data_field_name}}</p>
-        {% endfor %}
 
-        <input type="submit">
+        <div class="child_variables_model_settings">
+
+        <p style="margin-top:100px; font-size: 30px; font-style: normal; font-weight: 300; line-height: normal; text-align: center">Mark the target variable</p>
+
+        <!-- TODO: булкин, разберись с разъебным фором и схуяли там спавнятся 1000 элементов -->
+
+            <div class="child_left">
+                <div style="overflow-y: scroll; width:400px; height: 400px;">
+
+    {% for data_field_name in context.dataset_column_names %}
+        <div class="radio_btn_var">
+        <label for="target_variable_{{data_field_name}}" id="target_variable_{{data_field_name}}1"><p style="margin-top: 25px;">{{data_field_name}}</p></label>
+        <input type="radio" name="target_variable" id="target_variable_{{data_field_name}}" value="{{data_field_name}}" onchange="showValue(id)">
+        </div>
+    {% endfor %}
+
+        </div>
+            </div>
+
+
+        <div class="child_right">
+            <p style="margin-left:100px">Marked variable</p>
+            <p style="margin-left:100px;" id="text"></p>
+             <label for="continue" class="cont_button">Continue</label>
+            <input type="submit" id="continue" value="Continue" style="float:right; display: none;">
+        </div>
+
+
+
+            </div>
 
     </form>
+        </div>
 {% endblock %}

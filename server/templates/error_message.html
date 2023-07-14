@@ -1,21 +1,12 @@
 {% extends "header_footer.html" %}
 
 {% block page %}
-<style>
-    .parent{
-        height: 100vh;
-    }
-    .error_page_content{
-        background: #FFBCB9;
-        border-radius: 25px;
-        border: 5px solid #FFBCB9;
-        margin-left: 25%;
-        margin-right:25%;
-        margin-top:5%;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href='{% static "css/error_message.css" %}'/>
 <div class="parent">
 <div class="error_page_content">
+
+
+
 
     <h1>Oops!</h1>
 
@@ -28,11 +19,17 @@
 
     <h2>{{error}}</h2>
 
-    <details>
+    <details style="margin-bottom: 15px;">
   <summary>Error log</summary>
+        <div style="height: 300px;  overflow: auto; margin:10px;">
   <p>{{error_text}}</p>
+            </div>
+
+
 </details>
     </div>
+
+
     </div>
 
 

@@ -1,0 +1,122 @@
+.parent_model_settings{
+
+    }
+
+    .child_types_model_settings{
+        height: 100vh;
+
+    }
+
+    .child_variables_model_settings{
+        height: 100vh;
+    }
+
+    .buttons{
+        text-align: center;
+    }
+    .form_radio_btn {
+        display: inline-block;
+        margin: 10px;
+        background: #24415233;
+        height: 60%;
+        width:30%;
+
+        border: 1px solid #999;
+        border-radius: 6px;
+
+
+
+    }
+    .form_radio_btn input[type=radio] {
+        display: none;
+
+    }
+    .form_radio_btn label {
+        display: inline-block;
+        cursor: pointer;
+        padding: 0px 15px;
+        height: 100%;
+
+        user-select: none;
+    }
+
+    /* Checked */
+    .form_radio_btn input[type=radio]:checked + label {
+        background: #79E34F;
+    }
+
+    /* Hover */
+    .form_radio_btn label:hover {
+        background: #79e34f80;
+    }
+
+    .form_radio_btn h1{
+        text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+    }
+
+
+    .cont_button{
+
+    width: 477px;
+    height: 148px;
+    flex-shrink: 0;
+    background: white;
+
+    color: var(--text, #0B1B23);
+    text-align: center;
+
+    font-size: 75px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+
+    border: 3px solid var(--text, #0B1B23);
+}
+
+
+
+    .child_left{
+        display: inline-block;
+        margin-left: 10%;
+    }
+
+    .child_right{
+        display: inline-block;
+        margin-left:20%;
+    }
+
+    .radio_btn_var{
+        background: #24415233;
+        margin-top: 10px;
+        border: 1px solid #999;
+        border-radius: 6px;
+
+        text-align: center;
+    }
+
+    .radio_btn_var input[type=radio] {
+        display: none;}
+
+    .radio_btn_var label {
+        display: inline-block;
+        cursor: pointer;
+        padding: 0px 15px;
+        height: 100%;
+        width: 100%;
+
+        user-select: none;
+    }
+
+    /* Hover */
+    .radio_btn_var label:hover {
+        background: #79e34f80;
+    }
+
+
+
