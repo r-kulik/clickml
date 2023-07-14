@@ -3,9 +3,8 @@ async function createSocketAndConnect(exploit_task_id) {
         'ws://' + window.location.host + '/loading_results/' + exploit_task_id
     );
 
-    waitSocket.onmessage = function (message) {
-        alert(message);
-    }
+    waitSocket.onmessage = function (message) {}
+
 
     waitSocket.onclose = function (e) {
     }

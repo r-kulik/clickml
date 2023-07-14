@@ -22,7 +22,6 @@ from workspace import views as workspace_views
 from workspace import GPU_INTERFACES
 from workspace import consumers
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_page_views.index, name='Home page'),
@@ -52,7 +51,9 @@ urlpatterns += [
          GPU_INTERFACES.__COMPLETE_LEARNING_TASK_AND_GET_FILES,
          name='Complete Task'),
     path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
-         name='Upload Config Files')
+         name='Upload Config Files'),
+    path('complete_exploit_task_and_get_files', GPU_INTERFACES.__COMPLETE_EXPLOIT_TASK_AND_GET_FILES,
+         name="Complete Exploit Task")
 ]
 
 websocket_urlpatterns = [

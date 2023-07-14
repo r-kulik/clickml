@@ -74,7 +74,7 @@ class TaskRegister:
     @staticmethod
     def fromUseModelContext(useModelContext: UseModelContext):
         task_register = TaskRegister()
-        task_register.purpose= 'use'
+        task_register.purpose = 'use'
         print(useModelContext.model_id)
         task_register.exploit_task = ExploitTask(
             user=useModelContext.request.user,

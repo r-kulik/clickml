@@ -3,13 +3,14 @@ import json
 import os
 import secrets
 
+import channels.layers
 import requests
 from django.http import HttpResponse, HttpRequest, FileResponse
 from django.core.files.storage import default_storage
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import WorkingGpuRemoteServer, UploadTokens, LearningTask, MLMODEL
-
+from asgiref.sync import async_to_sync
 
 def __ENTER_AS_A_GPU_SERVER(request: HttpRequest) -> HttpResponse:
     IP_ADDRESS = __get_ip_address(request)
@@ -63,6 +64,17 @@ def __COMPLETE_LEARNING_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse
                 }
             )
         )
+
+@csrf_exempt
+def __COMPLETE_EXPLOIT_TASK_AND_GET_FILES(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        layer = channels.layers.get_channel_layer()
+        print("trying to broadcast message through redis channel")
+        async_to_sync(layer.group_send)("waiting_results", {
+            "type": "results.get",
+            "text": "Hello there"
+        })
+        return HttpResponse("OK")
 
 @csrf_exempt
 def __UPLOAD_MODEL_CONFIGURATION_FILE(request: HttpRequest) -> HttpResponse:
