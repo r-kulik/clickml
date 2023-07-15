@@ -13,7 +13,7 @@ from .TaskRegister import TaskRegister
 from .ViewResultsContext import ViewResultsContext
 from .UseModelContext import UseModelContext
 from .WorkspaceMainPageContext import WorkspaceMainPageContext
-from .models import ModelOnCreation, WorkingGpuRemoteServer, MLMODEL, ExploitTask
+from .models import ModelOnCreation,  MLMODEL, ExploitTask
 
 from .CreateNewModelContext import CreateNewModelContext
 
@@ -136,6 +136,7 @@ def downloadResults(request: HttpRequest) -> FileResponse:
         file_to_respond = default_storage.open(
             exploit_task.result_file_name
         )
+        exploit_task.delete()
         return FileResponse(
             file_to_respond
         )

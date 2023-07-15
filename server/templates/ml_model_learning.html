@@ -1,3 +1,5 @@
+{% load static %}
+
 <style>
 
   .parent
@@ -169,8 +171,10 @@ h6 {
     <div class="col-xl-3 col-md-6">
         <h6>Learning process</h6>
         <div class="progress">
-            <div class="progress-bar bg-c-green" id="{{ learning_model_context.progress_value_element_id }}" style="width:0%"></div>
+            <div class="progress-bar bg-c-green" id="{{ learning_model_context.progress_value_element_id }}" style="width:0%">
         </div>
+
     </div>
+        <p id = "waiting_gpu_response_text">Waiting for GPU machine to response</p>
 </div>
     </a>

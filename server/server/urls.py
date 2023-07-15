@@ -46,14 +46,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('enter_as_gpu_machine', GPU_INTERFACES.__ENTER_AS_A_GPU_SERVER, name='Enter as a GPU SERVER'),
-    path('get_dataset_file', GPU_INTERFACES.__GET_DATASET_FILE, name='Download the dataset file'),
-    path('complete_learning_task_and_get_files',
+    path('get_learning_task', GPU_INTERFACES.__GET_LEARNING_TASK, name='Get Learn Task'),
+    path('complete_learning_task',
          GPU_INTERFACES.__COMPLETE_LEARNING_TASK_AND_GET_FILES,
          name='Complete Task'),
-    path('upload_model_configuration_file', GPU_INTERFACES.__UPLOAD_MODEL_CONFIGURATION_FILE,
-         name='Upload Config Files'),
-    path('complete_exploit_task_and_get_files', GPU_INTERFACES.__COMPLETE_EXPLOIT_TASK_AND_GET_FILES,
+    path('get_exploit_task', GPU_INTERFACES.__GET_EXPLOIT_TASK, name='Get exploit task'),
+    path('get_exploit_task_model_files', GPU_INTERFACES.__GET_EXPLOIT_TASK_MODEL_FILES,
+         name='Get exploit task model files'),
+    path('complete_exploit_task', GPU_INTERFACES.__COMPLETE_EXPLOIT_TASK_AND_GET_FILES,
          name="Complete Exploit Task"),
     path('accept_percent', GPU_INTERFACES.__ACCEPT_PERCENT, name='Accept Percent')
 ]

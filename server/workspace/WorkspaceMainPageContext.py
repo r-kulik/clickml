@@ -49,7 +49,7 @@ class WorkspaceMainPageContext(BasePageContext):
         self.currently_created_model_project_name = information_object.project_name
 
     def loadInformationAboutExistingModels(self) -> None:
-        MLMODELS: list[MLMODEL] = MLMODEL.objects.filter(user=self.request.user, ready_to_use=1)
+        MLMODELS: list[MLMODEL] = MLMODEL.objects.filter(user=self.request.user)
         print(f"I found {len(MLMODELS)} ml_models for given user")
         for ml_model in MLMODELS:
             self.ml_model_contexts.append(

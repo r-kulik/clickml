@@ -23,15 +23,19 @@ function redirectToModelCreation(){
 }
 
 
-function updateProgressBars(learning_model, data){
+function updateProgressBars(learning_model, data) {
     CP = Math.ceil(data.completion_percentage * 100);
     document.getElementById(
         learning_model.progress_value_element_id
-    ).setAttribute('style', 'width: '+ CP +'%')
+    ).setAttribute('style', 'width: ' + CP + '%')
     document.getElementById(
         learning_model.metric_value_element_id
     ).innerText = data.main_metric_value;
+    document.getElementById("waiting_gpu_response_text").setAttribute(
+        'style', "display: none;"
+    );
 }
+
 
 function completeTask(learning_model, data){
     document.getElementById(
