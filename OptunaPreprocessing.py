@@ -7,7 +7,7 @@ import json
 import os
 import optuna
 import ModelsFunctions
-from SendTQMD import send_percent
+from MessageSending import send_percent
 from Encoder import Encoding
 from Imputers import Imputer
 from Scalers import Scaler

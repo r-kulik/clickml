@@ -10,6 +10,9 @@ from APICONFIG import site_host
 from WorkWithTask import Task
 
 
+# from MessageSending import send_error_message
+
+
 class ServerWrongResponseException(Exception):
     def __init__(self, response):
         self.response = response
@@ -21,23 +24,26 @@ class ServerWrongResponseException(Exception):
 def main() -> None:
     counter = 0
     while True:
+        counter += 1
+        time.sleep(2)
         try:
-            counter += 1
-            time.sleep(2)
             if counter == 5:
                 counter = 0
-
                 task = get_learn_task()
-                if task is not None:
-                    run_app(task)
-
             else:
-                pass
                 task = get_exploit_task()
-                if task is not None:
-                    run_app(task)
-        except Exception as e:
+        except:
+            # web warning
             print(traceback.format_exc())
+            continue
+
+        try:
+            if task is not None:
+                run_app(task)
+        except:
+            # gpu server problem
+            print(traceback.format_exc())
+            pass
 
 
 def get_learn_task() -> Optional[Task]:

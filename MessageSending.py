@@ -14,3 +14,11 @@ def send_percent(counter: int, n: int, task_id: int, score: float) -> bool:
         }
     )
     return response.status_code == 200
+
+"""def send_error_message(e: Exception):
+    response = requests.get(
+        url=f"http://{site_host}/{something}",
+        params={
+            "task_id" = 0
+        }
+    )"""

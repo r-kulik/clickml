@@ -10,6 +10,7 @@ def clear_files_after_learning(task: Task):
         os.remove(f"task_{task.task_id}_zip/{i}")
 
     os.rmdir(f"task_{task.task_id}")
+    os.rmdir(f"task_{task.task_id}_zip")
 
 
 def clear_files_after_using(task: Task):
