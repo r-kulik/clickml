@@ -7,7 +7,6 @@ from Test import *
 
 from WorkWithTask import Task
 from OptunaPreprocessing import OptunaWork
-from JsTask import APILearnTask
 from Predict import Predict
 from Predict_old import PredictOld
 
@@ -34,21 +33,19 @@ def print_reg_metrics(y_actual, y_pred):
     print(f'Testing R2 = {metrics.r2_score(y_actual, y_pred)}')
 
 
-def run_app(purpose: str, js_task: APILearnTask = None, task_id: int = None) -> None:
+def run_app(task: Task) -> None:
     if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
         patch_sklearn()
 
-    print(f"purpose={purpose}, task_id={task_id}")
-    if purpose == "learn":
-        task = Task(js_task)
+    if task.purpose == "learn":
         OptunaWork(task, 100).optuna_study()
-        complete_learn_task(js_task.task_id)
+        complete_learn_task(task)
         clear_files_after_learning(task)
-    if purpose == "use":
-        Predict(task_id).predict()
+    if task.purpose == "use":
+        Predict(task).predict()
 
-        complete_exploit_task(task_id)
-        clear_files_after_using(task_id)
+        complete_exploit_task(task)
+        clear_files_after_using(task)
 
 
 # for test only

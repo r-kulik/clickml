@@ -3,17 +3,15 @@ import pandas as pd
 import optuna
 import os
 import pickle
-from random import random
 import json
 import os
 import optuna
 import ModelsFunctions
-from DataSending import send_percent
+from SendTQMD import send_percent
 from Encoder import Encoding
 from Imputers import Imputer
 from Scalers import Scaler
 from WorkWithTask import Task
-import cpuinfo
 
 # todo add COMMENTS. Not forget. Not only in this file
 CONST_FREQ = 0.01

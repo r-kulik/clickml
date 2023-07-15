@@ -1,18 +1,18 @@
-import numpy as np
 import pandas as pd
 
 from WorkWithTask import Task
 import pickle
 import json
 from Imputers import Imputer
+from WorkWithTask import Task
 
 CONST_FREQ = 0.01
 
 
 class Predict:
-    def __init__(self, task_id: int) -> None:
-        self.task_id = task_id
-        self.df = pd.read_csv(f"task_{task_id}/df.csv")
+    def __init__(self, task: Task) -> None:
+        self.task_id = task.task_id
+        self.df = pd.read_csv(f"task_{task.task_id}/task_{task.task_id}.csv")
         self.col_name = self.df.columns
 
     def predict(self) -> None:
@@ -56,9 +56,9 @@ class Predict:
         # predict using best model
         out = model.predict(self.df)
         out = pd.DataFrame(out)
-        print(out)
+
         # save to file best.csv
-        result = pd.read_csv(f"task_{self.task_id}/df.csv")
+        result = pd.read_csv(f"task_{self.task_id}/task_{self.task_id}.csv")
         result[target] = out
 
         result.to_csv(f"task_{self.task_id}/best.csv")

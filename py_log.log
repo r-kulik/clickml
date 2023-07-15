@@ -1,1 +1,6 @@
-INFO:root:connection request was sent
+INFO:root:sklearn.linear_model.LogisticRegression.fit: running accelerated version on CPU
+INFO:root:sklearn.linear_model.LogisticRegression.fit: running accelerated version on CPU
+INFO:root:sklearn.linear_model.LogisticRegression.fit: running accelerated version on CPU
+INFO:root:sklearn.linear_model.LogisticRegression.fit: running accelerated version on CPU
+INFO:root:sklearn.linear_model.LogisticRegression.fit: running accelerated version on CPU
+INFO:root:sklearn.linear_model.LogisticRegression.fit: running accelerated version on CPU

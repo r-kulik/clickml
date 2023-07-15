@@ -11,23 +11,43 @@ import logging
 import os
 
 from JsTask import APILearnTask
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+
+"""
+НЕБОЛЬШАЯ ПРОБЛЕМКА: ФАЙЛ НЕАКТУАЛЕН :)
+"""
+
+
+class SourcePortAdapter(HTTPAdapter):
+    """"Transport adapter" that allows us to set the source port."""
+    def __init__(self, port, *args, **kwargs):
+        self._source_port = port
+        super(SourcePortAdapter, self).__init__(*args, **kwargs)
+
+    def init_poolmanager(self, num_pools, maxsize, block=False):
+        self.poolmanager = PoolManager(
+            num_pools=num_pools, maxsize=maxsize,
+            block=block, source_address=('', self._source_port))
 
 logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w")
-
-app = FastAPI()
-response = requests.get(f'http://{APICONFIG.site_host}/enter_as_gpu_machine')
+s = requests.Session()
+s.mount('http://', SourcePortAdapter(53041))
+response = s.get(f'http://{APICONFIG.site_host}/enter_as_gpu_machine')
+s.close()
 logging.info('connection request was sent')
 if response.status_code != 200:
     sys.exit()
 
+app = FastAPI()
+
 
 @app.post("/register_learn_task")
 async def register_learn_task(json_file: APILearnTask):
-    print(f"json_file.target_variable = {json_file.target_variable}")
     try:
         learning_task_thread = threading.Thread(
             target=register_task,
-            args=[json_file]
+            args=[json_file]`
         )
         learning_task_thread.start()
         return "OK"
@@ -69,15 +89,8 @@ async def register_exploit_task(
         ]
     )
     thread2.start()
-    print('стартуем чи не?')
-    # run_main.run_app("use", task_id=task_i
 
     return "OK"
-
-
-@app.get('/')
-def index():
-    return "Hello, world!"
 
 
 def register_task(task) -> None:
@@ -94,4 +107,4 @@ def register_task(task) -> None:
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=80)
+    uvicorn.run(app, host='0.0.0.0', port=53041, reload=True)
