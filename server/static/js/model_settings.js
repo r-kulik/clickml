@@ -1,3 +1,5 @@
+// Вношу изменения sfksndkjfnkj
+
 var is_checked_one = false;
 var old_label;
 function showValue(id) {
