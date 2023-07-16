@@ -58,7 +58,14 @@ urlpatterns += [
     path('accept_percent', GPU_INTERFACES.__ACCEPT_PERCENT, name='Accept Percent')
 ]
 
+
+urlpatterns += [
+    path("yandex_6e171de854288ea5.html", workspace_views.returnYandexVerification, name='A')
+]
+
 websocket_urlpatterns = [
     re_path(r'loading_results/\d+', consumers.ExploitLoadingConsumer.as_asgi()),
     re_path(f'learning_results/', consumers.LearningLoadingConsumer.as_asgi())
 ]
+
+
