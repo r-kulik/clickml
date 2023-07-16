@@ -141,3 +141,14 @@ def downloadResults(request: HttpRequest) -> FileResponse:
             file_to_respond
         )
 
+
+
+def returnYandexVerification(request) -> HttpResponse:
+    return HttpResponse(
+        """<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>Verification: 6e171de854288ea5</body>
+</html>"""
+    )
