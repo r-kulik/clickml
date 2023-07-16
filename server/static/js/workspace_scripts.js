@@ -36,6 +36,14 @@ function updateProgressBars(learning_model, data) {
     );
 }
 
+function visualizeException(learning_model, data){
+    let errorTextElement = document.getElementById("error_text");
+    errorTextElement.innerText = data.exception;
+    errorTextElement.setAttribute(
+        "style", "display: grid;"
+    );
+}
+
 
 function completeTask(learning_model, data){
     document.getElementById(
@@ -69,6 +77,9 @@ async function createSocketAndConnect(){
             let learning_model = learning_models[i];
             if (learning_model.model_id === data.learning_task_id){
                 console.log(data);
+                if (data.exception_occurred === 1){
+                    visualizeException(learning_model, data);
+                }
                 if (data.complete === 1){
                     completeTask(learning_model, data);
                     return;

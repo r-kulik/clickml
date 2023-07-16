@@ -91,16 +91,6 @@ def __ACCEPT_PERCENT(request: HttpRequest) -> HttpResponse:
 @csrf_exempt
 def __GET_LEARNING_TASK(request: HttpRequest) -> HttpResponseBase:
 
-    # TODO:
-    #   ОСНОВНАЯ ЗАДАЧА — сделать на стороне GPU машины запрашивалку
-    #   научиться принимать задачи в ZIP-ках, уметь отчитываться о задачах, используя
-    #   существующие интерфейсы.
-    #   ПОБОЧНЫЕ ЗАДАЧИ:
-    #   1) Научиться передавать задачу в пул свободных при таймауте отчета, выставляя им
-    #       первый приоритет
-    #   2) Сделать __UPLOAD_MODEL_CONFIGURATION_FILE ненужным, передавать все файлы сразу
-    #      Zip-архивом, его же и отправлять на EXPLOIT task
-
     task_pool: list[LearningTask] = LearningTask.objects.filter(GPU_SERVER_IP = "")
     if len(task_pool) == 0:
         return HttpResponse("NO TASKS");
@@ -155,8 +145,41 @@ def __GET_EXPLOIT_TASK_MODEL_FILES(request: HttpRequest) -> HttpResponseBase:
             }
         )
 
+@csrf_exempt
+def __REPORT_LEARNING_TASK_EXCEPTION(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        json_data = json.loads(request.body)
+        task_id = int(json_data.get('taskId', '-1'))
+        learning_task: LearningTask = LearningTask.objects.get(id=task_id)
 
+        layer = channels.layers.get_channel_layer()
+        async_to_sync(layer.group_send)("waiting_learning_task_info", {
+            "type": "exception.occurred",
+            "text": json.dumps({
+                "learning_task_id": learning_task.id,
+                "exception": json_data.get('exceptionText', "Some exception has been occurred")
+            })
+        })
+        learning_task.delete()
+        return HttpResponse("Exception handled")
 
+@csrf_exempt
+def __REPORT_EXPLOIT_TASK_EXCEPTION(request:HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        json_data = json.loads(request.body)
+        task_id = int(json_data.get('taskId', '-1'))
+        exploit_task: ExploitTask = ExploitTask.objects.get(id=task_id)
+
+        layer = channels.layers.get_channel_layer()
+        async_to_sync(layer.group_send)("waiting_results", {
+            "type": "exception.occurred",
+            "text": json.dumps({
+                "learning_task_id": exploit_task.id,
+                "exception": json_data.get('exceptionText', "Some exception has been occurred")
+            })
+        })
+        exploit_task.delete()
+        return HttpResponse("Exception handled")
 
 def __get_ip_address(request) -> str:
     user_ip_address = request.META.get('HTTP_X_FORWARDED_FOR')
