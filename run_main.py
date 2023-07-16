@@ -16,8 +16,7 @@ from completeLearnTask import complete_learn_task
 from  completeExploitTask import complete_exploit_task
 from Clear import *
 
-import cpuinfo
-from sklearnex import patch_sklearn
+
 import ChooseBest
 
 
@@ -34,8 +33,7 @@ def print_reg_metrics(y_actual, y_pred):
 
 
 def run_app(task: Task) -> None:
-    if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
-        patch_sklearn()
+
 
     if task.purpose == "learn":
         OptunaWork(task, 100).optuna_study()

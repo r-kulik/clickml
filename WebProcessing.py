@@ -4,13 +4,14 @@ import time
 import traceback
 from typing import Optional
 from run_main import run_app
+import cpuinfo
+from sklearnex import patch_sklearn
 
 import requests
 from APICONFIG import site_host
 from WorkWithTask import Task
 
-
-# from MessageSending import send_error_message
+from MessageSending import send_error_message
 
 
 class ServerWrongResponseException(Exception):
@@ -22,6 +23,9 @@ class ServerWrongResponseException(Exception):
 
 
 def main() -> None:
+    if "Intel" in cpuinfo.get_cpu_info()["brand_raw"]:
+        patch_sklearn()
+
     counter = 0
     while True:
         counter += 1
@@ -33,17 +37,13 @@ def main() -> None:
             else:
                 task = get_exploit_task()
         except:
-            # web warning
-            print(traceback.format_exc())
             continue
 
         try:
             if task is not None:
                 run_app(task)
-        except:
-            # gpu server problem
-            print(traceback.format_exc())
-            pass
+        except Exception as e:
+            send_error_message(e, task.task_id, task.purpose)
 
 
 def get_learn_task() -> Optional[Task]:
@@ -55,17 +55,22 @@ def get_learn_task() -> Optional[Task]:
 
     task_id = response.headers["Taskid"]
 
-    if not os.path.exists(os.path.join(os.curdir, f"task_{task_id}")):
-        os.mkdir(f"task_{task_id}")
+    try:
 
-    with open(f"task_{task_id}/df.csv", "wb") as f:
-        f.write(response.content)
+        if not os.path.exists(os.path.join(os.curdir, f"task_{task_id}")):
+            os.mkdir(f"task_{task_id}")
 
-    task = Task(task_id,
-                "learn",
-                response.headers["Tasktype"],
-                response.headers["Targetvariable"],
-                f"task_{task_id}/df.csv")
+        with open(f"task_{task_id}/df.csv", "wb") as f:
+            f.write(response.content)
+
+        task = Task(task_id,
+                    "learn",
+                    response.headers["Tasktype"],
+                    response.headers["Targetvariable"],
+                    f"task_{task_id}/df.csv")
+    except Exception as e:
+        send_error_message(e, int(task_id), "learn")
+        return None
 
     return task
 
@@ -78,29 +83,33 @@ def get_exploit_task() -> Optional[Task]:
         return None
 
     task_id = response.headers["Taskid"]
+    try:
 
-    zip_file_response = requests.get(
-        url=f"http://{site_host}/get_exploit_task_model_files",
-        params={
-            "task_id": task_id
-        }
-    )
+        zip_file_response = requests.get(
+            url=f"http://{site_host}/get_exploit_task_model_files",
+            params={
+                "task_id": task_id
+            }
+        )
 
-    if not os.path.exists(os.path.join(os.curdir, f"task_{task_id}")):
-        os.mkdir(f"task_{task_id}")
+        if not os.path.exists(os.path.join(os.curdir, f"task_{task_id}")):
+            os.mkdir(f"task_{task_id}")
 
-    with open(f"task_{task_id}/task_{task_id}.csv", "wb") as f:
-        f.write(response.content)
-    with open(f"task_{task_id}/task.zip", "wb") as f:
-        f.write(zip_file_response.content)
+        with open(f"task_{task_id}/task_{task_id}.csv", "wb") as f:
+            f.write(response.content)
+        with open(f"task_{task_id}/task.zip", "wb") as f:
+            f.write(zip_file_response.content)
 
-    shutil.unpack_archive(f"task_{task_id}/task.zip", f"task_{task_id}")
+        shutil.unpack_archive(f"task_{task_id}/task.zip", f"task_{task_id}")
 
-    task = Task(task_id,
-                "use",
-                None,
-                None,
-                f"task_{task_id}/task_{task_id}.csv")
+        task = Task(task_id,
+                    "use",
+                    None,
+                    None,
+                    f"task_{task_id}/task_{task_id}.csv")
+    except Exception as e:
+        send_error_message(e, int(task_id), "use")
+        return None
 
     return task
 
