@@ -3,11 +3,75 @@
 {% block title %}Create an account{% endblock %}
 
 {% block page %}
-    <h1>Create an account</h1>
-    <p>Please, sign up using the following form:</p>
+<style>
+    .register_page{
+        height: 100vh;
+    }
+
+    .myfieldclass{
+
+    }
+
+    .fields{
+    text-align: center;
+    }
+
+    .fields p{
+        display: inline-block;
+    }
+
+    .create_account_btn{
+
+    flex-shrink: 0;
+    background: white;
+
+    color: var(--text, #0B1B23);
+    text-align: center;
+
+    font-size: 75px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+
+    margin-top: 20px;
+    border: 3px solid var(--text, #0B1B23);
+    }
+</style>
+<div class="register_page">
+    <h1 style="text-align: center; margin-top: 5%; font-size: 64px;">Create an account</h1>
+    <p style="text-align: center; margin-top:20px; font-size:32px;">Please, sign up using the following form:</p>
     <form action="." method="post">
-        {{ user_form.as_p }}
         {% csrf_token %}
-        <p><input type="submit" value="Create my account"></p>
+<div class="fields">
+
+    <div style="flex-direction: column">
+        <p style="font-size:20px;">Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p style="font-size:20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user_form.username }}</p>
+    </div>
+
+    <div style="flex-direction: column">
+        <p style="font-size:20px;">First name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p style="font-size:20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user_form.first_name }}</p>
+    </div>
+
+    <div style="flex-direction: column">
+        <p style="font-size:20px;">E-mail&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <p style="font-size:20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user_form.email }}</p>
+    </div>
+
+    <div style="flex-direction: column">
+        <p style="font-size:20px;">Enter password&nbsp;&nbsp;&nbsp;</p>
+        <p style="font-size:20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user_form.password }}</p>
+    </div>
+
+    <div style="flex-direction: column">
+        <p style="font-size:20px;">Repeat password</p>
+        <p style="font-size:20px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ user_form.password2 }}</p>
+    </div>
+
+        <p><input class="create_account_btn" type="submit" value="Create"></p>
+    </div>
     </form>
+</div>
 {% endblock %}

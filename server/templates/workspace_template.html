@@ -43,7 +43,7 @@
         <p>Title</p>
         <p>Status</p>
     </div>
-
+<div class="models">
     {% for learning_model_context_object in context.learning_task_contexts %}
         {% include "ml_model_learning.html" with learning_model_context=learning_model_context_object %}
     {% endfor %}
@@ -51,6 +51,7 @@
     {% for model_context_object in context.ml_model_contexts%}
         {% include "ml_model.html" with model_context=model_context_object %}
     {% endfor %}
+    </div>
 </div>
 
 

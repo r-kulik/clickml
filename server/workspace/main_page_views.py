@@ -10,7 +10,10 @@ from.BasePageContext import BasePageContext
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    username = forms.CharField(label='User', required=True, widget=forms.TextInput(attrs={'class': 'myfieldclass'}))
+    first_name = forms.CharField(label='Name', required=True, widget=forms.TextInput(attrs={'class': 'myfieldclass'}))
+    email = forms.CharField(label='Email', required=True, widget=forms.TextInput(attrs={'class': 'myfieldclass'}))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput, required=True)
     password2 = forms.CharField(label='Repeat password', widget=forms.PasswordInput)
 
     class Meta:
