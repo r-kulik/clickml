@@ -3,6 +3,33 @@
 
 {% block page %}
 
+
+<style>
+    .button_final{
+        flex-shrink: 0;
+    background: white;
+
+
+    margin-top: 25%;
+    margin-left: 10%;
+    margin-right: 10%;
+
+
+    color: var(--text, #0B1B23);
+    text-align: center;
+
+    font-size: 75px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+
+    border: 3px solid var(--text, #0B1B23);
+
+        text-decoration: none;
+    }
+</style>
+
     <script type="text/javascript" src='{% static "/js/loading_results.js" %}'></script>
     <script>
         window.addEventListener('load', () => {
@@ -10,6 +37,10 @@
         });
 
     </script>
-    <p>Я так хочу, чтоб здесь были результаты</p>
-    <a id="link_to_download">Ссылка на скачивание</a>
+
+<div style="height: 100vh;">
+    <div style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);"><img id="loading" src="https://media.tenor.com/sWwGyR81eTAAAAAd/%D0%B7%D0%B5%D0%BB%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9-%D0%B6%D0%BC%D1%8B%D1%85.gif"></div>
+    <a style="display: none;" id="link_to_download"><p class="button_final">Download results</p></a>
+</div>
+
 {% endblock %}

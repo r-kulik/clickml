@@ -3,6 +3,8 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-    <h1>Welcome {{ new_user.first_name }}!</h1>
-    <p>Your account has been successfully created. Now you can <a href="/accounts/login">log in</a>.</p>
+    <div style=" border: 3px solid var(--text, #0B1B23);  margin-top: 20%; margin-left: 20%; margin-right: 20%">
+    <h1 style="text-align: center; margin-top: 5%">Welcome {{ new_user.first_name }}!</h1>
+    <p style="font-size:20px; text-align: center; margin-bottom: 5%; margin-top: 5%">Your account has been successfully created. Now you can <a href="/accounts/login">log in</a>.</p>
+    </div>
 {% endblock %}
