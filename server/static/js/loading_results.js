@@ -13,10 +13,19 @@ function handleException(data){
 // Функция вызывается в случае корректного выполнения задания
 // ссылка на скачивание файла будет /download_results?task_id="+data.task_id
 function completeTask(data){
-    document.getElementById(
+                var image = document.getElementById("loading");
+
+            image.setAttribute("style", "display: none;")
+            document.getElementById(
                 "link_to_download").setAttribute(
                     "href",
-                    "/download_results?task_id="+data.task_id);
+                    "/download_results?task_id="+exploit_task_id);
+            document.getElementById(
+                "link_to_download").setAttribute(
+                    "style",
+                    "display: block;text-decoration: none;");
+
+
 }
 
 
@@ -33,6 +42,7 @@ async function createSocketAndConnect(exploit_task_id) {
 
     waitSocket.onmessage = function (message) {
         var text = message.data;
+
         const data = JSON.parse(text);
 
         if (data.exception_occurred === 1){

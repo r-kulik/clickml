@@ -1,8 +1,29 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<p>Logged out!</p>
-<p>Ну и нахуя ты вышел?</p>
 
-<a href="{% url 'login'%}">Click here to login again.</a>
+<style>
+    .button_out{
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: white;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        font-size: 300%;
+        border-radius: 8px;
+        border: 3px solid var(--text, #0B1B23);
+        margin: 10px;
+    }
+    .buttons{
+        text-align: center;
+    }
+</style>
+<h1 style="font-size:400%; text-align: center; margin-top:20%;">You logged out!</h1>
+
+<div class="buttons">
+<a href="{% url 'login'%}" class="button_out"><p>Login again</p></a>
+<a href="/" class="button_out"><p>Main page</p></a>
+</div>
+
 {% endblock %}

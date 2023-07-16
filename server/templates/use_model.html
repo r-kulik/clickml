@@ -1,15 +1,56 @@
 {% extends "header_footer.html" %}
 
 {% block page %}
+{% load static %}
+
+<style>
+    .cont_button_use_model{
+
+
+    flex-shrink: 0;
+    background: white;
+
+    color: var(--text, #0B1B23);
+    text-align: center;
+
+    font-size: 75px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    text-transform: uppercase;
+
+    border: 3px solid var(--text, #0B1B23);
+    }
+</style>
+
+
+
+<div style="height: 100vh;">
 
 <form enctype="multipart/form-data" method="post" action="/view_results">
     {% csrf_token %}
-    <input type="file" name="exploit_file">
+
+<div style="text-align: center; margin-top:10%">
+    <label for="inputFile"><img src='{% static "svg/download_circle.svg" %}'><p>Please upload .csv</p></label>
+    <input type="file" id="inputFile" name="exploit_file" style="display: none;">
+</div>
+
+
+
     <input type="text" name="model_id" value="{{ context.model_id }}" style="display: none;">
-    <input type="submit">
+
+<div style="text-align: center; margin-top: 10%;">
+    <label for="inputNext" class="cont_button_use_model"><p>Get results</p></label>
+    <input type="submit" id="inputNext" style="display:none;">
+</div>
 
 
-    <p>Model id is {{ context.model_id }}</p>
+
+
+
+
 </form>
+
+</div>
 
 {% endblock %}
