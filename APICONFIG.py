@@ -1,1 +1,1 @@
-site_host = '10.91.50.38'
+site_host = 'click-ml.ru'

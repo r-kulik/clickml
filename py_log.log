@@ -649,3 +649,13 @@
 01:25:28,106 urllib3.connectionpool DEBUG http://10.91.50.38:80 "GET /get_exploit_task HTTP/1.1" 200 8
 01:25:30,112 urllib3.connectionpool DEBUG Starting new HTTP connection (1): 10.91.50.38:80
 01:25:30,135 urllib3.connectionpool DEBUG http://10.91.50.38:80 "GET /get_exploit_task HTTP/1.1" 200 8
+02:31:09,495 root INFO [WinError 32] Процесс не может получить доступ к файлу, так как этот файл занят другим процессом: 'task_35/best.csv'
+02:31:09,501 urllib3.connectionpool DEBUG Starting new HTTP connection (1): 10.91.50.38:80
+02:31:09,554 urllib3.connectionpool DEBUG http://10.91.50.38:80 "POST /complete_exploit_task HTTP/1.1" 200 2
+02:31:11,503 urllib3.connectionpool DEBUG Starting new HTTP connection (1): 10.91.50.38:80
+02:31:11,560 urllib3.connectionpool DEBUG http://10.91.50.38:80 "POST /report_exploit_task_exception HTTP/1.1" 200 17
+02:32:13,782 root INFO [WinError 32] Процесс не может получить доступ к файлу, так как этот файл занят другим процессом: 'task_36/best.csv'
+02:32:13,788 urllib3.connectionpool DEBUG Starting new HTTP connection (1): 10.91.50.38:80
+02:32:13,842 urllib3.connectionpool DEBUG http://10.91.50.38:80 "POST /complete_exploit_task HTTP/1.1" 200 2
+02:32:15,794 urllib3.connectionpool DEBUG Starting new HTTP connection (1): 10.91.50.38:80
+02:32:15,863 urllib3.connectionpool DEBUG http://10.91.50.38:80 "POST /report_exploit_task_exception HTTP/1.1" 200 17

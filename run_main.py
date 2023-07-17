@@ -1,6 +1,8 @@
 import traceback
 
 import pandas as pd
+import threading
+
 
 from Predict_old import PredictOld
 from Test import *
@@ -18,6 +20,9 @@ from Clear import *
 
 
 import ChooseBest
+
+import cpuinfo
+from sklearnex import patch_sklearn
 
 
 def print_clf_metrics(y_actual, y_pred):
@@ -38,12 +43,14 @@ def run_app(task: Task) -> None:
     if task.purpose == "learn":
         OptunaWork(task, 100).optuna_study()
         complete_learn_task(task)
-        clear_files_after_learning(task)
     if task.purpose == "use":
         Predict(task).predict()
 
-        complete_exploit_task(task)
-        clear_files_after_using(task)
+        web_thread = threading.Thread(
+            target=complete_exploit_task,
+            args=[task]
+        )
+        web_thread.start()
 
 
 # for test only

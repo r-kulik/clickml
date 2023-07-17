@@ -2,6 +2,7 @@ import requests
 from APICONFIG import site_host
 import shutil
 from WorkWithTask import Task
+from Clear import clear_files_after_learning
 
 
 def complete_learn_task(task: Task) -> int:
@@ -19,6 +20,10 @@ def complete_learn_task(task: Task) -> int:
     if response.status_code != 200:
         print('response code is not 200')
         return -1
+
+    clear_files_after_learning(task)
+    return 0
+
 
 
 
