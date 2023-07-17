@@ -4,42 +4,29 @@
 {% block page %}
 
 
-<style>
-    .button_final{
-        flex-shrink: 0;
-    background: white;
-
-
-    margin-top: 25%;
-    margin-left: 10%;
-    margin-right: 10%;
-
-
-    color: var(--text, #0B1B23);
-    text-align: center;
-
-    font-size: 75px;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
-    text-transform: uppercase;
-
-    border: 3px solid var(--text, #0B1B23);
-
-        text-decoration: none;
-    }
-</style>
-
-    <script type="text/javascript" src='{% static "/js/loading_results.js" %}'></script>
-    <script>
-        window.addEventListener('load', () => {
+<link rel="stylesheet" type="text/css" href='{% static "css/animation.css" %}'/>
+<link rel="stylesheet" type="text/css" href='{% static "css/view_results.css" %}'/>
+<script type="text/javascript" src='{% static "/js/loading_results.js" %}'></script>
+<script>
+        window.addEventListener('load', async () => {
             createSocketAndConnect({{ context.exploit_task_id }});
         });
-
-    </script>
+</script>
 
 <div style="height: 100vh;">
-    <div style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);"><img id="loading" src="https://media.tenor.com/sWwGyR81eTAAAAAd/%D0%B7%D0%B5%D0%BB%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9-%D0%B6%D0%BC%D1%8B%D1%85.gif"></div>
+    <div class="svg_animation_wrapper" id="svg_animation_wrapper">
+        <svg width="727" height="404" viewBox="0 0 727 404" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M528 43V391" stroke="#79E34F" stroke-width="25" stroke-linecap="round" class="svg-elem-1"></path>
+            <path d="M304 88V391" stroke="#79E34F" stroke-width="25" stroke-linecap="round" class="svg-elem-2"></path>
+            <path d="M190 13L190 391" stroke="#79E34F" stroke-width="25" stroke-linecap="round" class="svg-elem-3"></path>
+            <path d="M413 166.982L415 390.982" stroke="#79E34F" stroke-width="25" stroke-linecap="round" class="svg-elem-4"></path>
+            <path d="M485.021 162C482.26 161.988 480.012 164.218 480 166.979C479.988 169.74 482.218 171.988 484.979 172L485.021 162ZM725.521 171.55C727.481 169.606 727.495 166.44 725.55 164.479L693.865 132.526C691.921 130.565 688.755 130.551 686.794 132.496C684.833 134.44 684.82 137.606 686.764 139.567L714.929 167.97L686.526 196.135C684.565 198.079 684.551 201.245 686.496 203.206C688.44 205.167 691.606 205.18 693.567 203.236L725.521 171.55ZM484.979 172L721.979 173L722.021 163L485.021 162L484.979 172Z" fill="#274758" class="svg-elem-5"></path>
+            <line x1="483.195" y1="167.969" x2="360.969" y2="340.805" stroke="#274758" stroke-width="10" stroke-linecap="round" class="svg-elem-6"></line>
+            <path d="M359.06 342.288L223 226" stroke="#274758" stroke-width="10" stroke-linecap="round" class="svg-elem-7"></path>
+            <path d="M223 231C225.761 231 228 228.761 228 226C228 223.239 225.761 221 223 221V231ZM223 221L31 221V231L223 231V221Z" fill="#274758" class="svg-elem-8"></path>
+            <circle cx="17" cy="226" r="17" fill="#274758" class="svg-elem-9"></circle>
+        </svg>
+    </div>
     <a style="display: none;" id="link_to_download"><p class="button_final">Download results</p></a>
 
     <div id="error_message_view" style="display: none">

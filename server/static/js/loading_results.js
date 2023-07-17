@@ -1,19 +1,21 @@
 // Функция должна вызываться в случае ошибки и рисовать нам окошко
 
+var loading = true;
+
 function handleException(data){
-    var image = document.getElementById("loading");
-    image.setAttribute("style", "display: none;");
+    var animation = document.getElementById("svg_animation_wrapper");
+    animation.setAttribute("style", "display: none;");
     let error_text = document.getElementById("error_text").innerText = data.exception;
     let error_view = document.getElementById("error_message_view");
-    error_view.setAttribute("style","display: blcok;");
+    error_view.setAttribute("style","display: block;");
 }
 
 // Функция вызывается в случае корректного выполнения задания
 // ссылка на скачивание файла будет /download_results?task_id="+data.task_id
 function completeTask(data, exploit_task_id){
-                var image = document.getElementById("loading");
+            var animation = document.getElementById("svg_animation_wrapper");
 
-            image.setAttribute("style", "display: none;")
+            animation.setAttribute("style", "display: none;")
             document.getElementById(
                 "link_to_download").setAttribute(
                     "href",
@@ -22,6 +24,7 @@ function completeTask(data, exploit_task_id){
                 "link_to_download").setAttribute(
                     "style",
                     "display: block;text-decoration: none;");
+            loading = false;
 }
 
 
@@ -57,3 +60,33 @@ async function createSocketAndConnect(exploit_task_id) {
     }
 
 }
+
+
+
+
+
+window.addEventListener('load', async () => {
+    let wrapper = document.querySelector(".svg_animation_wrapper svg");
+
+   
+    function draw() {
+        wrapper.classList.add("active");
+    }
+
+   
+    function erase() {
+        wrapper.classList.remove("active");
+    }
+
+   
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+   
+    while (loading) {
+        console.log(loading);
+        draw();
+        await sleep(2000);
+        erase();
+        await sleep(2000);
+    }
+});
