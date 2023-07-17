@@ -5,7 +5,7 @@ from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 
-from django.http import HttpRequest, HttpResponse, response, FileResponse
+from django.http import HttpRequest, HttpResponse, response, FileResponse, HttpResponseBase
 
 from .BasePageContext import BasePageContext
 from .ModelCreationSettingsContext import ModelCreationSettingsContext
@@ -74,7 +74,6 @@ def createNewModel(request) -> HttpResponse:
 
 @errorHandler
 def modelCreationSettings(request: HttpRequest) -> HttpResponse:
-    #TODO: сделать так, чтоб пользователь обязательно выбрал тип задачи и целевую переменную
     if request.method == "POST":
         creationContext = ModelCreationSettingsContext(request, is_workspace=True)
         temporary_information = ModelOnCreation(
@@ -95,7 +94,12 @@ def modelCreationSettings(request: HttpRequest) -> HttpResponse:
 @errorHandler
 def useMlModel(request: HttpRequest) -> HttpResponse:
     model_id = int(request.GET.get("model_id", "-1"))
-    #TODO: проверка доступа
+    model: MLMODEL = MLMODEL.objects.get(id=model_id)
+    if request.user != model.user:
+        return TemplateResponse(
+            request,
+            "unauthorized_access.html"
+        )
     useModelContext = UseModelContext(
         request,
         model_id,
@@ -117,7 +121,6 @@ def viewResults(request: HttpRequest) -> HttpResponse:
         viewResultsContext = ViewResultsContext(request, is_workspace=True)
         task_register = TaskRegister.fromUseModelContext(viewResultsContext)
         task_register.registerExploitTask()
-
         return TemplateResponse(
             request,
             "view_results.html",
@@ -126,21 +129,26 @@ def viewResults(request: HttpRequest) -> HttpResponse:
 
 
 
-def downloadResults(request: HttpRequest) -> FileResponse:
+def downloadResults(request: HttpRequest) -> HttpResponseBase:
     #TODO устроить проверку доступа
     if request.method == "GET":
         exploit_task_id = request.GET.get("task_id", -1)
+
         print(exploit_task_id)
         exploit_task: ExploitTask = ExploitTask.objects.get(id=exploit_task_id)
-        print(f"Trying to respond with a file {exploit_task.result_file_name}")
-        file_to_respond = default_storage.open(
-            exploit_task.result_file_name
-        )
+        if request.user != exploit_task.user:
+            return TemplateResponse(
+                request,
+                "unauthorized_access.html"
+            )
+        with open('result.csv', 'wb') as file:
+            file.write(
+                default_storage.open(
+                    exploit_task.result_file_name
+                ).read()
+            )
         exploit_task.delete()
-        return FileResponse(
-            file_to_respond
-        )
-
+        return FileResponse(open('result.csv', 'rb'))
 
 
 def returnYandexVerification(request) -> HttpResponse:

@@ -1,3 +1,4 @@
+from django.core.files.storage import default_storage
 from django.db import models
 
 # Create your models here.
@@ -44,9 +45,12 @@ class LearningTask(models.Model):
     main_metric_name = models.CharField(max_length=20, default="Undefined")
     request_time = models.DateTimeField()
 
+    def delete(self, using=None, keep_parents=False):
+        default_storage.delete(self.dataset_source_file_name)
+        super().delete(using=using, keep_parents=keep_parents)
 
 class MLMODEL(models.Model):
-    # -(closed to_do)-: сделать хранение метрик для модели, а так же тип задачи для отображения на странице workspace
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project_name = models.CharField(max_length=100)
     model_zip_file = models.FilePathField(default='/')
@@ -67,4 +71,7 @@ class ExploitTask(models.Model):
     result_file_name = models.FilePathField()
     request_time = models.DateTimeField()
 
-
+    def delete(self, using=None, keep_parents=False):
+        default_storage.delete(self.csv_file_name)
+        default_storage.delete(self.result_file_name)
+        super().delete(using=using, keep_parents=keep_parents)

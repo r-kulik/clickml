@@ -12,20 +12,18 @@ function handleException(data){
 
 // Функция вызывается в случае корректного выполнения задания
 // ссылка на скачивание файла будет /download_results?task_id="+data.task_id
-function completeTask(data){
+function completeTask(data, exploit_task_id){
                 var image = document.getElementById("loading");
 
             image.setAttribute("style", "display: none;")
             document.getElementById(
                 "link_to_download").setAttribute(
                     "href",
-                    "/download_results?task_id="+exploit_task_id);
+                    "/download_results?task_id="+data.task_id);
             document.getElementById(
                 "link_to_download").setAttribute(
                     "style",
                     "display: block;text-decoration: none;");
-
-
 }
 
 
@@ -49,7 +47,7 @@ async function createSocketAndConnect(exploit_task_id) {
             handleException(data);
         }
         if (data.finish === 1 && data.task_id === exploit_task_id){
-            completeTask(data);
+            completeTask(data, exploit_task_id);
         }
     }
 
