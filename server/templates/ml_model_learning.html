@@ -1,10 +1,12 @@
 {% load static %}
 
+<!--
 <style>
 
   .parent
 {
 border: 1px solid black;
+      height: 100vh;
 
 }
 .child
@@ -161,9 +163,7 @@ h6 {
 </div>
 
 <div class="child">
-    <button><p>View</p></button>
-    <button><p>Delete</p></button>
-</div>
+
 
     <p id="{{ learning_model_context.metric_value_element_id }}">0</p>
     <p id="{{ learning_model_context.learning_model_id_value_element_id}}"></p>
@@ -175,5 +175,54 @@ h6 {
             </div>
         </div>
         <p id = "waiting_gpu_response_text">Waiting for GPU machine to response</p>
-</div>
     </div>
+</div>
+</div>
+
+
+СНАЧАЛА
+
+-->
+<style>
+    .ml_model_learning_block{
+
+        border: 2px black solid;
+        margin: 10px;
+        border-radius: 15px;
+        width: 40%;
+        margin-right: 30%;
+        margin-left: 30%;
+        padding: 5px;
+    }
+</style>
+
+<div class="ml_model_learning_block">
+
+   <div style="margin-right:30px; display: inline-block">
+       <a id="a_{{ learning_model_context.learning_task_id }}"><b>Name: </b>{{learning_model_context.name}}</a>
+       <p id="{{ learning_model_context.metric_value_element_id }}">0</p>
+        <p id="{{ learning_model_context.learning_model_id_value_element_id}}"></p>
+   </div>
+
+
+    <div style="display: inline-block">
+
+        <div style="width: 300px;" class="col-xl-3 col-md-6">
+
+            <h6>Learning process</h6>
+
+            <div class="progress">
+                <div class="progress-bar bg-c-green" id="{{ learning_model_context.progress_value_element_id }}"></div>
+            </div>
+
+            <p id="waiting_gpu_response_text">Waiting for GPU machine to response</p>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
