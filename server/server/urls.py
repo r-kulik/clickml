@@ -55,7 +55,9 @@ urlpatterns += [
          name='Get exploit task model files'),
     path('complete_exploit_task', GPU_INTERFACES.__COMPLETE_EXPLOIT_TASK_AND_GET_FILES,
          name="Complete Exploit Task"),
-    path('accept_percent', GPU_INTERFACES.__ACCEPT_PERCENT, name='Accept Percent')
+    path('accept_percent', GPU_INTERFACES.__ACCEPT_PERCENT, name='Accept Percent'),
+    path('report_learning_task_exception', GPU_INTERFACES.__REPORT_LEARNING_TASK_EXCEPTION, name='RLTE'),
+    path('report_exploit_task_exception', GPU_INTERFACES.__REPORT_EXPLOIT_TASK_EXCEPTION, name='RLTE')
 ]
 
 

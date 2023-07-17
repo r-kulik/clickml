@@ -34,6 +34,20 @@ class ExploitLoadingConsumer(WebsocketConsumer):
                     }
                 ))
 
+    def exception_occurred(self, event: dict) -> None:
+        if event.get('type', 'undefined') == "exception.occurred":
+            data = json.loads(event.get("text", "{}"))
+            learning_task_id = data.get('learning_task_id', -1)
+            if int(learning_task_id) == self.task_id:
+                json_data = {
+                    "learning_task_id": learning_task_id,
+                    "exception_occurred": 1,
+                    "exception": data.get('exception', 'Some exception has been occurred')
+                }
+                self.send(
+                    text_data=json.dumps(json_data)
+                )
+
 
 class LearningLoadingConsumer(WebsocketConsumer):
 
@@ -80,6 +94,20 @@ class LearningLoadingConsumer(WebsocketConsumer):
                     "learning_task_id": learning_task_id,
                     "complete": 1,
                     "ml_model_id": ml_model_id
+                }
+                self.send(
+                    text_data=json.dumps(json_data)
+                )
+
+    def exception_occurred(self, event: dict) -> None:
+        if event.get('type', 'undefined') == "exception.occurred":
+            data = json.loads(event.get("text", "{}"))
+            learning_task_id = data.get('learning_task_id', -1)
+            if int(learning_task_id) in self.learning_task_id_list:
+                json_data = {
+                    "learning_task_id": learning_task_id,
+                    "exception_occurred": 1,
+                    "exception": data.get('exception', 'Some exception has been occurred')
                 }
                 self.send(
                     text_data=json.dumps(json_data)
