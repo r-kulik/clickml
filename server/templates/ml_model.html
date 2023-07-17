@@ -3,12 +3,14 @@
 <link rel="stylesheet" type="text/css" href='{% static "css/ml_model.css" %}'>
 <a href='/use_model?model_id={{model_context.model_id}}'></a>
 
-<div class="parent">
+<div class="parent" id="ml_model_{{ model_context.model_id }}">
 
 <div class="child">
     <p>{{model_context.name}}</p>
 
     <p>{{model_context.creation_time}}</p>
+
+    <button onclick="delete_model({{ model_context.model_id }})">Delete model</button>
 
 
 </div>

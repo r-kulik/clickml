@@ -24,6 +24,16 @@ function redirectToModelCreation(){
 
 
 function updateProgressBars(learning_model, data) {
+
+    // эта функция вызывается, когда призодит сообщение с новым статусом обучения и значением целевой метрики
+
+    // прогресс выполнения лежит в переменной data.completion_percentage
+    // она принимаает значения от 0 до 1
+    // значение основной метрики качества модели лежит в переменной data.main_metric_value
+    // она тоже принимает значения от 0 до 1
+
+
+
     CP = Math.ceil(data.completion_percentage * 100);
     document.getElementById(
         learning_model.progress_value_element_id
@@ -37,6 +47,10 @@ function updateProgressBars(learning_model, data) {
 }
 
 function visualizeException(learning_model, data){
+    // эта функция вызывается когда приходит сообщение об ошибке обучения
+
+    //  в переменной data.exception лежит текст ошибки, которую нужно показать
+
     let errorTextElement = document.getElementById("error_text");
     errorTextElement.innerText = data.exception;
     errorTextElement.setAttribute(
@@ -46,10 +60,42 @@ function visualizeException(learning_model, data){
 
 
 function completeTask(learning_model, data){
+    // эта функция вызывается, когда задача обучения выполнена
+
+    // в learning_model.model_is лежит айдишник выполненной задачи
     document.getElementById(
         "a_" + learning_model.model_id
     ).setAttribute('href', '/use_model?model_id='+ data.ml_model_id);
 }
+
+
+/*
+Ниже этой линии ничего не трогать
+==================================================================================
+ */
+
+function delete_model(model_id){
+    let model_object = document.getElementById(
+        "ml_model_" + model_id
+    );
+    let xml_http_request = new XMLHttpRequest();
+    xml_http_request.onreadystatechange = function() {
+        if (xml_http_request.readyState === 4 && xml_http_request.status === 200){
+            if (xml_http_request.responseText === "OK"){
+                model_object.setAttribute(
+                    "style", "display: none;"
+                );
+            }
+        }
+    }
+    let request_parameters = "model_id="+model_id;
+    xml_http_request.open(
+        "GET",
+        '/delete_model' + "?" + request_parameters,
+        true);
+    xml_http_request.send(null);
+}
+
 
 async function createSocketAndConnect(){
     const updateSocket = await new WebSocket(

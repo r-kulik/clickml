@@ -152,6 +152,18 @@ def downloadResults(request: HttpRequest) -> HttpResponseBase:
         return FileResponse(open('result.csv', 'rb'))
 
 
+def __DELETE_MODEL(request: HttpRequest) -> HttpResponse:
+    model_id = int(request.GET.get("model_id",  "-1"))
+    assert model_id != -1
+    ml_model = MLMODEL.objects.get(id=model_id)
+    ml_model.delete()
+    return HttpResponse("OK")
+
+
+
+
+
+
 def returnYandexVerification(request) -> HttpResponse:
     return HttpResponse(
         """<html>

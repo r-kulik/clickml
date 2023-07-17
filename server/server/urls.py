@@ -37,7 +37,8 @@ urlpatterns += [
     path('model_creation_settings', workspace_views.modelCreationSettings, name='Set up a model'),
     path('use_model', workspace_views.useMlModel, name='Use Model'),
     path('view_results', workspace_views.viewResults, name='View Results'),
-    path('download_results', workspace_views.downloadResults, name="Download Results")
+    path('download_results', workspace_views.downloadResults, name="Download Results"),
+    path('delete_model', workspace_views.__DELETE_MODEL, name="delete model")
 ]
 
 urlpatterns += [

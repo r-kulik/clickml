@@ -23,6 +23,7 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
+
 class ModelOnCreation(models.Model):
     username = models.CharField(max_length=100)
     project_name = models.CharField(max_length=100)
@@ -49,6 +50,7 @@ class LearningTask(models.Model):
         default_storage.delete(self.dataset_source_file_name)
         super().delete(using=using, keep_parents=keep_parents)
 
+
 class MLMODEL(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -60,6 +62,10 @@ class MLMODEL(models.Model):
     model_main_metric_value = models.FloatField(default=0)
 
     model_task_type = models.CharField(max_length=20, default="UNDEFINED TASK TYPE")
+
+    def delete(self, using=None, keep_parents=False):
+        default_storage.delete(self.model_zip_file)
+        super().delete(using=using, keep_parents=keep_parents)
 
 
 class ExploitTask(models.Model):
