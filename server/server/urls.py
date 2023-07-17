@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import include
+from django.views.generic import RedirectView
 from workspace import main_page_views as main_page_views
 from workspace import views as workspace_views
 from workspace import GPU_INTERFACES
@@ -64,6 +65,9 @@ urlpatterns += [
 
 urlpatterns += [
     path("yandex_6e171de854288ea5.html", workspace_views.returnYandexVerification, name='A')
+]
+urlpatterns += [
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True)),
 ]
 
 websocket_urlpatterns = [
