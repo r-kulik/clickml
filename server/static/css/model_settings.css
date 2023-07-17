@@ -18,8 +18,9 @@
         display: inline-block;
         margin: 10px;
         background: #24415233;
-        height: 60%;
-        width:30%;
+
+        width: 500px;
+
 
         border: 1px solid #999;
         border-radius: 6px;

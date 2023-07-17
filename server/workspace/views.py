@@ -32,7 +32,8 @@ def errorHandler(function):
                 context={
                     'error': str(e),
                     'context': BasePageContext(*args, *kwargs, is_workspace=True),
-                    'error_text': traceback.format_exc()
+                    'error_text': traceback.format_exc(),
+                    'extended': True
                 }
             )
 

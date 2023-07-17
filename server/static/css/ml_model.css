@@ -1,12 +1,18 @@
   .parent
 {
 border: 1px solid black;
+border-radius: 15px;
+margin-left: 30%;
+margin-right: 30%;
+width: 40%;
+
+margin-bottom: 10px;
 
 }
 .child
 {
 margin-right: 40px;
-    margin-left: 10px;
+margin-left: 10px;
 display: inline-block;
 
 

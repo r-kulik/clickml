@@ -1,5 +1,6 @@
 {% extends "header_footer.html" %}
 
+
 {% load static %}
 
 {% block page %}
@@ -18,10 +19,10 @@
 
         <h2>{{error}}</h2>
 
-    <details style="margin-bottom: 15px;">
-  <summary>Error log</summary>
+    <details id="error_log_details" style="margin-bottom: 15px;">
+  <summary id="error_summary">Error log</summary>
         <div style="height: 300px;  overflow: auto; margin:10px;">
-  <p>{{error_text}}</p>
+  <p id="error_text">{{error_text}}</p>
             </div>
 
 
