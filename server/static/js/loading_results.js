@@ -83,7 +83,7 @@ window.addEventListener('load', async () => {
 
    
     while (loading) {
-        console.log(loading);
+        // console.log(loading);
         draw();
         await sleep(2000);
         erase();

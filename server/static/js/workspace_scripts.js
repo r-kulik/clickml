@@ -45,13 +45,18 @@ function updateProgressBars(learning_model, data) {
 
 function visualizeException(learning_model, data){
     // эта функция вызывается когда приходит сообщение об ошибке обучения
-
+    //
     //  в переменной data.exception лежит текст ошибки, которую нужно показать
 
-    let errorTextElement = document.getElementById("error_text");
-    errorTextElement.innerText = data.exception;
-    errorTextElement.setAttribute(
-        "style", "display: grid;"
+    let errorBlock = document.getElementById(
+        "error_message_block_learning_task_"+learning_model.model_id
+    );
+    let errorText = document.getElementById(
+        "error_message_text_learning_task_"+learning_model.model_id
+    )
+    errorText.innerText = data.exception;
+    errorBlock.setAttribute(
+        "style", "display: inline-block;"
     );
 }
 
