@@ -39,10 +39,8 @@
         <h1>Here is the list of your models</h1>
     </div>
 
-    <div class="title_description">
-        <p>Title</p>
-        <p>Status</p>
-    </div>
+
+
 <div class="models">
     {% for learning_model_context_object in context.learning_task_contexts %}
         {% include "ml_model_learning.html" with learning_model_context=learning_model_context_object %}
@@ -52,6 +50,7 @@
         {% include "ml_model.html" with model_context=model_context_object %}
     {% endfor %}
     </div>
+
 </div>
 
 

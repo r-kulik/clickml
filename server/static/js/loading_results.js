@@ -1,13 +1,11 @@
 // Функция должна вызываться в случае ошибки и рисовать нам окошко
 
 function handleException(data){
-    let errorObject = document.getElementById(
-                "error_message"
-            );
-            errorObject.setAttribute(
-                "style", "display: grid;"
-            );
-            errorObject.innerText = data.exception;
+    var image = document.getElementById("loading");
+    image.setAttribute("style", "display: none;");
+    let error_text = document.getElementById("error_text").innerText = data.exception;
+    let error_view = document.getElementById("error_message_view");
+    error_view.setAttribute("style","display: blcok;");
 }
 
 // Функция вызывается в случае корректного выполнения задания
