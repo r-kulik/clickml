@@ -18,9 +18,6 @@ let learning_models = []
 
 
 
-function redirectToModelCreation(){
-    location.href = '/create_new_model';
-}
 
 
 function updateProgressBars(learning_model, data) {
@@ -61,11 +58,37 @@ function visualizeException(learning_model, data){
 
 function completeTask(learning_model, data){
     // эта функция вызывается, когда задача обучения выполнена
-
-    // в learning_model.model_is лежит айдишник выполненной задачи
-    document.getElementById(
+    // data.ml_model_id - id готовой модели
+    // в learning_model.model_id лежит айдишник выполненной задачи
+    /*document.getElementById(
         "a_" + learning_model.model_id
     ).setAttribute('href', '/use_model?model_id='+ data.ml_model_id);
+    */
+
+    let progress_bar_block = document.getElementById(
+        "progress_bar_block_" + learning_model.model_id
+    );
+    let hidden_block = document.getElementById(
+        "hidden_block_" + learning_model.model_id
+    );
+    let view_results_button = document.getElementById(
+        "hidden_view_button_" + learning_model.model_id
+    );
+    let delete_model_button = document.getElementById(
+        "hidden_delete_button_" + learning_model.model_id
+    );
+    progress_bar_block.setAttribute(
+        "style", "display: none;"
+    );
+    view_results_button.setAttribute(
+        "onclick", "redirectToUseModel("+data.ml_model_id + ");"
+    );
+    delete_model_button.setAttribute(
+        "onclick", "delete_model("+learning_model.model_id + ", learning=true);"
+    );
+    hidden_block.setAttribute(
+        "style", "display: inline-block;"
+    );
 }
 
 
@@ -74,10 +97,26 @@ function completeTask(learning_model, data){
 ==================================================================================
  */
 
-function delete_model(model_id){
-    let model_object = document.getElementById(
-        "ml_model_" + model_id
-    );
+
+function redirectToModelCreation(){
+    location.href = '/create_new_model';
+}
+
+function redirectToUseModel(model_id){
+    location.href='/use_model?model_id='+model_id;
+}
+
+
+function delete_model(model_id, learning=false){
+    let model_object = null;
+    if (learning){
+        model_object = document.getElementById("ml_model_learning_block_"+model_id);
+    }
+    else {
+        model_object = document.getElementById(
+            "ml_model_" + model_id
+        );
+    }
     let xml_http_request = new XMLHttpRequest();
     xml_http_request.onreadystatechange = function() {
         if (xml_http_request.readyState === 4 && xml_http_request.status === 200){
