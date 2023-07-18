@@ -1,0 +1,117 @@
+{% extends "header_footer.html" %}
+
+{% load static %}
+
+{% block title %} <title>About us</title> {% endblock %}
+
+{% block page %}
+
+    <style>
+
+
+        .image-row {
+
+            align-items: flex-end;
+            margin: 50px 0; /* Отступы сверху и снизу для блока с рядом картинок */
+
+        }
+
+        .image-container {
+            margin: 0 80px; /* Отступы слева и справа для элементов */
+
+        }
+
+        .image-container-placeholder{
+            display: flex;
+            justify-content: center;
+        }
+
+        .image-container img {
+            width: 200px; /* Ширина изображения */
+            height: auto; /* Автоматическая высота для сохранения пропорций */
+            /* margin-left: 60px;*/
+            display: flex;
+            justify-content: center;
+
+        }
+
+
+
+        .image-container p {
+            text-align: center; /* Выравнивание текста по центру */
+            margin: 0; /* Убираем отступы между абзацами внутри блока */
+            font-size: 2em;
+            align-self: center;
+        }
+    </style>
+
+
+<!-- ключевая ошибка: если мы хотим вкусно центрировать изображения и подписи, то тогда нужно было создавать не 2 ряда, а три колонки -->
+
+<table style="width: 100%; height: 100%; margin-bottom: 10%;" >
+    <tr>
+
+        <div class="image-row" style="align-content: center; align-items: center">
+            <td>
+            <div class="image-container">
+                <div class="image-container-placeholder">
+                    <img src='{% static "faces/rostislav.png" %}' alt="Image 1">
+                </div>
+                <p><b>Rostislav Kulik</b></p>
+                <p>Backend developer<br>&nbsp;<br>&nbsp;</p>
+            </div>
+                </td>
+            <td>
+            <div class="image-container">
+                <div class="image-container-placeholder">
+                    <img src='{% static "faces/evgen.png" %}' alt="Image 2">
+                </div>
+                <p><b>Evgeniy Sorokin</b></p>
+                <p>ML developer<br>&nbsp;<br>&nbsp;</p>
+            </div>
+                </td>
+            <td>
+            <div class="image-container">
+                <div class="image-container-placeholder">
+                <img src='{% static "faces/ernest.png" %}' alt="Image 3">
+                </div>
+                <p><b>Ernest Matskevich</b></p>
+                <p>Frontend developer<br>&nbsp;<br>&nbsp;</p>
+            </div>
+            </td>
+        </div>
+    </tr>
+
+    <tr>
+        <div class="image-row" style="align-content: center; align-items: center">
+            <td>
+            <div class="image-container">
+                <div class="image-container-placeholder">
+                <img src='{% static "faces/arina.png" %}' alt="Image 4">
+                </div>
+                <p><b>Arina Zavelevich</b></p>
+                <p>Designer</p>
+            </div>
+                </td>
+            <td>
+            <div class="image-container">
+                <div class="image-container-placeholder">
+                <img src='{% static "faces/maksim.png" %}' alt="Image 5">
+                </div>
+                <p><b>Maksim Baranov</b></p>
+                <p>ML developer</p>
+            </div>
+                </td>
+            <td>
+            <div class="image-container">
+                <div class="image-container-placeholder">
+                <img src='{% static "faces/axi.png" %}' alt="Image 6">
+                </div>
+                <p><b>Aksinya Kochunova</b></p>
+                <p>Designer</p>
+            </div>
+            </td>
+        </div>
+    </tr>
+</table>
+{% endblock %}

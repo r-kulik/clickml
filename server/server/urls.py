@@ -26,6 +26,8 @@ from workspace import consumers
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_page_views.index, name='Home page'),
+    path('tutorial', main_page_views.tutorial, name="Tutorial"),
+    path('about_us', main_page_views.aboutUs, name="About us")
 ]
 
 urlpatterns += [

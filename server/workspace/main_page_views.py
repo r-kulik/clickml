@@ -61,3 +61,19 @@ def index(request: HttpRequest) -> HttpResponse:
     context = BasePageContext(request)
     return TemplateResponse(request, "mainpage.html", context={'context': context})
 
+
+def tutorial(request: HttpRequest) -> HttpResponse:
+    return TemplateResponse(
+        request,
+        "tutorial.html",
+        context={'context': BasePageContext(request)}
+    )
+
+
+def aboutUs(request: HttpRequest) -> HttpResponse:
+    return TemplateResponse(
+        request,
+        "about_us.html",
+        context={'context': BasePageContext(request)}
+    )
+
